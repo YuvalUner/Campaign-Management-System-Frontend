@@ -80,7 +80,6 @@
         "block-spacing": ["error", "always"],
         "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
         "comma-style": ["error", "last"],
-        "comma-dangle": ["error", "never"],
         "comma-spacing": ["error", { "before": false, "after": true }],
         "max-statements-per-line": ["error", { "max": 1 }],
         "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],
