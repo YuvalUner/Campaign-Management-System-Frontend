@@ -7,7 +7,11 @@ import {StatusCodes} from "http-status-codes";
 import {useNavigate} from "react-router-dom";
 import ScreenRoutes from "../utils/screen-routes";
 
-function LogIn(): JSX.Element {
+interface LogInProps {
+    setIsLoggedIn: (isLoggedIn: boolean) => void;
+}
+
+function LogIn(props: LogInProps): JSX.Element {
 
     const navigate = useNavigate();
 
@@ -23,8 +27,12 @@ function LogIn(): JSX.Element {
             externalAuth,
         );
 
-        if (res.status === StatusCodes.CREATED) {
-            navigate(ScreenRoutes.ProfilePage);
+        if (res.status === StatusCodes.CREATED || res.status === StatusCodes.OK) {
+            props.setIsLoggedIn(true);
+
+            if (res.status === StatusCodes.CREATED) {
+                navigate(ScreenRoutes.ProfilePage);
+            }
         }
     };
 
