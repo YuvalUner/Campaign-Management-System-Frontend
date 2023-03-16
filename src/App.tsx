@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import LogIn from "./home-page/LogIn";
 
 function App() {
     return (
@@ -8,7 +9,8 @@ function App() {
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo"/>
                 <p>
-                    {process.env.REACT_APP_TEST}
+                    {process.env.REACT_APP_TEST}<br/>
+                    <LogIn/>
                 </p>
                 <a
                     className="App-link"

@@ -1,0 +1,10 @@
+{
+  "OAuthProvider": "Google",
+  "ServerBaseUrl": "https://localhost:7065/",
+  "ControllerUrls" : {
+    "Tokens": {
+      "Base": "api/Token/",
+      "SignIn": "googleSignIn"
+    }
+  }
+}
