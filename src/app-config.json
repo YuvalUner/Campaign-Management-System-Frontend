@@ -6,6 +6,10 @@
       "Base": "api/Token/",
       "SignIn": "googleSignIn",
       "SignOut": "signOut"
+    },
+    "Users": {
+      "Base": "api/Users/",
+      "HomePageInfo": "HomePageInfo"
     }
   }
 }

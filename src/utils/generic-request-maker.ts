@@ -1,4 +1,4 @@
-import axios, {AxiosResponse} from "axios";
+import axios, {AxiosInstance, AxiosResponse} from "axios";
 import config from "../app-config.json";
 
 /***
@@ -9,6 +9,10 @@ import config from "../app-config.json";
  */
 class GenericRequestMaker {
 
+    private static readonly instance: AxiosInstance = axios.create({
+        withCredentials: true,
+    });
+
     /**
      * MakePostRequest is a method that makes a post request to the server.
      * @param url - url of the specific method in the server.
@@ -17,7 +21,7 @@ class GenericRequestMaker {
      */
     public static async MakePostRequest(url: string, body: unknown,
         additionalHeaders: string | null = null): Promise<AxiosResponse> {
-        return await axios.post(config.ServerBaseUrl + url, JSON.stringify(body), {
+        return await this.instance.post(config.ServerBaseUrl + url, JSON.stringify(body), {
             headers: {
                 "Content-Type": "application/json",
                 additionalHeaders
@@ -33,7 +37,7 @@ class GenericRequestMaker {
      */
     public static async MakeGetRequest<model>(url: string,
         additionalHeaders: string | null = null): Promise<AxiosResponse> {
-        return await axios.get<model>(process.env.REACT_APP_SERVER_BASE_URL + url, {
+        return await this.instance.get<model>(config.ServerBaseUrl + url, {
             headers: {
                 additionalHeaders
             }
@@ -48,7 +52,7 @@ class GenericRequestMaker {
      */
     public static async MakePutRequest(url: string, body: unknown,
         additionalHeaders: string | null = null): Promise<AxiosResponse> {
-        return await axios.put(process.env.REACT_APP_SERVER_BASE_URL + url, body, {
+        return await this.instance.put(config.ServerBaseUrl + url, body, {
             headers: {
                 "Content-Type": "application/json",
                 additionalHeaders
@@ -63,7 +67,7 @@ class GenericRequestMaker {
      */
     public static async MakeDeleteRequest(url: string,
         additionalHeaders: string | null = null): Promise<AxiosResponse> {
-        return await axios.delete(process.env.REACT_APP_SERVER_BASE_URL + url, {
+        return await this.instance.delete(config.ServerBaseUrl + url, {
             headers: {
                 "Content-Type": "application/json",
                 additionalHeaders

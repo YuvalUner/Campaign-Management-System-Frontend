@@ -17,9 +17,7 @@ if (clientId === undefined) {
 
 root.render(
     <GoogleOAuthProvider clientId={clientId}>
-        <React.StrictMode>
-            <App/>
-        </React.StrictMode>
+        <App/>
     </GoogleOAuthProvider>
 );
 

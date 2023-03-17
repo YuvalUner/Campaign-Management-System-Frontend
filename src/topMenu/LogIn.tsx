@@ -6,12 +6,10 @@ import config from "../app-config.json";
 import {StatusCodes} from "http-status-codes";
 import {useNavigate} from "react-router-dom";
 import ScreenRoutes from "../utils/screen-routes";
+import Events from "../utils/events";
 
-interface LogInProps {
-    setIsLoggedIn: (isLoggedIn: boolean) => void;
-}
 
-function LogIn(props: LogInProps): JSX.Element {
+function LogIn(): JSX.Element {
 
     const navigate = useNavigate();
 
@@ -28,7 +26,7 @@ function LogIn(props: LogInProps): JSX.Element {
         );
 
         if (res.status === StatusCodes.CREATED || res.status === StatusCodes.OK) {
-            props.setIsLoggedIn(true);
+            Events.dispatch(Events.EventNames.UserLoggedIn);
 
             if (res.status === StatusCodes.CREATED) {
                 navigate(ScreenRoutes.ProfilePage);

@@ -1,6 +1,6 @@
 import React from "react";
 import {googleLogout} from "@react-oauth/google";
-import {Box, Button} from "@mui/material";
+import {Box} from "@mui/material";
 import GenericRequestMaker from "../utils/generic-request-maker";
 import config from "../app-config.json";
 
@@ -20,8 +20,8 @@ function Logout(props: LogoutProps): JSX.Element {
     };
 
     return (
-        <Box>
-            <Button color={"inherit"} onClick={logout}>Logout</Button>
+        <Box onClick={logout}>
+            Logout
         </Box>
     );
 }
