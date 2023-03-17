@@ -1,14 +1,14 @@
 import {Guid} from "guid-typescript";
 
 interface Campaign {
-    campaignName: string | null;
-    campaignDescription: string | null;
-    campaignGuid: Guid | null;
-    campaignCreationDate: Date | null;
-    campaignIsActive: boolean | null;
-    isSubCampaign: boolean | null;
-    cityName: string | null;
-    campaignLogoUrl: string | null;
+    campaignName?: string;
+    campaignDescription?: string;
+    campaignGuid?: string | Guid;
+    campaignCreationDate?: Date;
+    campaignIsActive?: boolean;
+    isSubCampaign?: boolean;
+    cityName?: string;
+    campaignLogoUrl?: string;
 }
 
 export default Campaign;

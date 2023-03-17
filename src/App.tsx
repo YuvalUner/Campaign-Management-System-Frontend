@@ -3,6 +3,9 @@ import {BrowserRouter} from "react-router-dom";
 import TopMenu from "./topMenu/TopMenu";
 import Router from "./Router";
 import UserWithCampaigns from "./models/user-with-campaigns";
+import SideMenu from "./sideMenu/SideMenu";
+import {Box} from "@mui/material";
+import DrawerPageFlow from "./utils/DrawerPageFlow";
 
 
 function App(): JSX.Element {
@@ -11,8 +14,13 @@ function App(): JSX.Element {
 
     return (
         <BrowserRouter>
-            <TopMenu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} user={user} setUser={setUser}/>
-            <Router/>
+            <Box>
+                <TopMenu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} user={user} setUser={setUser}/>
+                <SideMenu campaignList={user.campaigns}/>
+                <DrawerPageFlow>
+                    <Router/>
+                </DrawerPageFlow>
+            </Box>
         </BrowserRouter>
     );
 }

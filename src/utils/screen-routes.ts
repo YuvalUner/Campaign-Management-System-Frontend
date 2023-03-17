@@ -4,10 +4,11 @@
  * It is used to avoid typos and to make the code more readable.
  * For any new screen, add its name here.
  */
-class ScreenRoutes{
-
-    public static readonly HomePage: string = "/";
-    public static readonly ProfilePage: string = "/profile";
-}
+const ScreenRoutes = {
+    HomePage: "/",
+    ProfilePage: "/profile",
+    CampaignRoute: "/campaign/*",
+    CampaignPage: "/campaign/",
+};
 
 export default ScreenRoutes;

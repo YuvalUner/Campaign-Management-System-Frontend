@@ -8,6 +8,9 @@ class Events{
     // Add the names of any future events here
     public static readonly EventNames = {
         UserLoggedIn: "UserLoggedIn",
+        UserLoggedOut: "UserLoggedOut",
+        LeftDrawerOpened: "LeftDrawerOpened",
+        LeftDrawerClosed: "LeftDrawerClosed",
     };
 
     /**

@@ -1,12 +1,12 @@
 interface User {
-    email: string | null;
-    firstNameEng: string | null;
-    lastNameEng: string | null;
-    firstNameHeb: string | null;
-    lastNameHeb: string | null;
-    displayNameEng: string | null;
-    profilePicUrl: string | null;
-    phoneNumber: string | null;
+    email?: string;
+    firstNameEng?: string;
+    lastNameEng?: string;
+    firstNameHeb?: string;
+    lastNameHeb?: string;
+    displayNameEng?: string;
+    profilePicUrl?: string;
+    phoneNumber?: string;
 }
 
 export default User;
