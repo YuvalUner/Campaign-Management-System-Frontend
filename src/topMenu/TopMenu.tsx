@@ -71,7 +71,7 @@ function TopMenu(props: TopMenuProps): JSX.Element {
 
 
     return (
-        <AppBar position={"static"} sx={{
+        <AppBar position={"sticky"} sx={{
             height: `${Constants.topMenuHeight}px`,
         }}>
             <Toolbar sx={{justifyContent: "space-between"}}>

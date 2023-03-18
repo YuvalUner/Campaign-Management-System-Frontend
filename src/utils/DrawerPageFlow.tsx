@@ -56,13 +56,20 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
                 // Center the button vertically by subtracting the height of the top menu twice
                 // (once for the top and once for the bottom).
                 height: `calc(100% - ${Constants.topMenuHeight * 2}px)`,
+                position: "absolute"
             }}>
-                <Tooltip title={isDrawerOpen ? "Close campaign list" : "Open campaign list"}>
+                <Tooltip title={isDrawerOpen ? "Close campaign list" : "Open campaign list"}
+                    sx={{
+                        position: "absolute",
+                        display: "block"
+                    }}
+                >
                     <IconButton color={"primary"} sx={{
                         position: "absolute",
                         // Using negative margin to offset the padding of the Box,
                         // so that the button sticks to the left.
                         marginLeft: `${-Constants.muiBoxDefaultPadding}px`,
+                        display: "block",
                     }}
                     onClick={() => {
                         if (isDrawerOpen) {

@@ -6,6 +6,8 @@ import {HttpStatusCode} from "axios";
 import AnnouncementWithPublisherDetails from "../models/announcement-with-publisher-details";
 import PublishedEventWithPublisher from "../models/published-event-with-publisher";
 import Events from "../utils/events";
+import {Avatar, List, ListItem, ListItemAvatar, ListItemText, Paper} from "@mui/material";
+import Constants from "../utils/constants";
 
 interface HomePageProps {
     homePageController: HomePageControl;
@@ -28,7 +30,7 @@ function HomePage(props: HomePageProps): JSX.Element {
             if (announcements !== null && events !== null) {
                 combined = announcements.concat(events);
                 combined.sort((a, b) => {
-                    return a.publishingDate.getTime() - b.publishingDate.getTime();
+                    return a.publishingDate.valueOf() -  b.publishingDate.valueOf();
                 });
             } else if (announcements !== null) {
                 combined = announcements;
@@ -45,7 +47,8 @@ function HomePage(props: HomePageProps): JSX.Element {
 
     const emptyOutAndRetrieveHomePage = async (): Promise<void> => {
         props.setHomePageController({
-            ...props.homePageController,
+            limit: props.homePageController.limit,
+            offset: 0,
             announcementsAndEvents: null,
         });
         await retrieveHomePage();
@@ -65,10 +68,45 @@ function HomePage(props: HomePageProps): JSX.Element {
         };
     }, []);
 
+    const instanceOfAnnouncementWithPublisherDetails = (object: any): object is AnnouncementWithPublisherDetails => {
+        return "announcementGuid" in object;
+    };
+
+    const instanceOfPublishedEventWithPublisher = (object: any): object is PublishedEventWithPublisher => {
+        return "eventGuid" in object;
+    };
+
     return (
-        <div>
-            <h1>Home Page</h1>
-        </div>
+        <Paper sx={{
+            maxHeight: `calc(100% - ${Constants.topMenuHeight}px)`,
+            overflow: "auto",
+        }}>
+            <List>
+                {props.homePageController.announcementsAndEvents?.map((announcementOrEvent) => {
+                    if (instanceOfAnnouncementWithPublisherDetails(announcementOrEvent)) {
+                        return (
+                            <ListItem key={"a" + announcementOrEvent.announcementGuid}>
+                                <ListItemAvatar>
+                                    <Avatar alt={announcementOrEvent.campaignName}
+                                        src={announcementOrEvent.campaignLogoUrl}/>
+                                </ListItemAvatar>
+                                <ListItemText primary={announcementOrEvent.announcementTitle}/>
+                            </ListItem>
+                        );
+                    } else if (instanceOfPublishedEventWithPublisher(announcementOrEvent)) {
+                        return (
+                            <ListItem key={"e" + announcementOrEvent.eventGuid}>
+                                <ListItemAvatar>
+                                    <Avatar alt={announcementOrEvent.campaignName}
+                                        src={announcementOrEvent.campaignLogoUrl}/>
+                                </ListItemAvatar>
+                                <ListItemText primary={announcementOrEvent.eventName}/>
+                            </ListItem>
+                        );
+                    }
+                })}
+            </List>
+        </Paper>
     );
 }
 
