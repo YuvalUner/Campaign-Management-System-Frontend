@@ -1,7 +1,6 @@
 import React, {useEffect} from "react";
 import LogIn from "./LogIn";
-import {Box, Button, Menu, MenuItem, styled, Toolbar} from "@mui/material";
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar";
+import {AppBar, Box, Button, Menu, MenuItem, Toolbar} from "@mui/material";
 import Logout from "./Logout";
 import Events from "../utils/events";
 import UserWithCampaigns from "../models/user-with-campaigns";
@@ -23,7 +22,6 @@ interface TopMenuProps {
 function TopMenu(props: TopMenuProps): JSX.Element {
 
     const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
-    const [isSideMenuOpen, setIsSideMenuOpen] = React.useState(false);
 
     const nav = useNavigate();
 
@@ -36,10 +34,6 @@ function TopMenu(props: TopMenuProps): JSX.Element {
             props.setUser(user);
             props.setIsLoggedIn(true);
         });
-
-        // React to opening and closing of the side menu by setting the state of isSideMenuOpen
-        Events.subscribe(Events.EventNames.LeftDrawerOpened, () => setIsSideMenuOpen(true));
-        Events.subscribe(Events.EventNames.LeftDrawerClosed, () => setIsSideMenuOpen(false));
     }, []);
 
     const renderUserImageMenu = (): JSX.Element => {
@@ -67,31 +61,9 @@ function TopMenu(props: TopMenuProps): JSX.Element {
         );
     };
 
-    interface AppBarProps extends MuiAppBarProps {
-        open?: boolean;
-    }
-
-    // Due to AppBar having a static position, we need to adjust it when the side menu is open or closed using
-    // this custom styled AppBar, instead of using the general DrawerPageFlow component.
-    const AppBar = styled(MuiAppBar, {
-        shouldForwardProp: (prop) => prop !== "open",
-    })<AppBarProps>(({theme, open}) => ({
-        transition: theme.transitions.create(["margin", "width"], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        ...(open && {
-            width: `calc(100% - ${Constants.drawerWidth}px)`,
-            marginLeft: `${Constants.drawerWidth}px`,
-            transition: theme.transitions.create(["margin", "width"], {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-        }),
-    }));
 
     return (
-        <AppBar position={"static"} open={isSideMenuOpen} sx={{
+        <AppBar position={"static"} sx={{
             height: `${Constants.topMenuHeight}px`,
         }}>
             <Toolbar sx={{justifyContent: "space-between"}}>

@@ -50,6 +50,7 @@ function SideMenu(props: SideMenuProps): JSX.Element {
                 "& .MuiDrawer-paper": {
                     width: Constants.drawerWidth,
                     boxSizing: "border-box",
+                    marginTop: `${Constants.topMenuHeight}px`,
                 },
             }}
             variant="persistent"

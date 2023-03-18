@@ -53,9 +53,11 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
                 justifyContent: "left",
                 alignItems: "center",
                 anchor: "left",
+                // Center the button vertically by subtracting the height of the top menu twice
+                // (once for the top and once for the bottom).
                 height: `calc(100% - ${Constants.topMenuHeight * 2}px)`,
             }}>
-                <Tooltip title={isDrawerOpen ? "Close menu" : "Open menu"}>
+                <Tooltip title={isDrawerOpen ? "Close campaign list" : "Open campaign list"}>
                     <IconButton color={"primary"} sx={{
                         position: "absolute",
                         // Using negative margin to offset the padding of the Box,
