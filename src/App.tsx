@@ -14,10 +14,14 @@ function App(): JSX.Element {
 
     return (
         <BrowserRouter>
-            <Box>
+            <Box sx={{
+                display: "flex",
+                height: "100vh",
+                flexDirection: "column",
+            }}>
                 <TopMenu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} user={user} setUser={setUser}/>
                 <SideMenu campaignList={user.campaigns}/>
-                <DrawerPageFlow>
+                <DrawerPageFlow isLoggedIn={isLoggedIn}>
                     <Router/>
                 </DrawerPageFlow>
             </Box>

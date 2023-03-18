@@ -2,14 +2,12 @@ import React, {useEffect, useState} from "react";
 import {
     Avatar, Divider,
     Drawer,
-    IconButton, List,
+    List,
     ListItem, ListItemAvatar,
     ListItemButton,
     ListItemText,
-    styled, Typography,
-    useTheme,
+    Typography,
 } from "@mui/material";
-import {ChevronLeft, ChevronRight} from "@mui/icons-material";
 import Events from "../utils/events";
 import Constants from "../utils/constants";
 import {useNavigate} from "react-router-dom";
@@ -23,8 +21,6 @@ interface SideMenuProps {
 function SideMenu(props: SideMenuProps): JSX.Element {
 
     const [isOpen, setIsOpen] = useState(false);
-
-    const pageTheme = useTheme();
 
     const nav = useNavigate();
 
@@ -46,16 +42,6 @@ function SideMenu(props: SideMenuProps): JSX.Element {
         });
     });
 
-    const DrawerHeader = styled("div")(({theme}) => ({
-        display: "flex",
-        alignItems: "center",
-        // eslint-disable-next-line no-magic-numbers
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
-        justifyContent: "flex-end",
-    }));
-
     return (
         <Drawer
             sx={{
@@ -70,12 +56,7 @@ function SideMenu(props: SideMenuProps): JSX.Element {
             anchor="left"
             open={isOpen}
         >
-            <DrawerHeader>
-                <IconButton onClick={() => Events.dispatch(Events.EventNames.LeftDrawerClosed)}>
-                    {pageTheme.direction === "ltr" ? <ChevronLeft/> : <ChevronRight/>}
-                </IconButton>
-            </DrawerHeader>
-            <Typography variant="h6" sx={{ml: 2, mb: 2}}>My Campaigns</Typography>
+            <Typography variant="h6" sx={{ml: 2, mb: 2, mt: 4}}>My Campaigns</Typography>
             <Divider/>
             <List>
                 {props.campaignList?.map((campaign) => (

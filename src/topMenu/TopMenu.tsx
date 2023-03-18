@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import LogIn from "./LogIn";
-import {Box, Button, IconButton, Menu, MenuItem, styled, Toolbar} from "@mui/material";
+import {Box, Button, Menu, MenuItem, styled, Toolbar} from "@mui/material";
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar";
 import Logout from "./Logout";
 import Events from "../utils/events";
@@ -11,7 +11,6 @@ import UserProfileImage from "./UserProfileImage";
 import {useNavigate} from "react-router-dom";
 import ScreenRoutes from "../utils/screen-routes";
 import Constants from "../utils/constants";
-import MenuIcon from "@mui/icons-material/Menu";
 
 interface TopMenuProps {
     isLoggedIn: boolean;
@@ -92,20 +91,11 @@ function TopMenu(props: TopMenuProps): JSX.Element {
     }));
 
     return (
-        <AppBar position={"static"} open={isSideMenuOpen}>
+        <AppBar position={"static"} open={isSideMenuOpen} sx={{
+            height: `${Constants.topMenuHeight}px`,
+        }}>
             <Toolbar sx={{justifyContent: "space-between"}}>
                 <Box>
-                    {props.isLoggedIn && <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={() => Events.dispatch(Events.EventNames.LeftDrawerOpened)}
-                        edge="start"
-                        disabled={isSideMenuOpen}
-                        sx={{mr: 2, ...(isSideMenuOpen && {display: "none"})}}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    }
                     <Button color={"inherit"} onClick={() => nav(ScreenRoutes.HomePage)}>Home</Button>
                 </Box>
                 <Box>
