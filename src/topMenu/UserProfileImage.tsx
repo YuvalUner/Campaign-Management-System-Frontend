@@ -4,7 +4,7 @@ import User from "../models/user";
 
 interface UserProfileImageProps {
     user: User;
-    onClick: (isOpen: boolean) => void;
+    onClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 function UserProfileImage(props: UserProfileImageProps): JSX.Element {
@@ -17,7 +17,7 @@ function UserProfileImage(props: UserProfileImageProps): JSX.Element {
     }
 
     return (
-        <IconButton onClick={() => props.onClick(true)}>
+        <IconButton onClick={props.onClick}>
             <Avatar alt={props.user.displayNameEng} src={props.user.profilePicUrl}/>
         </IconButton>
     );

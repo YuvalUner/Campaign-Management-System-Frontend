@@ -63,11 +63,19 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
                         // Using negative margin to offset the padding of the Box,
                         // so that the button sticks to the left.
                         marginLeft: `${-Constants.muiBoxDefaultPadding}px`,
-                    }}>
+                    }}
+                    onClick={() => {
+                        if (isDrawerOpen) {
+                            Events.dispatch(Events.EventNames.LeftDrawerClosed);
+                        } else {
+                            Events.dispatch(Events.EventNames.LeftDrawerOpened);
+                        }
+                    }}
+                    >
                         {
                             isDrawerOpen ?
-                                <ChevronLeft onClick={() => Events.dispatch(Events.EventNames.LeftDrawerClosed)}/> :
-                                <ChevronRight onClick={() => Events.dispatch(Events.EventNames.LeftDrawerOpened)}/>
+                                <ChevronLeft/> :
+                                <ChevronRight/>
                         }
                     </IconButton>
                 </Tooltip>

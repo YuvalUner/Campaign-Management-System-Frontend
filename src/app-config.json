@@ -10,6 +10,10 @@
     "Users": {
       "Base": "api/Users/",
       "HomePageInfo": "HomePageInfo"
+    },
+    "PublicBoard": {
+      "Base": "api/PublicBoard/",
+      "GetPublicBoard": "public-board"
     }
   }
 }

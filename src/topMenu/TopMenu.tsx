@@ -21,9 +21,17 @@ interface TopMenuProps {
 
 function TopMenu(props: TopMenuProps): JSX.Element {
 
-    const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = React.useState<null | HTMLElement>(null);
 
     const nav = useNavigate();
+
+    const handleClose = () => {
+        setIsUserMenuOpen(null);
+    };
+
+    const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setIsUserMenuOpen(event.currentTarget);
+    };
 
     useEffect(() => {
         Events.subscribe(Events.EventNames.UserLoggedIn, async () => {
@@ -39,8 +47,8 @@ function TopMenu(props: TopMenuProps): JSX.Element {
     const renderUserImageMenu = (): JSX.Element => {
         return (
             <div>
-                <UserProfileImage user={props.user.user} onClick={setIsUserMenuOpen}/>
-                <Menu open={isUserMenuOpen} onClose={() => setIsUserMenuOpen(false)} anchorOrigin={{
+                <UserProfileImage user={props.user.user} onClick={handleMenu}/>
+                <Menu open={Boolean(isUserMenuOpen)} anchorEl={isUserMenuOpen} onClose={handleClose} anchorOrigin={{
                     vertical: "top",
                     horizontal: "right",
                 }} transformOrigin={{
@@ -48,12 +56,12 @@ function TopMenu(props: TopMenuProps): JSX.Element {
                     horizontal: "left",
                 }} sx={{mt: "45px"}} keepMounted>
                     <MenuItem onClick={() => {
-                        setIsUserMenuOpen(false);
+                        handleClose();
                         nav(ScreenRoutes.ProfilePage);
                     }}>
                         Profile
                     </MenuItem>
-                    <MenuItem onClick={() => setIsUserMenuOpen(false)}>
+                    <MenuItem onClick={handleClose}>
                         <Logout setIsLoggedIn={props.setIsLoggedIn} setUser={props.setUser}/>
                     </MenuItem>
                 </Menu>

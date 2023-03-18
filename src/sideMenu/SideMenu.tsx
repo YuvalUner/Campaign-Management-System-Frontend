@@ -51,6 +51,7 @@ function SideMenu(props: SideMenuProps): JSX.Element {
                     width: Constants.drawerWidth,
                     boxSizing: "border-box",
                     marginTop: `${Constants.topMenuHeight}px`,
+                    height: `calc(100% - ${Constants.topMenuHeight}px)`
                 },
             }}
             variant="persistent"
