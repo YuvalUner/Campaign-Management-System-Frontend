@@ -40,7 +40,7 @@ function SideMenu(props: SideMenuProps): JSX.Element {
         Events.subscribe(Events.EventNames.LeftDrawerOpened, () => {
             setIsOpen(true);
         });
-    });
+    }, []);
 
     return (
         <Drawer

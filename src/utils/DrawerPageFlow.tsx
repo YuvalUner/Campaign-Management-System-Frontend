@@ -21,7 +21,7 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
         Events.subscribe(Events.EventNames.LeftDrawerClosed, () => {
             setIsDrawerOpen(false);
         });
-    });
+    }, []);
 
     const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
         open?: boolean;

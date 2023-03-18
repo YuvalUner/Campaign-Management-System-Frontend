@@ -37,10 +37,10 @@ function TopMenu(props: TopMenuProps): JSX.Element {
             props.setIsLoggedIn(true);
         });
 
-        // React to opening and closing of the side menu by setting the top menu to open or closed
+        // React to opening and closing of the side menu by setting the state of isSideMenuOpen
         Events.subscribe(Events.EventNames.LeftDrawerOpened, () => setIsSideMenuOpen(true));
         Events.subscribe(Events.EventNames.LeftDrawerClosed, () => setIsSideMenuOpen(false));
-    });
+    }, []);
 
     const renderUserImageMenu = (): JSX.Element => {
         return (

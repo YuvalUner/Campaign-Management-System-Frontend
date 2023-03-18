@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {googleLogout} from "@react-oauth/google";
 import {Box} from "@mui/material";
 import GenericRequestMaker from "../utils/generic-request-maker";
@@ -13,6 +13,8 @@ interface LogoutProps {
 
 function Logout(props: LogoutProps): JSX.Element {
 
+    const windowClosedEvent = "beforeunload";
+
     const logout = async (): Promise<void> => {
         props.setIsLoggedIn(false);
         googleLogout();
@@ -23,6 +25,17 @@ function Logout(props: LogoutProps): JSX.Element {
         props.setUser({} as UserWithCampaigns);
         Events.dispatch(Events.EventNames.UserLoggedOut);
     };
+
+    useEffect(() => {
+        // Make sure that the user is logged out when the window is closed.
+        // This is used instead of the Events.subscribed method because that method subscribes to document events,
+        // which are not triggered when the window is closed.
+        window.addEventListener(windowClosedEvent, logout);
+        // Unsubscribe from the event when the component is unmounted.
+        return () => {
+            window.removeEventListener(windowClosedEvent, logout);
+        };
+    }, []);
 
     return (
         <Box onClick={logout}>
