@@ -62,9 +62,13 @@ function HomePage(props: HomePageProps): JSX.Element {
     }, []);
 
     useEffect(() => {
+        // When the user logs in or out, we want to empty out the home page and then retrieve it again, so that
+        // the user can see the announcements and events that are relevant to them.
         Events.subscribe(Events.EventNames.UserLoggedIn, emptyOutAndRetrieveHomePage);
+        Events.subscribe(Events.EventNames.UserLoggedOut, emptyOutAndRetrieveHomePage);
         return () => {
             Events.unsubscribe(Events.EventNames.UserLoggedIn, emptyOutAndRetrieveHomePage);
+            Events.unsubscribe(Events.EventNames.UserLoggedOut, emptyOutAndRetrieveHomePage);
         };
     }, []);
 
@@ -87,7 +91,9 @@ function HomePage(props: HomePageProps): JSX.Element {
                                     <Avatar alt={announcementOrEvent.campaignName}
                                         src={announcementOrEvent.campaignLogoUrl}/>
                                 </ListItemAvatar>
-                                <ListItemText primary={announcementOrEvent.announcementTitle}/>
+                                <ListItemText primary={announcementOrEvent.announcementTitle}
+                                    secondary={announcementOrEvent.announcementContent}
+                                />
                             </ListItem>
                         );
                     } else if (instanceOfPublishedEventWithPublisher(announcementOrEvent)) {
@@ -108,7 +114,6 @@ function HomePage(props: HomePageProps): JSX.Element {
     return (
         <Paper sx={{
             marginBottom: `${Constants.muiBoxDefaultPadding}px`,
-            overflow: "auto",
         }}>
             {props.homePageController.announcementsAndEvents !== null ? renderHomePageList() : null}
         </Paper>

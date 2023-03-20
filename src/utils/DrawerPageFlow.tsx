@@ -49,7 +49,13 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
             height: `calc(100% - ${Constants.topMenuHeight * 2}px)`,
             paddingBottom: "0px",
         }}>
-            {props.children}
+            <Box sx={{
+                marginBottom: `${Constants.muiBoxDefaultPadding}px`,
+                overflow: "auto",
+                marginLeft: props.isLoggedIn ? `${Constants.muiBoxDefaultPadding}px` : "0px",
+            }}>
+                {props.children}
+            </Box>
             {props.isLoggedIn && <Box sx={{
                 display: "flex",
                 justifyContent: "left",

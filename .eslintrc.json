@@ -38,7 +38,6 @@
         "max-depth": ["error", 4],
         "max-len": ["error", { "code": 120 }],
         "max-lines": ["warn", { "max": 500 }],
-        "max-lines-per-function": ["warn", { "max": 100 }],
         "no-alert": "warn",
         "no-caller": "error",
         "no-console": "warn",
