@@ -46,6 +46,8 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
         <Main open={isDrawerOpen} sx={{
             display: "flex",
             flexDirection: "column",
+            height: `calc(100% - ${Constants.topMenuHeight * 2}px)`,
+            paddingBottom: "0px",
         }}>
             {props.children}
             {props.isLoggedIn && <Box sx={{

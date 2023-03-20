@@ -30,7 +30,7 @@ function HomePage(props: HomePageProps): JSX.Element {
             if (announcements !== null && events !== null) {
                 combined = announcements.concat(events);
                 combined.sort((a, b) => {
-                    return a.publishingDate.valueOf() -  b.publishingDate.valueOf();
+                    return a.publishingDate.valueOf() - b.publishingDate.valueOf();
                 });
             } else if (announcements !== null) {
                 combined = announcements;
@@ -76,13 +76,10 @@ function HomePage(props: HomePageProps): JSX.Element {
         return "eventGuid" in object;
     };
 
-    return (
-        <Paper sx={{
-            maxHeight: `calc(100% - ${Constants.topMenuHeight}px)`,
-            overflow: "auto",
-        }}>
-            <List>
-                {props.homePageController.announcementsAndEvents?.map((announcementOrEvent) => {
+    const renderHomePageList = () => {
+        return <List>
+            {(props.homePageController.announcementsAndEvents !== null) &&
+                props.homePageController.announcementsAndEvents.map((announcementOrEvent) => {
                     if (instanceOfAnnouncementWithPublisherDetails(announcementOrEvent)) {
                         return (
                             <ListItem key={"a" + announcementOrEvent.announcementGuid}>
@@ -105,7 +102,15 @@ function HomePage(props: HomePageProps): JSX.Element {
                         );
                     }
                 })}
-            </List>
+        </List>;
+    };
+
+    return (
+        <Paper sx={{
+            marginBottom: `${Constants.muiBoxDefaultPadding}px`,
+            overflow: "auto",
+        }}>
+            {props.homePageController.announcementsAndEvents !== null ? renderHomePageList() : null}
         </Paper>
     );
 }

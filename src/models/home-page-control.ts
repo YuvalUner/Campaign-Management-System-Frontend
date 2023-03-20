@@ -4,7 +4,7 @@ import PublishedEventWithPublisher from "./published-event-with-publisher";
 interface HomePageControl{
     limit?: number;
     offset?: number;
-    announcementsAndEvents?: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[] | null;
+    announcementsAndEvents: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[] | null;
 }
 
 export default HomePageControl;
