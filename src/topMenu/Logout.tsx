@@ -1,14 +1,19 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {googleLogout} from "@react-oauth/google";
-import {Box, Button} from "@mui/material";
+import {Box} from "@mui/material";
 import GenericRequestMaker from "../utils/generic-request-maker";
 import config from "../app-config.json";
+import Events from "../utils/events";
+import UserWithCampaigns from "../models/user-with-campaigns";
 
 interface LogoutProps {
     setIsLoggedIn: (isLoggedIn: boolean) => void;
+    setUser: (user: UserWithCampaigns) => void;
 }
 
 function Logout(props: LogoutProps): JSX.Element {
+
+    const windowClosedEvent = "beforeunload";
 
     const logout = async (): Promise<void> => {
         props.setIsLoggedIn(false);
@@ -17,11 +22,24 @@ function Logout(props: LogoutProps): JSX.Element {
             config.ControllerUrls.Tokens.Base + config.ControllerUrls.Tokens.SignOut,
             null
         );
+        props.setUser({} as UserWithCampaigns);
+        Events.dispatch(Events.EventNames.UserLoggedOut);
     };
 
+    useEffect(() => {
+        // Make sure that the user is logged out when the window is closed.
+        // This is used instead of the Events.subscribed method because that method subscribes to document events,
+        // which are not triggered when the window is closed.
+        window.addEventListener(windowClosedEvent, logout);
+        // Unsubscribe from the event when the component is unmounted.
+        return () => {
+            window.removeEventListener(windowClosedEvent, logout);
+        };
+    }, []);
+
     return (
-        <Box>
-            <Button color={"inherit"} onClick={logout}>Logout</Button>
+        <Box onClick={logout}>
+            Logout
         </Box>
     );
 }
