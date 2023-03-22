@@ -1,17 +1,19 @@
-import React, {useEffect} from "react";
+import React, {useEffect, memo, useContext} from "react";
 import Constants from "./constants";
 import {Box, IconButton, styled, Tooltip} from "@mui/material";
 import Events from "./events";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
+import componentIds from "./component-ids";
+import {UserLoggedInContext} from "../App";
 
 interface DrawerPageFlowProps {
-    children: JSX.Element;
-    isLoggedIn: boolean;
+    children: JSX.Element ;
 }
 
 function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
 
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+    const isLoggedIn = useContext(UserLoggedInContext);
 
     useEffect(() => {
         Events.subscribe(Events.EventNames.LeftDrawerOpened, () => {
@@ -46,24 +48,24 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
         <Main open={isDrawerOpen} sx={{
             display: "flex",
             flexDirection: "column",
-            height: `calc(100% - ${Constants.topMenuHeight * 2}px)`,
+            height: `calc(100% - ${Constants.topMenuHeight * 2.5}px)`,
             paddingBottom: "0px",
         }}>
             <Box sx={{
                 marginBottom: `${Constants.muiBoxDefaultPadding}px`,
-                overflow: "auto",
-                marginLeft: props.isLoggedIn ? `${Constants.muiBoxDefaultPadding}px` : "0px",
-            }}>
+                overflow: "hidden",
+                marginLeft: isLoggedIn ? `${Constants.muiBoxDefaultPadding}px` : "0px",
+            }} id={componentIds.DrawerPageFlowMainBoxId}>
                 {props.children}
             </Box>
-            {props.isLoggedIn && <Box sx={{
+            {isLoggedIn && <Box sx={{
                 display: "flex",
                 justifyContent: "left",
                 alignItems: "center",
                 anchor: "left",
                 // Center the button vertically by subtracting the height of the top menu twice
                 // (once for the top and once for the bottom).
-                height: `calc(100% - ${Constants.topMenuHeight * 2}px)`,
+                height: `calc(100% - ${Constants.topMenuHeight * 2.5}px)`,
                 position: "absolute"
             }}>
                 <Tooltip title={isDrawerOpen ? "Close campaign list" : "Open campaign list"}
@@ -99,4 +101,4 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
     );
 }
 
-export default DrawerPageFlow;
+export default memo(DrawerPageFlow);

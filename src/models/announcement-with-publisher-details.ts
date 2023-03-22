@@ -8,7 +8,7 @@ interface AnnouncementWithPublisherDetails extends Announcement, HasPublishingDa
     profilePicUrl?: string;
     email?: string;
     phoneNum?: string;
-    campaignName?: string;
+    campaignName: string | null;
     campaignLogoUrl?: string;
 }
 

@@ -7,262 +7,176 @@ import AnnouncementWithPublisherDetails from "../models/announcement-with-publis
 import PublishedEventWithPublisher from "../models/published-event-with-publisher";
 import Events from "../utils/events";
 import {
-    Avatar,
-    Card, CardActions,
-    CardContent,
-    CardHeader, Collapse,
     List,
-    ListItem,
-    Paper, styled, Typography,
+    Paper,
 } from "@mui/material";
 
 import Constants from "../utils/constants";
-import {toDdMmYyyy, toDdMmYyyyHhMm} from "../utils/date-converter";
-import AnnouncementIcon from "@mui/icons-material/Announcement";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import IconButton, {IconButtonProps} from "@mui/material/IconButton";
-import EventIcon from "@mui/icons-material/Event";
-import {Link} from "react-router-dom";
-import ScreenRoutes from "../utils/screen-routes";
+import InfiniteScroll from "react-infinite-scroll-component";
+import componentIds from "../utils/component-ids";
+import AnnouncementCard from "./AnnouncementCard";
+import EventCard from "./EventCard";
+import ComponentIds from "../utils/component-ids";
 
-interface HomePageProps {
-    homePageController: HomePageControl;
-    setHomePageController: (homePageController: HomePageControl) => void;
-}
-
-function HomePage(props: HomePageProps): JSX.Element {
-
-    const maxAnnouncementLength = 150;
-
-    interface ExpandMoreProps extends IconButtonProps {
-        expand: boolean;
-    }
-
-    const collapseTypographySx = {
-        whiteSpace: "pre-line",
-        marginLeft: `${Constants.muiBoxDefaultPadding}px`,
-        marginRight: `${Constants.muiBoxDefaultPadding}px`,
+const instanceOfAnnouncementWithPublisherDetails =
+    (object: AnnouncementWithPublisherDetails | PublishedEventWithPublisher):
+        object is AnnouncementWithPublisherDetails => {
+        return "announcementGuid" in object;
     };
+
+const instanceOfPublishedEventWithPublisher =
+    (object: AnnouncementWithPublisherDetails | PublishedEventWithPublisher):
+        object is PublishedEventWithPublisher => {
+        return "eventGuid" in object;
+    };
+
+const toDict = (arr: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[]) => {
+    const dict: { [key: string]: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[] } = {};
+    arr.forEach((item) => {
+        let key = "";
+        if (instanceOfAnnouncementWithPublisherDetails(item)) {
+            key = item.announcementGuid as string;
+        } else if (instanceOfPublishedEventWithPublisher(item)) {
+            key = item.eventGuid as string;
+        }
+        if (!dict[key]) {
+            dict[key] = [];
+        }
+        dict[key].push(item);
+    });
+    return dict;
+};
+
+function HomePage(): JSX.Element {
+
+
+    const [homePageControl, setHomePageControl] = React.useState<HomePageControl>({
+        announcementsAndEvents: null,
+        limit: Constants.defaultLimit,
+        offset: Constants.defaultOffset,
+    });
+    const [hasMore, setHasMore] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
 
     const retrieveHomePage = async ():
         Promise<void> => {
-        const query = `?limit=${props.homePageController.limit}&offset=${props.homePageController.offset}`;
-        const res = await GenericRequestMaker.MakeGetRequest<HomePageControl>(
-            config.ControllerUrls.PublicBoard.Base + config.ControllerUrls.PublicBoard.GetPublicBoard + query,
-        );
-        if (res.status === HttpStatusCode.Ok) {
-            const announcements: AnnouncementWithPublisherDetails[] | null = res.data.announcements;
-            const events: PublishedEventWithPublisher[] | null = res.data.events;
+        setLoading(true);
+        if (!loading) {
+            const query = `?limit=${homePageControl.limit}&offset=${homePageControl.offset}`;
+            const res = await GenericRequestMaker.MakeGetRequest<HomePageControl>(
+                config.ControllerUrls.PublicBoard.Base + config.ControllerUrls.PublicBoard.GetPublicBoard + query,
+            );
+            if (res.status === HttpStatusCode.Ok) {
+                const announcements: AnnouncementWithPublisherDetails[] | null = res.data.announcements;
+                const events: PublishedEventWithPublisher[] | null = res.data.events;
 
-            let combined: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[] | null = null;
+                let combined: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[] = [];
 
-            if (announcements !== null && events !== null && announcements.length > 0 && events.length > 0) {
-                combined = announcements.concat(events);
-                combined.sort((a, b) => {
-                    return a.publishingDate.valueOf() - b.publishingDate.valueOf();
+                if (announcements !== null && events !== null && announcements.length > 0 && events.length > 0) {
+                    combined = combined.concat(announcements);
+                    combined = combined.concat(events);
+
+                    // Convert to dictionary
+                    const combinedDict = toDict(combined);
+                    combined = [];
+                    const dictKeys = Object.keys(combinedDict);
+                    // Sort each array by publishing date, in order to maintain the order established by the server
+                    // when the data was retrieved, as the server takes user preferences into account
+                    dictKeys.forEach((key) => {
+                        combinedDict[key].sort((a, b) => {
+                            return a.publishingDate.valueOf() - b.publishingDate.valueOf();
+                        });
+                        combinedDict[key].forEach((item) => {
+                            combined.push(item);
+                        });
+                    });
+                } else if (announcements !== null && announcements.length > 0) {
+                    combined = announcements;
+                } else if (events !== null && events.length > 0) {
+                    combined = events;
+                } else {
+                    setHasMore(false);
+                }
+
+                setHomePageControl({
+                    announcementsAndEvents: homePageControl.announcementsAndEvents === null ?
+                        combined :
+                        homePageControl.announcementsAndEvents.concat(combined),
+                    limit: homePageControl.limit,
+                    offset: homePageControl.offset + homePageControl.limit,
                 });
-            } else if (announcements !== null && announcements.length > 0) {
-                combined = announcements;
-            } else if (events !== null && events.length > 0) {
-                combined = events;
-            }
 
-            props.setHomePageController({
-                announcementsAndEvents: props.homePageController.announcementsAndEvents === null ?
-                    combined :
-                    props.homePageController.announcementsAndEvents.concat(combined === null ? [] : combined),
-                limit: props.homePageController.limit,
-                offset: props.homePageController.offset + props.homePageController.limit,
-            });
+            }
         }
+        setLoading(false);
     };
 
     useEffect(() => {
-        if (props.homePageController.announcementsAndEvents === null) {
-            // eslint-disable-next-line no-console
-            retrieveHomePage().catch(console.error);
-        }
+        retrieveHomePage();
     }, []);
+
+    const emptyAndRetrieveHomePage = async (): Promise<void> => {
+        setHomePageControl({
+            announcementsAndEvents: null,
+            limit: homePageControl.limit,
+            offset: 0,
+        });
+        await retrieveHomePage();
+    };
 
     useEffect(() => {
         // When the user logs in or out, we want to empty out the home page and then retrieve it again, so that
         // the user can see the announcements and events that are relevant to them.
-        Events.subscribe(Events.EventNames.UserLoggedIn, retrieveHomePage);
-        Events.subscribe(Events.EventNames.UserLoggedOut, retrieveHomePage);
+        Events.subscribe(Events.EventNames.UserLoggedIn, emptyAndRetrieveHomePage);
+        Events.subscribe(Events.EventNames.UserLoggedOut, emptyAndRetrieveHomePage);
+        // Clean up the event listeners when the component unmounts.
         return () => {
-            Events.unsubscribe(Events.EventNames.UserLoggedIn, retrieveHomePage);
-            Events.unsubscribe(Events.EventNames.UserLoggedOut, retrieveHomePage);
+            Events.unsubscribe(Events.EventNames.UserLoggedIn, emptyAndRetrieveHomePage);
+            Events.unsubscribe(Events.EventNames.UserLoggedOut, emptyAndRetrieveHomePage);
         };
     }, []);
-
-
-    const instanceOfAnnouncementWithPublisherDetails = (object: any): object is AnnouncementWithPublisherDetails => {
-        return "announcementGuid" in object;
-    };
-
-    const instanceOfPublishedEventWithPublisher = (object: any): object is PublishedEventWithPublisher => {
-        return "eventGuid" in object;
-    };
-
-    const ExpandMore = styled((props: ExpandMoreProps) => {
-        const {expand, ...other} = props;
-        return <IconButton {...other} />;
-    })(({theme, expand}) => ({
-        transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-        marginLeft: "auto",
-        transition: theme.transitions.create("transform", {
-            duration: theme.transitions.duration.shortest,
-        }),
-    }));
-
-    const createCardForAnnouncement = (announcement: AnnouncementWithPublisherDetails): JSX.Element => {
-        if (announcement.announcementContent === undefined || announcement.announcementTitle === undefined) {
-            return (<ListItem key={"a" + announcement.announcementGuid}/>);
-        }
-
-        const needsExpansion: boolean = announcement.announcementContent.length > maxAnnouncementLength;
-        const announcementContent: string = needsExpansion ?
-            announcement.announcementContent.substring(0, maxAnnouncementLength) + "..." :
-            announcement.announcementContent;
-
-        const [expanded, setExpanded] = React.useState(false);
-
-        let publisherName: string = announcement.displayNameEng ?? "Unknown";
-
-        if (announcement.firstNameHeb !== null) {
-            publisherName = announcement.firstNameHeb + " " + announcement.lastNameHeb;
-        }
-
-        return (
-            <ListItem key={"a" + announcement.announcementGuid}>
-                <Card sx={{
-                    width: `calc(100% - ${Constants.muiBoxDefaultPadding * 2}px)`,
-                }}>
-                    <CardHeader
-                        avatar={
-                            <Avatar alt={announcement.campaignName} src={announcement.campaignLogoUrl}/>
-                        }
-                        title={announcement.announcementTitle}
-                        subheader={`Published by ${publisherName} on ${toDdMmYyyyHhMm(announcement.publishingDate)}`}
-                        action={
-                            <AnnouncementIcon/>
-                        }
-                    />
-                    <Collapse in={!expanded} timeout="auto" unmountOnExit sx={collapseTypographySx}>
-                        <Typography paragraph>
-                            {announcementContent}
-                        </Typography>
-                    </Collapse>
-                    <Collapse in={expanded} timeout="auto" unmountOnExit sx={collapseTypographySx}>
-                        <Typography paragraph>
-                            {announcement.announcementContent}
-                        </Typography>
-                    </Collapse>
-                    <CardActions disableSpacing>
-                        <ExpandMore
-                            onClick={() => setExpanded(!expanded)}
-                            aria-expanded={expanded}
-                            aria-label="show more"
-                            expand={expanded}
-                            sx={{
-                                visibility: needsExpansion ? "visible" : "hidden",
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "right",
-                                },
-                            }}
-                        >
-                            <ExpandMoreIcon/>
-                        </ExpandMore>
-                    </CardActions>
-                </Card>
-            </ListItem>
-        );
-    };
-
-    const createCardForEvent = (event: PublishedEventWithPublisher): JSX.Element => {
-        if (event.eventName === undefined) {
-            return (<ListItem key={"e" + event.eventGuid}/>);
-        }
-
-        const [expanded, setExpanded] = React.useState(false);
-
-        let publisherName: string = event.displayNameEng ?? "";
-
-        if (event.firstNameHeb !== null) {
-            publisherName = event.firstNameHeb + " " + event.lastNameHeb;
-        }
-
-        return (
-            <ListItem key={"e" + event.eventGuid}>
-                <Card sx={{
-                    width: `calc(100% - ${Constants.muiBoxDefaultPadding * 2}px)`,
-                }}>
-                    <CardHeader
-                        avatar={
-                            <Avatar alt={event.campaignName} src={event.campaignLogoUrl}/>
-                        }
-                        title={<Link to={`${ScreenRoutes.PublicEventPage}${event.eventGuid}`}>{event.eventName}</Link>}
-                        subheader={`Published by ${publisherName} on ${toDdMmYyyy(event.publishingDate)}`}
-                        action={
-                            <EventIcon/>
-                        }
-                    />
-                    <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                            {event.eventDescription}
-                        </Typography>
-                    </CardContent>
-                    <CardActions disableSpacing>
-                        <ExpandMore
-                            onClick={() => setExpanded(!expanded)}
-                            aria-expanded={expanded}
-                            aria-label="show more"
-                            expand={expanded}
-                            sx={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "right",
-                                },
-                            }}
-                        >
-                            <ExpandMoreIcon/>
-                        </ExpandMore>
-                    </CardActions>
-                    <Collapse in={expanded} timeout="auto" unmountOnExit sx={collapseTypographySx}>
-                        <Typography paragraph>
-                            Location: {event.eventLocation} <br/>
-                            Start time: {toDdMmYyyyHhMm(event.eventStartTime)} <br/>
-                            End time: {toDdMmYyyyHhMm(event.eventEndTime)} <br/>
-                            Max attendees: {event.maxAttendees} <br/>
-                            Current attendees: {event.numAttending}
-                        </Typography>
-                    </Collapse>
-                </Card>
-            </ListItem>
-        );
-    };
 
     const renderHomePageList = () => {
         return (
             <List>
-                {(props.homePageController.announcementsAndEvents !== null) &&
-                    props.homePageController.announcementsAndEvents.map((announcementOrEvent) => {
+                {homePageControl.announcementsAndEvents !== null ?
+                    homePageControl.announcementsAndEvents.map((announcementOrEvent) => {
                         if (instanceOfAnnouncementWithPublisherDetails(announcementOrEvent)) {
-                            return (createCardForAnnouncement(announcementOrEvent));
+                            return (<AnnouncementCard announcement={announcementOrEvent}
+                                key={"a" + announcementOrEvent.announcementGuid}/>);
                         } else if (instanceOfPublishedEventWithPublisher(announcementOrEvent)) {
-                            return (createCardForEvent(announcementOrEvent));
+                            return (<EventCard event={announcementOrEvent} key={"e" + announcementOrEvent.eventGuid}/>);
                         }
-                    })}
+                    }) : <></>}
             </List>);
     };
 
     return (
-        <Paper sx={{
-            marginBottom: `${Constants.muiBoxDefaultPadding}px`,
-        }}>
-            {props.homePageController.announcementsAndEvents !== null ? renderHomePageList() : null}
-        </Paper>
+        <InfiniteScroll next={retrieveHomePage}
+            hasMore={hasMore}
+            loader={<></>}
+            dataLength={homePageControl.announcementsAndEvents?.length ?? 0}
+            // endMessage={
+            //     <Typography variant={"h5"}
+            //         sx={{alignSelf: "center", justifySelf: "center"}}>No more announcements or
+            //                     events to show
+            //     </Typography>
+            // }
+            scrollableTarget={componentIds.HomePagePaper}
+            style={{height: `calc(100vh - ${Constants.topMenuHeight * 2}px)`}}
+        >
+            <Paper sx={{
+                marginBottom: `${Constants.muiBoxDefaultPadding}px`,
+                display: "flex",
+                overflow: "auto",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+            }} id={ComponentIds.HomePagePaper}>
+
+                {homePageControl.announcementsAndEvents !== null ? renderHomePageList() : null}
+            </Paper>
+        </InfiniteScroll>
     );
 }
 

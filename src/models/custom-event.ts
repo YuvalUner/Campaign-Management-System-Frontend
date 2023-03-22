@@ -1,8 +1,8 @@
 interface CustomEvent{
-    eventGuid?: string;
-    eventName?: string;
-    eventDescription?: string;
-    eventLocation?: string;
+    eventGuid: string | null;
+    eventName: string | null;
+    eventDescription: string | null;
+    eventLocation: string | null;
     eventStartTime?: Date;
     eventEndTime?: Date;
     maxAttendees?: number;
