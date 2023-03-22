@@ -29,7 +29,8 @@ function App(): JSX.Element {
                 <TopMenu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} user={user} setUser={setUser}/>
                 <SideMenu campaignList={user.campaigns}/>
                 <DrawerPageFlow isLoggedIn={isLoggedIn}>
-                    <Router homePageController={homePageController} setHomePageController={setHomePageController}/>
+                    <Router homePageController={homePageController} setHomePageController={setHomePageController}
+                        isLoggedIn={isLoggedIn}/>
                 </DrawerPageFlow>
             </Box>
         </BrowserRouter>

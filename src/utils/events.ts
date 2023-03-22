@@ -11,6 +11,7 @@ class Events{
         UserLoggedOut: "UserLoggedOut",
         LeftDrawerOpened: "LeftDrawerOpened",
         LeftDrawerClosed: "LeftDrawerClosed",
+        PageBottomReached: "PageBottomReached",
     };
 
     /**

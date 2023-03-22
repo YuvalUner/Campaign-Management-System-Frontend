@@ -2,8 +2,8 @@ import AnnouncementWithPublisherDetails from "./announcement-with-publisher-deta
 import PublishedEventWithPublisher from "./published-event-with-publisher";
 
 interface HomePageControl{
-    limit?: number;
-    offset?: number;
+    limit: number;
+    offset: number;
     announcementsAndEvents: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[] | null;
 }
 

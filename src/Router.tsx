@@ -5,10 +5,13 @@ import ScreenRoutes from "./utils/screen-routes";
 import ProfilePage from "./ProfilePage/ProfilePage";
 import HomePageControl from "./models/home-page-control";
 import CampaignPage from "./campaignPage/CampaignPage";
+import PublicCampaignPage from "./campaignPage/PublicCampaignPage";
+import PublicEventPage from "./event/PublicEventPage";
 
 interface RouterProps {
     homePageController: HomePageControl;
     setHomePageController: (homePageController: HomePageControl) => void;
+    isLoggedIn: boolean;
 }
 
 /**
@@ -22,6 +25,8 @@ function Router(props: RouterProps): JSX.Element {
                 setHomePageController={props.setHomePageController}/>}/>
             <Route path={ScreenRoutes.ProfilePage} element={<ProfilePage/>}/>
             <Route path={ScreenRoutes.CampaignRoute} element={<CampaignPage/>}/>
+            <Route path={ScreenRoutes.PublicCampaignRoute} element={<PublicCampaignPage/>}/>
+            <Route path={ScreenRoutes.PublicEventRoute} element={<PublicEventPage/>}/>
         </Routes>
     );
 }

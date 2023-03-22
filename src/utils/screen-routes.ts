@@ -9,6 +9,10 @@ const ScreenRoutes = {
     ProfilePage: "/profile",
     CampaignRoute: "/campaign/*",
     CampaignPage: "/campaign/",
+    PublicCampaignPage: "/public-campaign/",
+    PublicCampaignRoute: "/public-campaign/*",
+    PublicEventPage: "/public-event/",
+    PublicEventRoute: "/public-event/*",
 };
 
 export default ScreenRoutes;
