@@ -2,10 +2,12 @@ import React, {memo} from "react";
 import {Routes, Route} from "react-router-dom";
 import HomePage from "./homePage/HomePage";
 import ScreenRoutes from "./utils/screen-routes";
-import ProfilePage from "./ProfilePage/ProfilePage";
+import ProfilePage from "./profilePage/ProfilePage";
 import CampaignPage from "./campaignPage/CampaignPage";
 import PublicCampaignPage from "./campaignPage/PublicCampaignPage";
 import PublicEventPage from "./event/PublicEventPage";
+import HomePageControl from "./models/home-page-control";
+import Constants from "./utils/constants";
 
 
 /**
@@ -14,9 +16,17 @@ import PublicEventPage from "./event/PublicEventPage";
  */
 function Router(): JSX.Element {
 
+    const [homePageControl, setHomePageControl] = React.useState<HomePageControl>({
+        announcementsAndEvents: null,
+        limit: Constants.defaultLimit,
+        offset: Constants.defaultOffset,
+        hasMore: true,
+    });
+
     return (
         <Routes key={"MainRouter"}>
-            <Route path={ScreenRoutes.HomePage} element={<HomePage/>}/>
+            <Route path={ScreenRoutes.HomePage} element={<HomePage
+                homePageControl={homePageControl} setHomePageControl={setHomePageControl}/>}/>
             <Route path={ScreenRoutes.ProfilePage} element={<ProfilePage/>}/>
             <Route path={ScreenRoutes.CampaignRoute} element={<CampaignPage/>}/>
             <Route path={ScreenRoutes.PublicCampaignRoute} element={<PublicCampaignPage/>}/>
