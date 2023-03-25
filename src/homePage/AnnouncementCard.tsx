@@ -9,7 +9,6 @@ import AnnouncementWithPublisherDetails from "../models/announcement-with-publis
 
 interface AnnouncementCardProps {
     announcement: AnnouncementWithPublisherDetails;
-    cardWidth: number;
 }
 
 const maxAnnouncementLength = 150;
@@ -26,12 +25,6 @@ function AnnouncementCard(props: AnnouncementCardProps): JSX.Element {
             props.announcement.announcementContent;
     }
 
-    const collapseTypographySx = {
-        whiteSpace: "pre-line",
-        marginLeft: `${Constants.muiBoxDefaultPadding}px`,
-        marginRight: `${Constants.muiBoxDefaultPadding}px`,
-    };
-
     const [expanded, setExpanded] = React.useState(false);
 
     let publisherName: string = props.announcement.displayNameEng ?? "Unknown";
@@ -43,7 +36,7 @@ function AnnouncementCard(props: AnnouncementCardProps): JSX.Element {
     return (
         <ListItem>
             <Card sx={{
-                width: props.cardWidth,
+                width: "100%",
             }}>
                 <CardHeader
                     avatar={
@@ -56,16 +49,17 @@ function AnnouncementCard(props: AnnouncementCardProps): JSX.Element {
                         <AnnouncementIcon/>
                     }
                 />
-                <Box>
-                    <Collapse in={!expanded} timeout="auto" unmountOnExit sx={collapseTypographySx}>
+                <Box sx={{
+                    marginLeft: `${Constants.muiBoxDefaultPadding}px`,
+                    marginRight: `${Constants.muiBoxDefaultPadding / 2}px`,
+                    whitespace: "pre-line",
+                }}>
+                    <Collapse in={!expanded} timeout="auto" unmountOnExit>
                         <Typography paragraph>
                             {announcementContent}
                         </Typography>
                     </Collapse>
-                    <Collapse in={expanded} timeout="auto" unmountOnExit sx={{
-                        ...collapseTypographySx,
-
-                    }}>
+                    <Collapse in={expanded} timeout="auto">
                         <Typography paragraph>
                             {props.announcement.announcementContent}
                         </Typography>
