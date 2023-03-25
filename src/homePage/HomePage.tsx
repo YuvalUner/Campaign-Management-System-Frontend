@@ -55,6 +55,7 @@ interface HomePageProps {
 function HomePage(props: HomePageProps): JSX.Element {
 
     const [loading, setLoading] = React.useState(false);
+    const cardWidth = window.innerWidth - (Constants.drawerWidth * 2);
 
     const retrieveHomePage = async ():
         Promise<void> => {
@@ -142,10 +143,11 @@ function HomePage(props: HomePageProps): JSX.Element {
                 {props.homePageControl.announcementsAndEvents !== null ?
                     props.homePageControl.announcementsAndEvents.map((announcementOrEvent) => {
                         if (instanceOfAnnouncementWithPublisherDetails(announcementOrEvent)) {
-                            return (<AnnouncementCard announcement={announcementOrEvent}
+                            return (<AnnouncementCard announcement={announcementOrEvent} cardWidth={cardWidth}
                                 key={"a" + announcementOrEvent.announcementGuid}/>);
                         } else if (instanceOfPublishedEventWithPublisher(announcementOrEvent)) {
-                            return (<EventCard event={announcementOrEvent} key={"e" + announcementOrEvent.eventGuid}/>);
+                            return (<EventCard event={announcementOrEvent} cardWidth={cardWidth}
+                                key={"e" + announcementOrEvent.eventGuid}/>);
                         }
                     }) : <></>}
             </List>);

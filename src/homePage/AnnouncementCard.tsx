@@ -1,5 +1,5 @@
 import React from "react";
-import {Avatar, Card, CardActions, CardHeader, Collapse, ListItem, Typography} from "@mui/material";
+import {Avatar, Box, Card, CardActions, CardHeader, Collapse, ListItem, Typography} from "@mui/material";
 import Constants from "../utils/constants";
 import {toDdMmYyyyHhMm} from "../utils/date-converter";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
@@ -9,6 +9,7 @@ import AnnouncementWithPublisherDetails from "../models/announcement-with-publis
 
 interface AnnouncementCardProps {
     announcement: AnnouncementWithPublisherDetails;
+    cardWidth: number;
 }
 
 const maxAnnouncementLength = 150;
@@ -42,7 +43,7 @@ function AnnouncementCard(props: AnnouncementCardProps): JSX.Element {
     return (
         <ListItem>
             <Card sx={{
-                width: "100%",
+                width: props.cardWidth,
             }}>
                 <CardHeader
                     avatar={
@@ -55,16 +56,21 @@ function AnnouncementCard(props: AnnouncementCardProps): JSX.Element {
                         <AnnouncementIcon/>
                     }
                 />
-                <Collapse in={!expanded} timeout="auto" unmountOnExit sx={collapseTypographySx}>
-                    <Typography paragraph>
-                        {announcementContent}
-                    </Typography>
-                </Collapse>
-                <Collapse in={expanded} timeout="auto" unmountOnExit sx={collapseTypographySx}>
-                    <Typography paragraph>
-                        {props.announcement.announcementContent}
-                    </Typography>
-                </Collapse>
+                <Box>
+                    <Collapse in={!expanded} timeout="auto" unmountOnExit sx={collapseTypographySx}>
+                        <Typography paragraph>
+                            {announcementContent}
+                        </Typography>
+                    </Collapse>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit sx={{
+                        ...collapseTypographySx,
+
+                    }}>
+                        <Typography paragraph>
+                            {props.announcement.announcementContent}
+                        </Typography>
+                    </Collapse>
+                </Box>
                 <CardActions disableSpacing>
                     <ExpandMoreButton
                         onClick={() => setExpanded(!expanded)}

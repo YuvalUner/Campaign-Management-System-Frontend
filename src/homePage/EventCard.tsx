@@ -11,6 +11,7 @@ import ExpandMoreButton from "./ExpandMoreButton";
 
 interface EventCardProps {
     event: PublishedEventWithPublisher;
+    cardWidth: number;
 }
 function EventCard(props: EventCardProps): JSX.Element {
     const [expanded, setExpanded] = React.useState(false);
@@ -24,7 +25,7 @@ function EventCard(props: EventCardProps): JSX.Element {
     return (
         <ListItem>
             <Card sx={{
-                width: "100%",
+                width: props.cardWidth,
             }}>
                 <CardHeader
                     avatar={
