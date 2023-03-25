@@ -47,28 +47,27 @@ const toDict = (arr: (AnnouncementWithPublisherDetails | PublishedEventWithPubli
     return dict;
 };
 
-function HomePage(): JSX.Element {
+interface HomePageProps {
+    homePageControl: HomePageControl;
+    setHomePageControl: (homePageControl: HomePageControl) => void;
+}
 
+function HomePage(props: HomePageProps): JSX.Element {
 
-    const [homePageControl, setHomePageControl] = React.useState<HomePageControl>({
-        announcementsAndEvents: null,
-        limit: Constants.defaultLimit,
-        offset: Constants.defaultOffset,
-    });
-    const [hasMore, setHasMore] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
 
     const retrieveHomePage = async ():
         Promise<void> => {
-        setLoading(true);
-        if (!loading) {
-            const query = `?limit=${homePageControl.limit}&offset=${homePageControl.offset}`;
+        if (!loading && props.homePageControl.hasMore) {
+            setLoading(true);
+            const query = `?limit=${props.homePageControl.limit}&offset=${props.homePageControl.offset}`;
             const res = await GenericRequestMaker.MakeGetRequest<HomePageControl>(
                 config.ControllerUrls.PublicBoard.Base + config.ControllerUrls.PublicBoard.GetPublicBoard + query,
             );
             if (res.status === HttpStatusCode.Ok) {
                 const announcements: AnnouncementWithPublisherDetails[] | null = res.data.announcements;
                 const events: PublishedEventWithPublisher[] | null = res.data.events;
+                let hasMore = true;
 
                 let combined: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[] = [];
 
@@ -95,20 +94,20 @@ function HomePage(): JSX.Element {
                 } else if (events !== null && events.length > 0) {
                     combined = events;
                 } else {
-                    setHasMore(false);
+                    hasMore = false;
                 }
 
-                setHomePageControl({
-                    announcementsAndEvents: homePageControl.announcementsAndEvents === null ?
+                props.setHomePageControl({
+                    announcementsAndEvents: props.homePageControl.announcementsAndEvents === null ?
                         combined :
-                        homePageControl.announcementsAndEvents.concat(combined),
-                    limit: homePageControl.limit,
-                    offset: homePageControl.offset + homePageControl.limit,
+                        props.homePageControl.announcementsAndEvents.concat(combined),
+                    limit: props.homePageControl.limit,
+                    offset: props.homePageControl.offset + props.homePageControl.limit,
+                    hasMore: hasMore,
                 });
-
+                setLoading(false);
             }
         }
-        setLoading(false);
     };
 
     useEffect(() => {
@@ -116,10 +115,11 @@ function HomePage(): JSX.Element {
     }, []);
 
     const emptyAndRetrieveHomePage = async (): Promise<void> => {
-        setHomePageControl({
+        props.setHomePageControl({
             announcementsAndEvents: null,
-            limit: homePageControl.limit,
-            offset: 0,
+            limit: props.homePageControl.limit,
+            offset: Constants.defaultOffset,
+            hasMore: true,
         });
         await retrieveHomePage();
     };
@@ -139,8 +139,8 @@ function HomePage(): JSX.Element {
     const renderHomePageList = () => {
         return (
             <List>
-                {homePageControl.announcementsAndEvents !== null ?
-                    homePageControl.announcementsAndEvents.map((announcementOrEvent) => {
+                {props.homePageControl.announcementsAndEvents !== null ?
+                    props.homePageControl.announcementsAndEvents.map((announcementOrEvent) => {
                         if (instanceOfAnnouncementWithPublisherDetails(announcementOrEvent)) {
                             return (<AnnouncementCard announcement={announcementOrEvent}
                                 key={"a" + announcementOrEvent.announcementGuid}/>);
@@ -153,28 +153,19 @@ function HomePage(): JSX.Element {
 
     return (
         <InfiniteScroll next={retrieveHomePage}
-            hasMore={hasMore}
+            hasMore={props.homePageControl.hasMore}
             loader={<></>}
-            dataLength={homePageControl.announcementsAndEvents?.length ?? 0}
-            // endMessage={
-            //     <Typography variant={"h5"}
-            //         sx={{alignSelf: "center", justifySelf: "center"}}>No more announcements or
-            //                     events to show
-            //     </Typography>
-            // }
-            scrollableTarget={componentIds.HomePagePaper}
-            style={{height: `calc(100vh - ${Constants.topMenuHeight * 2}px)`}}
+            dataLength={props.homePageControl.announcementsAndEvents?.length ?? 0}
+            scrollableTarget={componentIds.DrawerPageFlowMainBoxId}
+            style={{height: "100%", width: "100%"}}
         >
             <Paper sx={{
-                marginBottom: `${Constants.muiBoxDefaultPadding}px`,
                 display: "flex",
-                overflow: "auto",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
             }} id={ComponentIds.HomePagePaper}>
-
-                {homePageControl.announcementsAndEvents !== null ? renderHomePageList() : null}
+                {props.homePageControl.announcementsAndEvents !== null ? renderHomePageList() : null}
             </Paper>
         </InfiniteScroll>
     );

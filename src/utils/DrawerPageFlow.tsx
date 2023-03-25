@@ -1,19 +1,20 @@
 import React, {useEffect, memo, useContext} from "react";
 import Constants from "./constants";
-import {Box, IconButton, styled, Tooltip} from "@mui/material";
+import {Box, IconButton, Tooltip} from "@mui/material";
 import Events from "./events";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
 import componentIds from "./component-ids";
 import {UserLoggedInContext} from "../App";
 
 interface DrawerPageFlowProps {
-    children: JSX.Element ;
+    children: JSX.Element;
 }
 
 function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
 
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
     const isLoggedIn = useContext(UserLoggedInContext);
+
 
     useEffect(() => {
         Events.subscribe(Events.EventNames.LeftDrawerOpened, () => {
@@ -25,35 +26,18 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
         });
     }, []);
 
-    const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
-        open?: boolean;
-    }>(({theme, open}) => ({
-        flexGrow: 1,
-        // eslint-disable-next-line no-magic-numbers
-        padding: theme.spacing(3),
-        transition: theme.transitions.create("margin", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        ...(open && {
-            marginLeft: `${Constants.drawerWidth}px`,
-            transition: theme.transitions.create("margin", {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-        }),
-    }));
-
     return (
-        <Main open={isDrawerOpen} sx={{
+        <Box sx={{
             display: "flex",
             flexDirection: "column",
-            height: `calc(100% - ${Constants.topMenuHeight * 2.5}px)`,
+            height: `calc(100% - ${Constants.topMenuHeight * 2}px)`,
             paddingBottom: "0px",
+            marginLeft: isDrawerOpen ? `${Constants.drawerWidth}px` : "0px",
         }}>
             <Box sx={{
-                marginBottom: `${Constants.muiBoxDefaultPadding}px`,
-                overflow: "hidden",
+                // Negative margin used to prevent the content from ending too close to the top menu.
+                marginBottom: `${-Constants.muiBoxDefaultPadding}px`,
+                overflow: "auto",
                 marginLeft: isLoggedIn ? `${Constants.muiBoxDefaultPadding}px` : "0px",
             }} id={componentIds.DrawerPageFlowMainBoxId}>
                 {props.children}
@@ -65,20 +49,20 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
                 anchor: "left",
                 // Center the button vertically by subtracting the height of the top menu twice
                 // (once for the top and once for the bottom).
-                height: `calc(100% - ${Constants.topMenuHeight * 2.5}px)`,
-                position: "absolute"
+                height: `calc(100% - ${Constants.topMenuHeight * 2}px)`,
+                position: "absolute",
             }}>
                 <Tooltip title={isDrawerOpen ? "Close campaign list" : "Open campaign list"}
                     sx={{
                         position: "absolute",
-                        display: "block"
+                        display: "block",
+                        // Using negative margin to offset the padding of the Box,
+                        // so that the button sticks to the left.
+                        marginLeft: `${-Constants.muiBoxDefaultPadding}px`,
                     }}
                 >
                     <IconButton color={"primary"} sx={{
                         position: "absolute",
-                        // Using negative margin to offset the padding of the Box,
-                        // so that the button sticks to the left.
-                        marginLeft: `${-Constants.muiBoxDefaultPadding}px`,
                         display: "block",
                     }}
                     onClick={() => {
@@ -97,7 +81,7 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
                     </IconButton>
                 </Tooltip>
             </Box>}
-        </Main>
+        </Box>
     );
 }
 

@@ -5,6 +5,7 @@ interface HomePageControl{
     limit: number;
     offset: number;
     announcementsAndEvents: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[] | null;
+    hasMore: boolean;
 }
 
 export default HomePageControl;

@@ -12,6 +12,8 @@ class Events{
         LeftDrawerOpened: "LeftDrawerOpened",
         LeftDrawerClosed: "LeftDrawerClosed",
         PageBottomReached: "PageBottomReached",
+        ShouldScrollToRecordedPosition: "ShouldScrollToRecordedPosition",
+        ShouldResetScrollPosition: "ShouldResetScrollPosition",
     };
 
     /**
