@@ -158,7 +158,7 @@ function HomePage(props: HomePageProps): JSX.Element {
             loader={<></>}
             dataLength={props.homePageControl.announcementsAndEvents?.length ?? 0}
             scrollableTarget={componentIds.DrawerPageFlowMainBoxId}
-            style={{height: "100%", width: "100%"}}
+            style={{height: "100%", width: "100%", overflow: "hidden"}}
         >
             <Paper sx={{
                 display: "flex",
