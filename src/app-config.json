@@ -9,7 +9,8 @@
     },
     "Users": {
       "Base": "api/Users/",
-      "HomePageInfo": "HomePageInfo"
+      "HomePageInfo": "HomePageInfo",
+      "UserPrivateInfo": "UserPrivateInfo"
     },
     "PublicBoard": {
       "Base": "api/PublicBoard/",
