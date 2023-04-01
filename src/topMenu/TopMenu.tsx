@@ -64,6 +64,12 @@ function TopMenu(props: TopMenuProps): JSX.Element {
                     <MenuItem onClick={handleClose}>
                         <Logout setIsLoggedIn={props.setIsLoggedIn} setUser={props.setUser}/>
                     </MenuItem>
+                    <MenuItem onClick={() => {
+                        handleClose();
+                        nav(ScreenRoutes.PersonalBallotPage);
+                    }}>
+                        My Ballot
+                    </MenuItem>
                 </Menu>
             </div>
         );

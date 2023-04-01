@@ -8,6 +8,7 @@ import PublicCampaignPage from "./campaignPage/PublicCampaignPage";
 import PublicEventPage from "./event/PublicEventPage";
 import HomePageControl from "./models/home-page-control";
 import Constants from "./utils/constants";
+import PersonalBallotPage from "./personalBallotPage/PersonalBallotPage";
 
 
 /**
@@ -31,6 +32,7 @@ function Router(): JSX.Element {
             <Route path={ScreenRoutes.CampaignRoute} element={<CampaignPage/>}/>
             <Route path={ScreenRoutes.PublicCampaignRoute} element={<PublicCampaignPage/>}/>
             <Route path={ScreenRoutes.PublicEventRoute} element={<PublicEventPage/>}/>
+            <Route path={ScreenRoutes.PersonalBallotPage} element={<PersonalBallotPage/>} />
         </Routes>
     );
 }
