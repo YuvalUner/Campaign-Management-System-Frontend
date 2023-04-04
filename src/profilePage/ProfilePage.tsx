@@ -5,7 +5,8 @@ import config from "../app-config.json";
 import {HttpStatusCode} from "axios";
 import ErrorCodeExtractor from "../utils/error-code-extractor";
 import userPrivateInfo from "../models/user-private-info";
-
+import { Alert, AlertTitle } from "@mui/material"; // For Material-UI
+//import { Alert, AlertTitle } from "react-bootstrap"; // For Bootstrap
 
 function ProfilePage(): JSX.Element {
     // Define state object to store user's personal details
@@ -18,35 +19,56 @@ function ProfilePage(): JSX.Element {
 
     // Define a state variable to track whether the form has been submitted
     const [submitted, setSubmitted] = useState(false);
-
-
+    const [alertMessage, setAlertMessage] = useState<React.ReactNode>(null);
     // Define a function to handle form submission
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         if (!userDetails.firstNameHeb || !userDetails.lastNameHeb || !userDetails.idNumber || !userDetails.cityName) {
-            alert("Please fill in all fields");
+            setAlertMessage(
+                <Alert variant="outlined" severity="error" onClose={() => setAlertMessage(null)}>
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>Please fill in all fields</strong>
+                </Alert>
+            );
             return;
         }
         if (userDetails.firstNameHeb.match(/^[\u0590-\u05FF ]+$/) === null) {
-            alert("First name must be in Hebrew letters only");
+            setAlertMessage(
+                <Alert variant="outlined" severity="error" onClose={() => setAlertMessage(null)}>
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>First name must be in Hebrew letters only</strong>
+                </Alert>
+            );
             return;
         }
         if (userDetails.lastNameHeb.match(/^[\u0590-\u05FF ]+$/) === null) {
-            alert("Last name must be in Hebrew letters only");
+            setAlertMessage(
+                <Alert variant="outlined" severity="error" onClose={() => setAlertMessage(null)}>
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>Last name must be in Hebrew letters only</strong>
+                </Alert>
+            );
             return;
         }
         if (userDetails.cityName.match(/^[a-zA-Z ]+$/) === null) {
-            alert("City name must be in English letters only");
+            setAlertMessage(
+                <Alert variant="outlined" severity="error" onClose={() => setAlertMessage(null)}>
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>City name must be in English letters only</strong>
+                </Alert>
+            );
             return;
         }
         if (userDetails.idNumber.toString().length !== 9) {
-            alert("ID number must be exactly 9 digits");
+            setAlertMessage(
+                <Alert variant="outlined" severity="error" onClose={() => setAlertMessage(null)}>
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>ID number must be exactly 9 digits</strong>
+                </Alert>
+            );
             return;
         }
-
-        // store user details in local storage
-        localStorage.setItem("userDetails", JSON.stringify(userDetails));
 
         setSubmitted(true);
 
@@ -56,17 +78,18 @@ function ProfilePage(): JSX.Element {
         );
 
 
-        /*if (res.status === HttpStatusCode.Ok){
+        if (res.status === HttpStatusCode.Ok){
             // TODO: Handle success
-        }
-        else{
+        } else{
             const errNum = ErrorCodeExtractor(res.data);
-            if (res.status === HttpStatusCode.BadRequest){
-            }
-            else{
+            if (res.status !== HttpStatusCode.Unauthorized) {
+                alert("unauthorized");
+
+            } else{
+                alert("Bad Request");
 
             }
-        }*/
+        }
     };
 
     // Define a function to handle changes in the input fields
@@ -78,6 +101,9 @@ function ProfilePage(): JSX.Element {
         }));
     };
 
+    /*
+    // store user details in local storage
+    localStorage.setItem("userDetails", JSON.stringify(userDetails));
 
     useEffect(() => {
         const storedDetails = localStorage.getItem("userDetails");
@@ -94,6 +120,7 @@ function ProfilePage(): JSX.Element {
     const handleUnload = () => {
         localStorage.removeItem("userDetails");
     };
+    */
 
     return (
         <div>
@@ -108,45 +135,48 @@ function ProfilePage(): JSX.Element {
                 </div>
             ) : (
                 // If the form hasn't been submitted yet, display the form for the user to enter their personal details
-                <form onSubmit={handleSubmit}>
-                    <label>
+                <>
+                    {alertMessage}
+                    <form onSubmit={handleSubmit}>
+                        <label>
                         Name:
-                        <input
-                            type="text"
-                            name="firstNameHeb"
-                            value={userDetails.firstNameHeb}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
+                            <input
+                                type="text"
+                                name="firstNameHeb"
+                                value={userDetails.firstNameHeb}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label>
                         Last Name:
-                        <input
-                            type="text"
-                            name="lastNameHeb"
-                            value={userDetails.lastNameHeb}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
+                            <input
+                                type="text"
+                                name="lastNameHeb"
+                                value={userDetails.lastNameHeb}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label>
                         ID:
-                        <input
-                            type="text"
-                            name="idNumber"
-                            value={userDetails.idNumber}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
+                            <input
+                                type="text"
+                                name="idNumber"
+                                value={userDetails.idNumber}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label>
                         City:
-                        <input
-                            type="text"
-                            name="cityName"
-                            value={userDetails.cityName}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <button type="submit">Submit</button>
-                </form>
+                            <input
+                                type="text"
+                                name="cityName"
+                                value={userDetails.cityName}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <button type="submit">Submit</button>
+                    </form>
+                </>
             )}
         </div>
     );
