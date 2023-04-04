@@ -75,6 +75,12 @@ function TopMenu(props: TopMenuProps): JSX.Element {
         );
     };
 
+    const renderMenuAvailableToLoggedInUsers = (): JSX.Element => {
+        return (<>
+            <Button color={"inherit"} onClick={() => nav(ScreenRoutes.CreateCampaignPage)}>Create Campaign</Button>
+        </>);
+    };
+
 
     return (
         <AppBar position={"sticky"} sx={{
@@ -83,6 +89,7 @@ function TopMenu(props: TopMenuProps): JSX.Element {
             <Toolbar sx={{justifyContent: "space-between"}}>
                 <Box>
                     <Button color={"inherit"} onClick={() => nav(ScreenRoutes.HomePage)}>Home</Button>
+                    {props.isLoggedIn && renderMenuAvailableToLoggedInUsers()}
                 </Box>
                 <Box>
                     {props.isLoggedIn ?

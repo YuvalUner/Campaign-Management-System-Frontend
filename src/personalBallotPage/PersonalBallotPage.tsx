@@ -77,8 +77,9 @@ function PersonalBallotPage(): JSX.Element {
     const renderBallotWithMap = (status: Status) => {
         return (
             <Grid2 container spacing={2} sx={{
-                height: "100%",
+                height: `calc(100% - ${Constants.topMenuHeight}px)`,
                 marginRight: `${Constants.muiBoxDefaultPadding}px`,
+                marginTop: `${Constants.muiBoxDefaultPadding}px`,
             }}>
                 <Grid2 xs={12} md={6}>
                     <Typography variant={"h3"} component={"h2"} gutterBottom>
@@ -102,9 +103,9 @@ function PersonalBallotPage(): JSX.Element {
                 </Grid2>
                 <Grid2 xs={12} md={6}>
                     {renderGoogleMap(status)}
-                    <Typography variant={"caption"}>
-                        *Please note that the location displayed on the map <br/>
-                        is not guaranteed to be the exact location of your ballot.
+                    <Typography variant={"caption"} >
+                        * Please note that the location displayed on the map is not guaranteed to be the exact location
+                        of your ballot.
                     </Typography>
                 </Grid2>
             </Grid2>

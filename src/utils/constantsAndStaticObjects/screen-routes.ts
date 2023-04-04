@@ -13,7 +13,8 @@ const ScreenRoutes = {
     PublicCampaignRoute: "/public-campaign/*",
     PublicEventPage: "/public-event/",
     PublicEventRoute: "/public-event/*",
-    PersonalBallotPage: "/personal-ballot/",
+    PersonalBallotPage: "/personal-ballot",
+    CreateCampaignPage: "/create-campaign",
 };
 
 export default ScreenRoutes;

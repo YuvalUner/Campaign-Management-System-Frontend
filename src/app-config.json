@@ -10,7 +10,8 @@
     },
     "Users": {
       "Base": "api/Users/",
-      "HomePageInfo": "HomePageInfo"
+      "HomePageInfo": "HomePageInfo",
+      "GetVerifiedStatus": "get-verified-status"
     },
     "PublicBoard": {
       "Base": "api/PublicBoard/",
