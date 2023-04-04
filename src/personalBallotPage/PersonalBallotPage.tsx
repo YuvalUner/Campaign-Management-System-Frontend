@@ -9,6 +9,7 @@ import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
 import {Status, Wrapper} from "@googlemaps/react-wrapper";
 import Map from "./Map";
 import Constants from "../utils/constantsAndStaticObjects/constants";
+import Grid2 from "@mui/material/Unstable_Grid2";
 
 function PersonalBallotPage(): JSX.Element {
 
@@ -75,33 +76,38 @@ function PersonalBallotPage(): JSX.Element {
 
     const renderBallotWithMap = (status: Status) => {
         return (
-            <Box sx={{
+            <Grid2 container spacing={2} sx={{
                 height: "100%",
+                marginRight: `${Constants.muiBoxDefaultPadding}px`,
             }}>
-                <Typography variant={"h3"} component={"h2"} gutterBottom>
-                    Your Ballot
-                </Typography>
-                <Typography variant="h5" component="h2" gutterBottom>
-                    {`City: ${ballot.cityName}`}
-                </Typography>
-                <Typography variant="h5" component="h2" gutterBottom>
-                    {`Address: ${ballot.ballotAddress}`}
-                </Typography>
-                <Typography variant="h5" component="h2" gutterBottom>
-                    {`Location: ${ballot.ballotLocation}`}
-                </Typography>
-                <Typography variant="h5" component="h2" gutterBottom>
-                    {`Accessibility: ${ballot.accessible ? "Accessible" : "Not Accessible"}`}
-                </Typography>
-                <Typography variant="h5" component="h2" gutterBottom>
-                    {`Ballot number: ${ballot.innerCityBallotId}`}
-                </Typography>
-                {renderGoogleMap(status)}
-                <Typography variant={"caption"}>
-                    *Please note that the location displayed on the map is not guaranteed to be the exact location of
-                    your ballot.
-                </Typography>
-            </Box>
+                <Grid2 xs={12} md={6}>
+                    <Typography variant={"h3"} component={"h2"} gutterBottom>
+                        Your Ballot
+                    </Typography>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        {`City: ${ballot.cityName}`}
+                    </Typography>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        {`Address: ${ballot.ballotAddress}`}
+                    </Typography>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        {`Location: ${ballot.ballotLocation}`}
+                    </Typography>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        {`Accessibility: ${ballot.accessible ? "Accessible" : "Not Accessible"}`}
+                    </Typography>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        {`Ballot number: ${ballot.innerCityBallotId}`}
+                    </Typography>
+                </Grid2>
+                <Grid2 xs={12} md={6}>
+                    {renderGoogleMap(status)}
+                    <Typography variant={"caption"}>
+                        *Please note that the location displayed on the map <br/>
+                        is not guaranteed to be the exact location of your ballot.
+                    </Typography>
+                </Grid2>
+            </Grid2>
         );
     };
 
