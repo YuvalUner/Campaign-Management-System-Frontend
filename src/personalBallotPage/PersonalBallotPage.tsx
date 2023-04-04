@@ -8,6 +8,7 @@ import {Link} from "react-router-dom";
 import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
 import {Status, Wrapper} from "@googlemaps/react-wrapper";
 import Map from "./Map";
+import Constants from "../utils/constantsAndStaticObjects/constants";
 
 function PersonalBallotPage(): JSX.Element {
 
@@ -64,9 +65,9 @@ function PersonalBallotPage(): JSX.Element {
         case Status.LOADING:
             return <CircularProgress/>;
         case Status.FAILURE:
-            return <div>Failure</div>;
+            return <div>Failed to load map</div>;
         case Status.SUCCESS:
-            return <Box sx={{height: "400px"}}><Map ballot={ballot}/></Box>;
+            return <Map ballot={ballot}/>;
         default:
             return <></>;
         }
@@ -96,6 +97,10 @@ function PersonalBallotPage(): JSX.Element {
                     {`Ballot number: ${ballot.innerCityBallotId}`}
                 </Typography>
                 {renderGoogleMap(status)}
+                <Typography variant={"caption"}>
+                    *Please note that the location displayed on the map is not guaranteed to be the exact location of
+                    your ballot.
+                </Typography>
             </Box>
         );
     };
@@ -105,7 +110,8 @@ function PersonalBallotPage(): JSX.Element {
         <Box sx={{
             display: "flex",
             flexDirection: "column",
-            height: "100%"
+            height: "100%",
+            marginLeft: `${Constants.muiBoxDefaultPadding}px`,
         }}>
             {responseStatus === HttpStatusCode.Unauthorized && renderNotAuthenticatedError()}
             {responseStatus === HttpStatusCode.NotFound && renderNotFoundError()}
