@@ -11,12 +11,12 @@ import {
     Paper,
 } from "@mui/material";
 
-import Constants from "../utils/constants";
+import Constants from "../utils/constantsAndStaticObjects/constants";
 import InfiniteScroll from "react-infinite-scroll-component";
-import componentIds from "../utils/component-ids";
-import AnnouncementCard from "./AnnouncementCard";
-import EventCard from "./EventCard";
-import ComponentIds from "../utils/component-ids";
+import componentIds from "../utils/constantsAndStaticObjects/component-ids";
+import AnnouncementCard from "./cards/AnnouncementCard";
+import EventCard from "./cards/EventCard";
+import ComponentIds from "../utils/constantsAndStaticObjects/component-ids";
 
 const instanceOfAnnouncementWithPublisherDetails =
     (object: AnnouncementWithPublisherDetails | PublishedEventWithPublisher):

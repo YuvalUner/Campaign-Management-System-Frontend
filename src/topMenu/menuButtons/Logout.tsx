@@ -1,10 +1,10 @@
 import React, {useEffect} from "react";
 import {googleLogout} from "@react-oauth/google";
 import {Box} from "@mui/material";
-import GenericRequestMaker from "../utils/generic-request-maker";
-import config from "../app-config.json";
-import Events from "../utils/events";
-import UserWithCampaigns from "../models/user-with-campaigns";
+import GenericRequestMaker from "../../utils/generic-request-maker";
+import config from "../../app-config.json";
+import Events from "../../utils/events";
+import UserWithCampaigns from "../../models/user-with-campaigns";
 
 interface LogoutProps {
     setIsLoggedIn: (isLoggedIn: boolean) => void;

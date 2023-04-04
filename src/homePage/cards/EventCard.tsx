@@ -1,10 +1,10 @@
 import React from "react";
-import PublishedEventWithPublisher from "../models/published-event-with-publisher";
+import PublishedEventWithPublisher from "../../models/published-event-with-publisher";
 import {Avatar, Card, CardActions, CardContent, CardHeader, Collapse, ListItem, Typography} from "@mui/material";
-import Constants from "../utils/constants";
+import Constants from "../../utils/constantsAndStaticObjects/constants";
 import {Link} from "react-router-dom";
-import ScreenRoutes from "../utils/screen-routes";
-import {toDdMmYyyy, toDdMmYyyyHhMm} from "../utils/date-converter";
+import ScreenRoutes from "../../utils/constantsAndStaticObjects/screen-routes";
+import {toDdMmYyyy, toDdMmYyyyHhMm} from "../../utils/date-converter";
 import EventIcon from "@mui/icons-material/Event";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandMoreButton from "./ExpandMoreButton";

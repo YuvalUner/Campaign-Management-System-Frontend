@@ -1,9 +1,9 @@
 import React, {useEffect, memo, useContext} from "react";
-import Constants from "./constants";
+import Constants from "./constantsAndStaticObjects/constants";
 import {Box, IconButton, Tooltip} from "@mui/material";
 import Events from "./events";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
-import componentIds from "./component-ids";
+import componentIds from "./constantsAndStaticObjects/component-ids";
 import {UserLoggedInContext} from "../App";
 
 interface DrawerPageFlowProps {

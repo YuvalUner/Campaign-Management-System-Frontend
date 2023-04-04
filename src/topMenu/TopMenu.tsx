@@ -1,15 +1,15 @@
 import React, {useEffect} from "react";
-import LogIn from "./LogIn";
+import LogIn from "./menuButtons/LogIn";
 import {AppBar, Box, Button, Menu, MenuItem, Toolbar} from "@mui/material";
-import Logout from "./Logout";
+import Logout from "./menuButtons/Logout";
 import Events from "../utils/events";
 import UserWithCampaigns from "../models/user-with-campaigns";
 import GenericRequestMaker from "../utils/generic-request-maker";
 import config from "../app-config.json";
-import UserProfileImage from "./UserProfileImage";
+import UserProfileImage from "./menuButtons/UserProfileImage";
 import {useNavigate} from "react-router-dom";
-import ScreenRoutes from "../utils/screen-routes";
-import Constants from "../utils/constants";
+import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
+import Constants from "../utils/constantsAndStaticObjects/constants";
 
 interface TopMenuProps {
     isLoggedIn: boolean;

@@ -6,6 +6,7 @@
 const componentIds = {
     DrawerPageFlowMainBoxId: "drawer-page-flow-main-box",
     HomePagePaper: "home-page-paper",
+    MapDiv: "Map"
 };
 
 export default componentIds;

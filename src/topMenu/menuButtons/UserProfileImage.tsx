@@ -1,6 +1,6 @@
 import React from "react";
 import {Avatar, IconButton} from "@mui/material";
-import User from "../models/user";
+import User from "../../models/user";
 
 interface UserProfileImageProps {
     user: User;

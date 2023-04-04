@@ -5,7 +5,7 @@ import GenericRequestMaker from "../utils/generic-request-maker";
 import config from "../app-config.json";
 import {HttpStatusCode} from "axios";
 import {Link} from "react-router-dom";
-import ScreenRoutes from "../utils/screen-routes";
+import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
 import {Status, Wrapper} from "@googlemaps/react-wrapper";
 import Map from "./Map";
 

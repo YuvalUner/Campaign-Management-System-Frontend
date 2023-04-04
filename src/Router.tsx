@@ -1,13 +1,13 @@
 import React, {memo} from "react";
 import {Routes, Route} from "react-router-dom";
 import HomePage from "./homePage/HomePage";
-import ScreenRoutes from "./utils/screen-routes";
+import ScreenRoutes from "./utils/constantsAndStaticObjects/screen-routes";
 import ProfilePage from "./profilePage/ProfilePage";
 import CampaignPage from "./campaignPage/CampaignPage";
 import PublicCampaignPage from "./campaignPage/PublicCampaignPage";
 import PublicEventPage from "./event/PublicEventPage";
 import HomePageControl from "./models/home-page-control";
-import Constants from "./utils/constants";
+import Constants from "./utils/constantsAndStaticObjects/constants";
 import PersonalBallotPage from "./personalBallotPage/PersonalBallotPage";
 
 

@@ -9,9 +9,9 @@ import {
     Typography,
 } from "@mui/material";
 import Events from "../utils/events";
-import Constants from "../utils/constants";
+import Constants from "../utils/constantsAndStaticObjects/constants";
 import {useNavigate} from "react-router-dom";
-import ScreenRoutes from "../utils/screen-routes";
+import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
 import CampaignWithRole from "../models/campaign-with-role";
 
 interface SideMenuProps {
