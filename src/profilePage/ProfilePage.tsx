@@ -19,6 +19,7 @@ function ProfilePage(): JSX.Element {
 
     // Define a state variable to track whether the form has been submitted
     const [submitted, setSubmitted] = useState(false);
+    //set Alert definition
     const [alertMessage, setAlertMessage] = useState<React.ReactNode>(null);
     // Define a function to handle form submission
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
