@@ -5,6 +5,8 @@ import GenericRequestMaker from "../../utils/generic-request-maker";
 import config from "../../app-config.json";
 import Events from "../../utils/events";
 import UserWithCampaigns from "../../models/user-with-campaigns";
+import {useNavigate} from "react-router-dom";
+import ScreenRoutes from "../../utils/constantsAndStaticObjects/screen-routes";
 
 interface LogoutProps {
     setIsLoggedIn: (isLoggedIn: boolean) => void;
@@ -14,6 +16,7 @@ interface LogoutProps {
 function Logout(props: LogoutProps): JSX.Element {
 
     const windowClosedEvent = "beforeunload";
+    const nav = useNavigate();
 
     const logout = async (): Promise<void> => {
         props.setIsLoggedIn(false);
@@ -24,6 +27,7 @@ function Logout(props: LogoutProps): JSX.Element {
         );
         props.setUser({} as UserWithCampaigns);
         Events.dispatch(Events.EventNames.UserLoggedOut);
+        nav(ScreenRoutes.HomePage);
     };
 
     useEffect(() => {

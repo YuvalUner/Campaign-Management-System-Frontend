@@ -20,6 +20,10 @@
     "ElectionDay": {
       "Base": "api/ElectionDay/",
       "GetSelfBallot": "ballot"
+    },
+    "Cities": {
+      "Base": "api/Cities/",
+      "GetAllCities": ""
     }
   }
 }
