@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {Box, CircularProgress, Typography} from "@mui/material";
 import Ballot from "../models/ballot";
-import GenericRequestMaker from "../utils/generic-request-maker";
+import ServerRequestMaker from "../utils/server-request-maker";
 import config from "../app-config.json";
 import {HttpStatusCode} from "axios";
 import {Link} from "react-router-dom";
@@ -23,7 +23,7 @@ function PersonalBallotPage(): JSX.Element {
     const [responseStatus, setResponseStatus] = React.useState<number>(0);
 
     useEffect(() => {
-        GenericRequestMaker.MakeGetRequest(
+        ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.ElectionDay.Base + config.ControllerUrls.ElectionDay.GetSelfBallot,
         ).then((response) => {
             if (response.status === HttpStatusCode.Ok) {

@@ -17,7 +17,6 @@ function CampaignDescriptionField(props: CampaignDescriptionFieldProps): JSX.Ele
             <TextField
                 label={"Campaign Description"}
                 variant={"outlined"}
-                required={true}
                 onChange={handleChange}
             />
         </div>

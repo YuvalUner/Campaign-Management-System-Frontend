@@ -4,7 +4,7 @@ import {AppBar, Box, Button, Menu, MenuItem, Toolbar} from "@mui/material";
 import Logout from "./menuButtons/Logout";
 import Events from "../utils/events";
 import UserWithCampaigns from "../models/user-with-campaigns";
-import GenericRequestMaker from "../utils/generic-request-maker";
+import ServerRequestMaker from "../utils/server-request-maker";
 import config from "../app-config.json";
 import UserProfileImage from "./menuButtons/UserProfileImage";
 import {useNavigate} from "react-router-dom";
@@ -35,7 +35,7 @@ function TopMenu(props: TopMenuProps): JSX.Element {
 
     useEffect(() => {
         Events.subscribe(Events.EventNames.UserLoggedIn, async () => {
-            const res = await GenericRequestMaker.MakeGetRequest<UserWithCampaigns>(
+            const res = await ServerRequestMaker.MakeGetRequest<UserWithCampaigns>(
                 config.ControllerUrls.Users.Base + config.ControllerUrls.Users.HomePageInfo,
             );
             const user: UserWithCampaigns = res.data;

@@ -24,6 +24,7 @@ function CampaignCityField(props: CampaignCityFieldProps): JSX.Element {
                 onChange={handleChange}
                 label={"City"}
                 native
+                required={true}
             >
                 <option aria-label={"None"} value={""}/>
                 {props.cities.map((city) => {

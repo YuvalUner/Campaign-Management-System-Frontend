@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {Box, Button, CircularProgress, Stack, Typography} from "@mui/material";
-import GenericRequestMaker from "../utils/generic-request-maker";
+import ServerRequestMaker from "../utils/server-request-maker";
 import config from "../app-config.json";
 import {Link} from "react-router-dom";
 import Constants from "../utils/constantsAndStaticObjects/constants";
@@ -9,6 +9,8 @@ import City from "../models/city";
 import CampaignNameField from "./formFields/CampaignNameField";
 import CampaignDescriptionField from "./formFields/CampaignDescriptionField";
 import CampaignCityField from "./formFields/CampaignCityField";
+import CampaignLogoField from "./formFields/CampaignLogoField";
+import IsMunicipalChoiceField from "./formFields/IsMunicipalChoiceField";
 
 function CreateCampaignPage(): JSX.Element {
 
@@ -18,12 +20,13 @@ function CreateCampaignPage(): JSX.Element {
         campaignName: "",
         campaignDescription: "",
         cityName: "",
+        isMunicipal: true,
     });
     const [cityList, setCityList] = React.useState<City[]>([]);
     const [serverError, setServerError] = React.useState(false);
 
     useEffect(() => {
-        GenericRequestMaker.MakeGetRequest(
+        ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.Users.Base + config.ControllerUrls.Users.GetVerifiedStatus,
         ).then((res) => {
             setAwaitingAuthStatusVerification(false);
@@ -35,7 +38,7 @@ function CreateCampaignPage(): JSX.Element {
             // The boolean equality is used again because setAuthStatus is asynchronous, and the value of
             // authStatus may not be updated by the time this code is executed.
             if (res.data.isVerified === true) {
-                GenericRequestMaker.MakeGetRequest(
+                ServerRequestMaker.MakeGetRequest(
                     config.ControllerUrls.Cities.Base + config.ControllerUrls.Cities.GetAllCities
                 ).then((cities) => {
                     const citiesList = cities.data;
@@ -55,6 +58,7 @@ function CreateCampaignPage(): JSX.Element {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
+        console.log(campaign.current);
     };
 
     const renderPage = (): JSX.Element => {
@@ -88,6 +92,8 @@ function CreateCampaignPage(): JSX.Element {
                     <CampaignNameField campaign={campaign}/>
                     <CampaignDescriptionField campaign={campaign}/>
                     <CampaignCityField campaign={campaign} cities={cityList}/>
+                    <CampaignLogoField campaign={campaign}/>
+                    <IsMunicipalChoiceField campaign={campaign}/>
                     <Button variant={"contained"} type={"submit"}>Create</Button>
                 </Stack>
             </Stack>

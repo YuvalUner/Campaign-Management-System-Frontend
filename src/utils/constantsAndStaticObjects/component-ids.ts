@@ -8,6 +8,7 @@ const componentIds = {
     HomePagePaper: "home-page-paper",
     MapDiv: "Map",
     CitySelectLabel: "city-select-label",
+    MunicipalChoiceLabel: "municipal-choice-label",
 };
 
 export default componentIds;

@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {googleLogout} from "@react-oauth/google";
 import {Box} from "@mui/material";
-import GenericRequestMaker from "../../utils/generic-request-maker";
+import ServerRequestMaker from "../../utils/server-request-maker";
 import config from "../../app-config.json";
 import Events from "../../utils/events";
 import UserWithCampaigns from "../../models/user-with-campaigns";
@@ -21,7 +21,7 @@ function Logout(props: LogoutProps): JSX.Element {
     const logout = async (): Promise<void> => {
         props.setIsLoggedIn(false);
         googleLogout();
-        await GenericRequestMaker.MakePostRequest(
+        await ServerRequestMaker.MakePostRequest(
             config.ControllerUrls.Tokens.Base + config.ControllerUrls.Tokens.SignOut,
             null
         );

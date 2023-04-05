@@ -1,7 +1,7 @@
 import React from "react";
 import {CredentialResponse, GoogleLogin} from "@react-oauth/google";
 import ExternalAuthDto from "../../models/external-auth-dto";
-import GenericRequestMaker from "../../utils/generic-request-maker";
+import ServerRequestMaker from "../../utils/server-request-maker";
 import config from "../../app-config.json";
 import {StatusCodes} from "http-status-codes";
 import {useNavigate} from "react-router-dom";
@@ -20,7 +20,7 @@ function LogIn(): JSX.Element {
             provider: config.OAuthProvider,
         };
 
-        const res = await GenericRequestMaker.MakePostRequest(
+        const res = await ServerRequestMaker.MakePostRequest(
             (config.ControllerUrls.Tokens.Base + config.ControllerUrls.Tokens.SignIn) as string,
             externalAuth,
         );
