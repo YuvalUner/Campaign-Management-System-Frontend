@@ -30,6 +30,8 @@ function LogIn(): JSX.Element {
 
             if (res.status === StatusCodes.CREATED) {
                 navigate(ScreenRoutes.ProfilePage);
+            } else{
+                navigate(ScreenRoutes.HomePage);
             }
         }
     };

@@ -9,6 +9,7 @@ const componentIds = {
     MapDiv: "Map",
     CitySelectLabel: "city-select-label",
     MunicipalChoiceLabel: "municipal-choice-label",
+    CampaignCreationLogoUploadInputField: "campaign-creation-logo-upload-input-field",
 };
 
 export default componentIds;

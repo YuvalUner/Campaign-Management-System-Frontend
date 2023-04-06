@@ -9,8 +9,8 @@ import City from "../models/city";
 import CampaignNameField from "./formFields/CampaignNameField";
 import CampaignDescriptionField from "./formFields/CampaignDescriptionField";
 import CampaignCityField from "./formFields/CampaignCityField";
-import CampaignLogoField from "./formFields/CampaignLogoField";
 import IsMunicipalChoiceField from "./formFields/IsMunicipalChoiceField";
+import CampaignLogoUploadField from "./formFields/CampaignLogoUploadField";
 
 function CreateCampaignPage(): JSX.Element {
 
@@ -89,11 +89,15 @@ function CreateCampaignPage(): JSX.Element {
                     alignItems: "center",
                     marginRight: Constants.muiBoxDefaultPadding
                 }}>
-                    <CampaignNameField campaign={campaign}/>
-                    <CampaignDescriptionField campaign={campaign}/>
-                    <CampaignCityField campaign={campaign} cities={cityList}/>
-                    <CampaignLogoField campaign={campaign}/>
-                    <IsMunicipalChoiceField campaign={campaign}/>
+                    <Stack direction={"row"} spacing={2}>
+                        <Stack direction={"column"} spacing={1}>
+                            <CampaignNameField campaign={campaign}/>
+                            <CampaignDescriptionField campaign={campaign}/>
+                            <CampaignCityField campaign={campaign} cities={cityList}/>
+                            <IsMunicipalChoiceField campaign={campaign}/>
+                        </Stack>
+                        <CampaignLogoUploadField campaign={campaign}/>
+                    </Stack>
                     <Button variant={"contained"} type={"submit"}>Create</Button>
                 </Stack>
             </Stack>

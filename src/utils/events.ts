@@ -14,6 +14,7 @@ class Events{
         PageBottomReached: "PageBottomReached",
         ShouldScrollToRecordedPosition: "ShouldScrollToRecordedPosition",
         ShouldResetScrollPosition: "ShouldResetScrollPosition",
+        NewCampaignSubmitted: "NewCampaignSubmitted",
     };
 
     /**

@@ -2,6 +2,10 @@
   "OAuthProvider": "Google",
   "ServerBaseUrl": "https://localhost:7065/",
   "GoogleMapsApiKey": "AIzaSyAhj6Ks-mb8uH9Co5e9YPZZLSGXX-HKDWc",
+  "ImgBbConfig": {
+    "UploadUrl": "https://api.imgbb.com/1/upload?key=",
+    "ApiKey": "f62f9f34ecef275cf31a659b34210726"
+  },
   "ControllerUrls" : {
     "Tokens": {
       "Base": "api/Token/",
