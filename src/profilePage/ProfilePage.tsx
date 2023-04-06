@@ -11,63 +11,47 @@ import { Alert, AlertTitle } from "@mui/material"; // For Material-UI
 function ProfilePage(): JSX.Element {
     // Define state object to store user's personal details
     const [userDetails, setUserDetails] = useState<UserPrivateInfo>({
-        firstNameHeb : "",
-        lastNameHeb : "",
-        idNumber : 0,
-        cityName : "",
+        firstNameHeb: "",
+        lastNameHeb: "",
+        idNumber: 0,
+        cityName: "",
     });
 
     // Define a state variable to track whether the form has been submitted
     const [submitted, setSubmitted] = useState(false);
     //set Alert definition
     const [alertMessage, setAlertMessage] = useState<React.ReactNode>(null);
+    //Define a show alert function
+    const showAlert = (message: string, severity: "error" | "warning" | "info" | "success") => {
+        setAlertMessage(
+            <Alert variant="outlined" severity={severity} onClose={() => setAlertMessage(null)}>
+                <AlertTitle>{severity.charAt(0).toUpperCase() + severity.slice(1)}</AlertTitle>
+                <strong>{message}</strong>
+            </Alert>
+        );
+    };
     // Define a function to handle form submission
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         if (!userDetails.firstNameHeb || !userDetails.lastNameHeb || !userDetails.idNumber || !userDetails.cityName) {
-            setAlertMessage(
-                <Alert variant="outlined" severity="error" onClose={() => setAlertMessage(null)}>
-                    <AlertTitle>Error</AlertTitle>
-                    <strong>Please fill in all fields</strong>
-                </Alert>
-            );
+            showAlert("Please fill in all fields", "error");
             return;
         }
         if (userDetails.firstNameHeb.match(/^[\u0590-\u05FF ]+$/) === null) {
-            setAlertMessage(
-                <Alert variant="outlined" severity="error" onClose={() => setAlertMessage(null)}>
-                    <AlertTitle>Error</AlertTitle>
-                    <strong>First name must be in Hebrew letters only</strong>
-                </Alert>
-            );
+            showAlert("First name must be in Hebrew letters only", "error");
             return;
         }
         if (userDetails.lastNameHeb.match(/^[\u0590-\u05FF ]+$/) === null) {
-            setAlertMessage(
-                <Alert variant="outlined" severity="error" onClose={() => setAlertMessage(null)}>
-                    <AlertTitle>Error</AlertTitle>
-                    <strong>Last name must be in Hebrew letters only</strong>
-                </Alert>
-            );
+            showAlert("Last name must be in Hebrew letters only", "error");
             return;
         }
         if (userDetails.cityName.match(/^[a-zA-Z ]+$/) === null) {
-            setAlertMessage(
-                <Alert variant="outlined" severity="error" onClose={() => setAlertMessage(null)}>
-                    <AlertTitle>Error</AlertTitle>
-                    <strong>City name must be in English letters only</strong>
-                </Alert>
-            );
+            showAlert("City name must be in English letters only", "error");
             return;
         }
         if (userDetails.idNumber.toString().length !== 9) {
-            setAlertMessage(
-                <Alert variant="outlined" severity="error" onClose={() => setAlertMessage(null)}>
-                    <AlertTitle>Error</AlertTitle>
-                    <strong>ID number must be exactly 9 digits</strong>
-                </Alert>
-            );
+            showAlert("ID number must be exactly 9 digits", "error");
             return;
         }
 
@@ -80,15 +64,25 @@ function ProfilePage(): JSX.Element {
 
 
         if (res.status === HttpStatusCode.Ok){
-            // TODO: Handle success
+            showAlert("User private info updated successfully!", "success");
         } else{
             const errNum = ErrorCodeExtractor(res.data);
             if (res.status !== HttpStatusCode.Unauthorized) {
-                alert("unauthorized");
-
+                if (errNum === 1) {
+                    showAlert("ID number already exists when verifying info.", "error");
+                } else if (errNum === 12) {
+                    showAlert("Phone number already verified.", "error");
+                } else {
+                    showAlert("Unauthorized request.", "error");
+                }
             } else{
-                alert("Bad Request");
-
+                if (errNum === 4) {
+                    showAlert("Verification failed. Please check your info and try again.", "error");
+                } else if (errNum === 1) {
+                    showAlert("ID number already exists when verifying info.", "error");
+                } else {
+                    showAlert("Bad request.", "error");
+                }
             }
         }
     };
@@ -101,27 +95,6 @@ function ProfilePage(): JSX.Element {
             [name]: value,
         }));
     };
-
-    /*
-    // store user details in local storage
-    localStorage.setItem("userDetails", JSON.stringify(userDetails));
-
-    useEffect(() => {
-        const storedDetails = localStorage.getItem("userDetails");
-        if (storedDetails) {
-            setUserDetails(JSON.parse(storedDetails));
-            setSubmitted(true);
-        }
-        // eslint-disable-next-line no-use-before-define
-        window.addEventListener("beforeunload", handleUnload);
-        // eslint-disable-next-line no-use-before-define
-        return () => window.removeEventListener("beforeunload", handleUnload);
-    }, []);
-
-    const handleUnload = () => {
-        localStorage.removeItem("userDetails");
-    };
-    */
 
     return (
         <div>
