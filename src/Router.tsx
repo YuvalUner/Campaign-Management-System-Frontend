@@ -11,7 +11,7 @@ import Constants from "./utils/constantsAndStaticObjects/constants";
 import PersonalBallotPage from "./personalBallotPage/PersonalBallotPage";
 import CreateCampaignPage from "./createCampaignPage/CreateCampaignPage";
 import JoinCampaignPage from "./joinCampaignPage/JoinCampaignPage";
-
+import NotFoundPage from "./notFoundPage/NotFoundPage";
 
 /**
  * This is the main router for the application. All routes should be added here.
@@ -37,6 +37,7 @@ function Router(): JSX.Element {
             <Route path={ScreenRoutes.PersonalBallotPage} element={<PersonalBallotPage/>} />
             <Route path={ScreenRoutes.CreateCampaignPage} element={<CreateCampaignPage/>} />
             <Route path={ScreenRoutes.AcceptInviteRoute} element={<JoinCampaignPage/>} />
+            <Route path={"*"} element={<NotFoundPage/>}/>
         </Routes>
     );
 }
