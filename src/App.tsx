@@ -6,16 +6,12 @@ import UserWithCampaigns from "./models/user-with-campaigns";
 import SideMenu from "./sideMenu/SideMenu";
 import {Box} from "@mui/material";
 import DrawerPageFlow from "./utils/DrawerPageFlow";
-import CampaignWithRole from "./models/campaign-with-role";
 
 const UserLoggedInContext = createContext(false);
 
 function App(): JSX.Element {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState<UserWithCampaigns>({} as UserWithCampaigns);
-    const setCampaignList = (campaignList: CampaignWithRole[]): void => {
-        setUser({...user, campaigns: campaignList});
-    };
 
     return (
         <UserLoggedInContext.Provider value={isLoggedIn}>
@@ -26,7 +22,7 @@ function App(): JSX.Element {
                     flexDirection: "column",
                 }}>
                     <TopMenu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} user={user} setUser={setUser}/>
-                    <SideMenu campaignList={user.campaigns} setCampaignList={setCampaignList}/>
+                    <SideMenu campaignList={user.campaigns} setCampaignList={setUser}/>
                     <DrawerPageFlow>
                         <Router key={"router"}/>
                     </DrawerPageFlow>

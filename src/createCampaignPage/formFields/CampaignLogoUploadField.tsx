@@ -1,37 +1,16 @@
-import React, {useEffect} from "react";
-import ImageBbApiRequestMaker from "../../utils/ImageBbApiRequestMaker";
+import React from "react";
 import Campaign from "../../models/campaign";
-import Events from "../../utils/events";
 import {FormControl} from "@mui/material";
 import {DropzoneArea, FileObject} from "mui-file-dropzone";
 import fieldsStyle from "./fields.module.css";
 
 interface CampaignLogoUploadFieldProps {
     campaign: React.MutableRefObject<Campaign>;
-    setPhotoUploaded: (photoUploaded: boolean) => void;
+    uploadedFile: FileObject | null | File;
+    setUploadedFile: (uploadedFile: FileObject | null | File) => void;
 }
 
 function CampaignLogoUploadField(props: CampaignLogoUploadFieldProps): JSX.Element {
-
-    const [uploadedFile, setUploadedFile] = React.useState<FileObject | null | File>(null);
-
-    const uploadToImgBb = async (): Promise<void> => {
-        if (uploadedFile) {
-            try {
-                const response = await ImageBbApiRequestMaker.uploadImage(uploadedFile as File);
-                props.campaign.current.campaignLogoUrl = response.data.data.url;
-            } finally {
-                props.setPhotoUploaded(true);
-            }
-        }
-    };
-
-    useEffect(() => {
-        Events.subscribe(Events.EventNames.NewCampaignSubmitted, uploadToImgBb);
-        return () => {
-            Events.unsubscribe(Events.EventNames.NewCampaignSubmitted, uploadToImgBb);
-        };
-    }, []);
 
     return (
         <FormControl sx={{
@@ -43,9 +22,9 @@ function CampaignLogoUploadField(props: CampaignLogoUploadFieldProps): JSX.Eleme
                 acceptedFiles={["image/*"]}
                 dropzoneText={"Upload a logo for your campaign"}
                 filesLimit={1}
-                fileObjects={uploadedFile ? [uploadedFile] : []}
+                fileObjects={props.uploadedFile ? [props.uploadedFile] : []}
                 onChange={(files) => {
-                    setUploadedFile(files[0]);
+                    props.setUploadedFile(files[0]);
                 }}
 
                 showPreviewsInDropzone={true}
@@ -59,7 +38,7 @@ function CampaignLogoUploadField(props: CampaignLogoUploadFieldProps): JSX.Eleme
                 }}
                 showAlerts={false}
                 onDelete={() => {
-                    setUploadedFile(null);
+                    props.setUploadedFile(null);
                 }}/>
         </FormControl>
     );

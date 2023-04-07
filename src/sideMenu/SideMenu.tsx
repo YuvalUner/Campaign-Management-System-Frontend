@@ -19,7 +19,7 @@ import config from "../app-config.json";
 
 interface SideMenuProps {
     campaignList: CampaignWithRole[] | null;
-    setCampaignList: (campaignList: CampaignWithRole[]) => void;
+    setCampaignList: (campaignList: UserWithCampaigns) => void;
 }
 
 const DrawerOpenContext = React.createContext(false);
@@ -34,7 +34,7 @@ function SideMenu(props: SideMenuProps): JSX.Element {
         const res = await ServerRequestMaker.MakeGetRequest<UserWithCampaigns>(
             config.ControllerUrls.Users.Base + config.ControllerUrls.Users.HomePageInfo,
         );
-        props.setCampaignList(res.data.campaigns);
+        props.setCampaignList(res.data);
     };
 
     useEffect(() => {
@@ -103,7 +103,7 @@ function SideMenu(props: SideMenuProps): JSX.Element {
                                 <ListItemAvatar>
                                     <Avatar
                                         alt={campaign.campaignName}
-                                        src={campaign.campaignLogoUrl}
+                                        src={campaign.campaignLogoUrl?? ""}
                                     />
                                 </ListItemAvatar>
                                 <ListItemText primary={campaign.campaignName} secondary={campaign.roleName}/>

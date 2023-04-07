@@ -14,15 +14,24 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 import Events from "../utils/events";
 import {HttpStatusCode} from "axios";
 import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
+import ImageBbApiRequestMaker from "../utils/ImageBbApiRequestMaker";
+import {FileObject} from "mui-file-dropzone";
 
 interface CreateCampaignPageProps {
     setActiveCampaignGuid: (guid: string) => void;
 }
 
+/**
+ * This component is used to create a new campaign.
+ * A user can create a new campaign by filling out the form and clicking the "Create Campaign" button.
+ * It is also possible to upload a logo for the campaign.
+ * @param props
+ */
 function CreateCampaignPage(props: CreateCampaignPageProps): JSX.Element {
 
     const [awaitingAuthStatusVerification, setAwaitingAuthStatusVerification] = React.useState(true);
     const [authStatus, setAuthStatus] = React.useState(false);
+
     const campaign = React.useRef<Campaign>({
         campaignName: "",
         campaignDescription: "",
@@ -30,11 +39,14 @@ function CreateCampaignPage(props: CreateCampaignPageProps): JSX.Element {
         isMunicipal: true,
         campaignLogoUrl: "",
     });
+
     const [cityList, setCityList] = React.useState<City[]>([]);
     const [serverError, setServerError] = React.useState(false);
-    const [photoUploaded, setPhotoUploaded] = React.useState(false);
+    const [uploadedFile, setUploadedFile] = React.useState<File | null | FileObject>(null);
+
     const nav = useNavigate();
 
+    // This effect is used to check if the user is verified. If they are, the list of cities is fetched.
     useEffect(() => {
         ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.Users.Base + config.ControllerUrls.Users.GetVerifiedStatus,
@@ -66,6 +78,25 @@ function CreateCampaignPage(props: CreateCampaignPageProps): JSX.Element {
         });
     }, []);
 
+    /**
+     * Uploads the campaign logo to imgbb.com and sets the campaign logo url to the url returned by the API.
+     */
+    const uploadToImgBb = async (): Promise<void> => {
+        if (uploadedFile){
+            const response = await ImageBbApiRequestMaker.uploadImage(uploadedFile as File);
+            if (response.status === HttpStatusCode.Ok) {
+                campaign.current.campaignLogoUrl = response.data.data.url;
+            }
+        } else{
+            campaign.current.campaignLogoUrl = null;
+        }
+    };
+
+    /**
+     * Handles the submit event of the form.
+     * Validates the form and sends the request to the server.
+     * @param event
+     */
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
         let isAllValid = true;
@@ -74,18 +105,13 @@ function CreateCampaignPage(props: CreateCampaignPageProps): JSX.Element {
             isAllValid = false;
             Events.dispatch(Events.EventNames.CampaignNameInvalid);
         }
-        if (!campaign.current.cityName || campaign.current.cityName.length < 1){
+        if (campaign.current.isMunicipal && (!campaign.current.cityName || campaign.current.cityName.length < 1)){
             isAllValid = false;
             Events.dispatch(Events.EventNames.CampaignCityInvalid);
         }
+        // If all fields are valid, upload the campaign logo to imgbb.com and send the request to the server.
         if (isAllValid){
-            Events.dispatch(Events.EventNames.NewCampaignSubmitted);
-            // Wait for the photo to be uploaded, after firing the trigger event.
-            // eslint-disable-next-line no-unmodified-loop-condition
-            while (!photoUploaded){
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
-
+            await uploadToImgBb();
             ServerRequestMaker.MakePostRequest(
                 config.ControllerUrls.Campaigns.Base + config.ControllerUrls.Campaigns.CreateCampaign,
                 campaign.current
@@ -93,7 +119,7 @@ function CreateCampaignPage(props: CreateCampaignPageProps): JSX.Element {
                 if (res.status === HttpStatusCode.Ok){
                     props.setActiveCampaignGuid(res.data.newCampaignGuid);
                     Events.dispatch(Events.EventNames.RefreshCampaignsList);
-                    nav(ScreenRoutes.CampaignPage);
+                    nav(ScreenRoutes.CampaignPage + res.data.newCampaignGuid);
                 }
             }).catch((res) => {
                 // The only fail condition covered by the server but not the client, is if the city name is not
@@ -106,6 +132,10 @@ function CreateCampaignPage(props: CreateCampaignPageProps): JSX.Element {
         }
     };
 
+    /**
+     * Handles the rendering of the main part of the page.
+     * Will render a form if the user is verified, or a message if the user is not verified.
+     */
     const renderPage = (): JSX.Element => {
         // Handling for the case where the user's verification status is either unknown or false - render a message.
         if (!authStatus){
@@ -141,7 +171,9 @@ function CreateCampaignPage(props: CreateCampaignPageProps): JSX.Element {
                             </Stack>
                         </Grid2>
                         <Grid2 xs={12} md={6}>
-                            <CampaignLogoUploadField campaign={campaign} setPhotoUploaded={setPhotoUploaded}/>
+                            <CampaignLogoUploadField campaign={campaign}
+                                uploadedFile={uploadedFile}
+                                setUploadedFile={setUploadedFile}/>
                         </Grid2>
                     </Grid2>
                     <Button variant={"contained"} type={"submit"}>Create</Button>
