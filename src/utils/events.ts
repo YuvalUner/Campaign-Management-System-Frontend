@@ -15,6 +15,9 @@ class Events{
         ShouldScrollToRecordedPosition: "ShouldScrollToRecordedPosition",
         ShouldResetScrollPosition: "ShouldResetScrollPosition",
         NewCampaignSubmitted: "NewCampaignSubmitted",
+        CampaignNameInvalid: "CampaignNameInvalid",
+        CampaignCityInvalid: "CampaignCityInvalid",
+        RefreshCampaignsList: "RefreshCampaignsList",
     };
 
     /**

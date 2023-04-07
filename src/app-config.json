@@ -28,6 +28,10 @@
     "Cities": {
       "Base": "api/Cities/",
       "GetAllCities": ""
+    },
+    "Campaigns": {
+      "Base": "api/Campaigns/",
+      "CreateCampaign": "create"
     }
   }
 }

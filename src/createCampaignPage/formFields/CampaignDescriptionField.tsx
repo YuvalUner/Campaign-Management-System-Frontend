@@ -1,6 +1,7 @@
 import React from "react";
-import {TextField} from "@mui/material";
+import {FormControl, TextField} from "@mui/material";
 import Campaign from "../../models/campaign";
+import fieldStyles from "./fields.module.css";
 
 interface CampaignDescriptionFieldProps {
     campaign: React.MutableRefObject<Campaign>;
@@ -13,13 +14,13 @@ function CampaignDescriptionField(props: CampaignDescriptionFieldProps): JSX.Ele
     };
 
     return (
-        <div>
+        <FormControl className={fieldStyles.full_length_field}>
             <TextField
                 label={"Campaign Description"}
                 variant={"outlined"}
                 onChange={handleChange}
             />
-        </div>
+        </FormControl>
     );
 }
 

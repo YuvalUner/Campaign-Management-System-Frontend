@@ -8,17 +8,21 @@ import fieldsStyle from "./fields.module.css";
 
 interface CampaignLogoUploadFieldProps {
     campaign: React.MutableRefObject<Campaign>;
+    setPhotoUploaded: (photoUploaded: boolean) => void;
 }
 
 function CampaignLogoUploadField(props: CampaignLogoUploadFieldProps): JSX.Element {
 
     const [uploadedFile, setUploadedFile] = React.useState<FileObject | null | File>(null);
 
-
     const uploadToImgBb = async (): Promise<void> => {
         if (uploadedFile) {
-            const response = await ImageBbApiRequestMaker.uploadImage(uploadedFile as File);
-            props.campaign.current.campaignLogoUrl = response.data.data.url;
+            try {
+                const response = await ImageBbApiRequestMaker.uploadImage(uploadedFile as File);
+                props.campaign.current.campaignLogoUrl = response.data.data.url;
+            } finally {
+                props.setPhotoUploaded(true);
+            }
         }
     };
 
@@ -37,7 +41,7 @@ function CampaignLogoUploadField(props: CampaignLogoUploadFieldProps): JSX.Eleme
             <DropzoneArea
                 dropzoneClass={fieldsStyle.dropzone}
                 acceptedFiles={["image/*"]}
-                dropzoneText={"Drag and drop an image here or click"}
+                dropzoneText={"Upload a logo for your campaign"}
                 filesLimit={1}
                 fileObjects={uploadedFile ? [uploadedFile] : []}
                 onChange={(files) => {
@@ -45,10 +49,11 @@ function CampaignLogoUploadField(props: CampaignLogoUploadFieldProps): JSX.Eleme
                 }}
 
                 showPreviewsInDropzone={true}
+                showPreviews={false}
                 getPreviewIcon={(fileObject) => {
                     return <img alt={props.campaign.current.campaignName} src={fileObject.data as string} style={{
-                        height: "100%",
-                        width: "100%",
+                        height: "400px",
+                        width: "500px",
                         objectFit: "contain",
                     }} role={"presentation"}/>;
                 }}

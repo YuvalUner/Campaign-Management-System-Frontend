@@ -2,17 +2,24 @@ import React, {useEffect} from "react";
 import {Box, Button, CircularProgress, Stack, Typography} from "@mui/material";
 import ServerRequestMaker from "../utils/server-request-maker";
 import config from "../app-config.json";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Constants from "../utils/constantsAndStaticObjects/constants";
 import Campaign from "../models/campaign";
 import City from "../models/city";
 import CampaignNameField from "./formFields/CampaignNameField";
 import CampaignDescriptionField from "./formFields/CampaignDescriptionField";
-import CampaignCityField from "./formFields/CampaignCityField";
 import IsMunicipalChoiceField from "./formFields/IsMunicipalChoiceField";
 import CampaignLogoUploadField from "./formFields/CampaignLogoUploadField";
+import Grid2 from "@mui/material/Unstable_Grid2";
+import Events from "../utils/events";
+import {HttpStatusCode} from "axios";
+import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
 
-function CreateCampaignPage(): JSX.Element {
+interface CreateCampaignPageProps {
+    setActiveCampaignGuid: (guid: string) => void;
+}
+
+function CreateCampaignPage(props: CreateCampaignPageProps): JSX.Element {
 
     const [awaitingAuthStatusVerification, setAwaitingAuthStatusVerification] = React.useState(true);
     const [authStatus, setAuthStatus] = React.useState(false);
@@ -21,9 +28,12 @@ function CreateCampaignPage(): JSX.Element {
         campaignDescription: "",
         cityName: "",
         isMunicipal: true,
+        campaignLogoUrl: "",
     });
     const [cityList, setCityList] = React.useState<City[]>([]);
     const [serverError, setServerError] = React.useState(false);
+    const [photoUploaded, setPhotoUploaded] = React.useState(false);
+    const nav = useNavigate();
 
     useEffect(() => {
         ServerRequestMaker.MakeGetRequest(
@@ -58,7 +68,42 @@ function CreateCampaignPage(): JSX.Element {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
-        console.log(campaign.current);
+        let isAllValid = true;
+        // Check if all fields are valid.
+        if (!campaign.current.campaignName || campaign.current.campaignName.length < 1){
+            isAllValid = false;
+            Events.dispatch(Events.EventNames.CampaignNameInvalid);
+        }
+        if (!campaign.current.cityName || campaign.current.cityName.length < 1){
+            isAllValid = false;
+            Events.dispatch(Events.EventNames.CampaignCityInvalid);
+        }
+        if (isAllValid){
+            Events.dispatch(Events.EventNames.NewCampaignSubmitted);
+            // Wait for the photo to be uploaded, after firing the trigger event.
+            // eslint-disable-next-line no-unmodified-loop-condition
+            while (!photoUploaded){
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            ServerRequestMaker.MakePostRequest(
+                config.ControllerUrls.Campaigns.Base + config.ControllerUrls.Campaigns.CreateCampaign,
+                campaign.current
+            ).then((res) => {
+                if (res.status === HttpStatusCode.Ok){
+                    props.setActiveCampaignGuid(res.data.newCampaignGuid);
+                    Events.dispatch(Events.EventNames.RefreshCampaignsList);
+                    nav(ScreenRoutes.CampaignPage);
+                }
+            }).catch((res) => {
+                // The only fail condition covered by the server but not the client, is if the city name is not
+                // one of the cities in the database.
+                // All others are impossible to reach, as the client checks for them before sending the request.
+                if (res.status === HttpStatusCode.BadRequest){
+                    Events.dispatch(Events.EventNames.CampaignCityInvalid);
+                }
+            });
+        }
     };
 
     const renderPage = (): JSX.Element => {
@@ -79,25 +124,26 @@ function CreateCampaignPage(): JSX.Element {
         }
         // Handling for the case where the user is verified - render the form.
         return (
-            <Stack component={"form"} direction={"column"} onSubmit={handleSubmit} spacing={3}>
+            <Stack component={"form"} direction={"column"} onSubmit={handleSubmit} spacing={3} sx={{
+                marginRight: `${Constants.muiBoxDefaultPadding * 5}px`,
+                marginLeft: `${Constants.muiBoxDefaultPadding * 5}px`,
+            }}>
                 <Typography variant={"h4"}>
                     Create a campaign
                 </Typography>
-                <Stack direction={"column"} spacing={1} sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginRight: Constants.muiBoxDefaultPadding
-                }}>
-                    <Stack direction={"row"} spacing={2}>
-                        <Stack direction={"column"} spacing={1}>
-                            <CampaignNameField campaign={campaign}/>
-                            <CampaignDescriptionField campaign={campaign}/>
-                            <CampaignCityField campaign={campaign} cities={cityList}/>
-                            <IsMunicipalChoiceField campaign={campaign}/>
-                        </Stack>
-                        <CampaignLogoUploadField campaign={campaign}/>
-                    </Stack>
+                <Stack direction={"column"} spacing={1}>
+                    <Grid2 container spacing={10}>
+                        <Grid2 xs={12} md={6}>
+                            <Stack direction={"column"} spacing={6}>
+                                <CampaignNameField campaign={campaign}/>
+                                <CampaignDescriptionField campaign={campaign}/>
+                                <IsMunicipalChoiceField campaign={campaign} cities={cityList}/>
+                            </Stack>
+                        </Grid2>
+                        <Grid2 xs={12} md={6}>
+                            <CampaignLogoUploadField campaign={campaign} setPhotoUploaded={setPhotoUploaded}/>
+                        </Grid2>
+                    </Grid2>
                     <Button variant={"contained"} type={"submit"}>Create</Button>
                 </Stack>
             </Stack>

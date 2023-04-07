@@ -13,9 +13,13 @@ import Constants from "../utils/constantsAndStaticObjects/constants";
 import {useNavigate} from "react-router-dom";
 import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
 import CampaignWithRole from "../models/campaign-with-role";
+import ServerRequestMaker from "../utils/server-request-maker";
+import UserWithCampaigns from "../models/user-with-campaigns";
+import config from "../app-config.json";
 
 interface SideMenuProps {
     campaignList: CampaignWithRole[] | null;
+    setCampaignList: (campaignList: CampaignWithRole[]) => void;
 }
 
 const DrawerOpenContext = React.createContext(false);
@@ -25,6 +29,13 @@ function SideMenu(props: SideMenuProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false);
 
     const nav = useNavigate();
+
+    const refreshCampaignList = async (): Promise<void> => {
+        const res = await ServerRequestMaker.MakeGetRequest<UserWithCampaigns>(
+            config.ControllerUrls.Users.Base + config.ControllerUrls.Users.HomePageInfo,
+        );
+        props.setCampaignList(res.data.campaigns);
+    };
 
     useEffect(() => {
         Events.subscribe(Events.EventNames.UserLoggedIn, () => {
@@ -42,6 +53,28 @@ function SideMenu(props: SideMenuProps): JSX.Element {
         Events.subscribe(Events.EventNames.LeftDrawerOpened, () => {
             setIsOpen(true);
         });
+
+        Events.subscribe(Events.EventNames.RefreshCampaignsList, refreshCampaignList);
+
+        return () => {
+            Events.unsubscribe(Events.EventNames.UserLoggedIn, () => {
+                Events.dispatch(Events.EventNames.LeftDrawerOpened);
+            });
+
+            Events.unsubscribe(Events.EventNames.UserLoggedOut, () => {
+                Events.dispatch(Events.EventNames.LeftDrawerClosed);
+            });
+
+            Events.unsubscribe(Events.EventNames.LeftDrawerClosed, () => {
+                setIsOpen(false);
+            });
+
+            Events.unsubscribe(Events.EventNames.LeftDrawerOpened, () => {
+                setIsOpen(true);
+            });
+
+            Events.unsubscribe(Events.EventNames.RefreshCampaignsList, refreshCampaignList);
+        };
     }, []);
 
     return (

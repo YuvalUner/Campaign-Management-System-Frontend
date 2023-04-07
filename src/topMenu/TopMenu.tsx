@@ -33,15 +33,20 @@ function TopMenu(props: TopMenuProps): JSX.Element {
         setIsUserMenuOpen(event.currentTarget);
     };
 
+    const retrieveMainDisplayInfo = async (): Promise<void> => {
+        const res = await ServerRequestMaker.MakeGetRequest<UserWithCampaigns>(
+            config.ControllerUrls.Users.Base + config.ControllerUrls.Users.HomePageInfo,
+        );
+        const user: UserWithCampaigns = res.data;
+        props.setUser(user);
+        props.setIsLoggedIn(true);
+    };
+
     useEffect(() => {
-        Events.subscribe(Events.EventNames.UserLoggedIn, async () => {
-            const res = await ServerRequestMaker.MakeGetRequest<UserWithCampaigns>(
-                config.ControllerUrls.Users.Base + config.ControllerUrls.Users.HomePageInfo,
-            );
-            const user: UserWithCampaigns = res.data;
-            props.setUser(user);
-            props.setIsLoggedIn(true);
-        });
+        Events.subscribe(Events.EventNames.UserLoggedIn, retrieveMainDisplayInfo);
+        return () => {
+            Events.unsubscribe(Events.EventNames.UserLoggedIn, retrieveMainDisplayInfo);
+        };
     }, []);
 
     const renderUserImageMenu = (): JSX.Element => {
