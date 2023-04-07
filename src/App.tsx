@@ -22,7 +22,7 @@ function App(): JSX.Element {
                     flexDirection: "column",
                 }}>
                     <TopMenu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} user={user} setUser={setUser}/>
-                    <SideMenu campaignList={user.campaigns}/>
+                    <SideMenu campaignList={user.campaigns} setCampaignList={setUser}/>
                     <DrawerPageFlow>
                         <Router key={"router"}/>
                     </DrawerPageFlow>

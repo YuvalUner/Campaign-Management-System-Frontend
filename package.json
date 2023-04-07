@@ -22,6 +22,7 @@
     "google-map-react": "^2.2.0",
     "guid-typescript": "^1.0.9",
     "http-status-codes": "^2.2.0",
+    "mui-file-dropzone": "^4.0.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
