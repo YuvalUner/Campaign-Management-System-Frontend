@@ -10,7 +10,8 @@ import HomePageControl from "./models/home-page-control";
 import Constants from "./utils/constantsAndStaticObjects/constants";
 import PersonalBallotPage from "./personalBallotPage/PersonalBallotPage";
 import CreateCampaignPage from "./createCampaignPage/CreateCampaignPage";
-
+import JoinCampaignPage from "./joinCampaignPage/JoinCampaignPage";
+import NotFoundPage from "./notFoundPage/NotFoundPage";
 
 /**
  * This is the main router for the application. All routes should be added here.
@@ -25,8 +26,6 @@ function Router(): JSX.Element {
         hasMore: true,
     });
 
-    const [activeCampaignGuid, setActiveCampaignGuid] = React.useState<string>("");
-
     return (
         <Routes key={"MainRouter"}>
             <Route path={ScreenRoutes.HomePage} element={<HomePage
@@ -36,8 +35,9 @@ function Router(): JSX.Element {
             <Route path={ScreenRoutes.PublicCampaignRoute} element={<PublicCampaignPage/>}/>
             <Route path={ScreenRoutes.PublicEventRoute} element={<PublicEventPage/>}/>
             <Route path={ScreenRoutes.PersonalBallotPage} element={<PersonalBallotPage/>} />
-            <Route path={ScreenRoutes.CreateCampaignPage} element={<CreateCampaignPage
-                setActiveCampaignGuid={setActiveCampaignGuid}/>} />
+            <Route path={ScreenRoutes.CreateCampaignPage} element={<CreateCampaignPage/>} />
+            <Route path={ScreenRoutes.AcceptInviteRoute} element={<JoinCampaignPage/>} />
+            <Route path={"*"} element={<NotFoundPage/>}/>
         </Routes>
     );
 }

@@ -18,6 +18,7 @@ class Events{
         CampaignNameInvalid: "CampaignNameInvalid",
         CampaignCityInvalid: "CampaignCityInvalid",
         RefreshCampaignsList: "RefreshCampaignsList",
+        ShouldHideEffects: "ShouldHideEffects",
     };
 
     /**

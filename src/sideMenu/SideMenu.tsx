@@ -38,9 +38,9 @@ function SideMenu(props: SideMenuProps): JSX.Element {
     };
 
     useEffect(() => {
-        Events.subscribe(Events.EventNames.UserLoggedIn, () => {
-            Events.dispatch(Events.EventNames.LeftDrawerOpened);
-        });
+        // Events.subscribe(Events.EventNames.UserLoggedIn, () => {
+        //     Events.dispatch(Events.EventNames.LeftDrawerOpened);
+        // });
 
         Events.subscribe(Events.EventNames.UserLoggedOut, () => {
             Events.dispatch(Events.EventNames.LeftDrawerClosed);
@@ -57,9 +57,9 @@ function SideMenu(props: SideMenuProps): JSX.Element {
         Events.subscribe(Events.EventNames.RefreshCampaignsList, refreshCampaignList);
 
         return () => {
-            Events.unsubscribe(Events.EventNames.UserLoggedIn, () => {
-                Events.dispatch(Events.EventNames.LeftDrawerOpened);
-            });
+            // Events.unsubscribe(Events.EventNames.UserLoggedIn, () => {
+            //     Events.dispatch(Events.EventNames.LeftDrawerOpened);
+            // });
 
             Events.unsubscribe(Events.EventNames.UserLoggedOut, () => {
                 Events.dispatch(Events.EventNames.LeftDrawerClosed);

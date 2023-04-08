@@ -17,17 +17,12 @@ import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
 import ImageBbApiRequestMaker from "../utils/ImageBbApiRequestMaker";
 import {FileObject} from "mui-file-dropzone";
 
-interface CreateCampaignPageProps {
-    setActiveCampaignGuid: (guid: string) => void;
-}
-
 /**
  * This component is used to create a new campaign.
  * A user can create a new campaign by filling out the form and clicking the "Create Campaign" button.
  * It is also possible to upload a logo for the campaign.
- * @param props
  */
-function CreateCampaignPage(props: CreateCampaignPageProps): JSX.Element {
+function CreateCampaignPage(): JSX.Element {
 
     const [awaitingAuthStatusVerification, setAwaitingAuthStatusVerification] = React.useState(true);
     const [authStatus, setAuthStatus] = React.useState(false);
@@ -117,7 +112,6 @@ function CreateCampaignPage(props: CreateCampaignPageProps): JSX.Element {
                 campaign.current
             ).then((res) => {
                 if (res.status === HttpStatusCode.Ok){
-                    props.setActiveCampaignGuid(res.data.newCampaignGuid);
                     Events.dispatch(Events.EventNames.RefreshCampaignsList);
                     nav(ScreenRoutes.CampaignPage + res.data.newCampaignGuid);
                 }
