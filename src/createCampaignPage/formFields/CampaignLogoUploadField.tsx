@@ -1,6 +1,6 @@
 import React from "react";
 import Campaign from "../../models/campaign";
-import {FormControl} from "@mui/material";
+import {FormControl, Typography} from "@mui/material";
 import {DropzoneArea, FileObject} from "mui-file-dropzone";
 import fieldsStyle from "./fields.module.css";
 
@@ -40,6 +40,10 @@ function CampaignLogoUploadField(props: CampaignLogoUploadFieldProps): JSX.Eleme
                 onDelete={() => {
                     props.setUploadedFile(null);
                 }}/>
+            <Typography variant={"caption"}>
+                * It is recommended to choose a small image and clear image, as it will be displayed as the
+                avatar for your campaign.
+            </Typography>
         </FormControl>
     );
 }

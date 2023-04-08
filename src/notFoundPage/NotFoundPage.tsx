@@ -3,6 +3,7 @@ import {Box, Button, Container, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import {useNavigate} from "react-router-dom";
 import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
+import Constants from "../utils/constantsAndStaticObjects/constants";
 
 interface ErrorPageProps {
     errorMessage?: string;
@@ -30,7 +31,9 @@ export default function NotFoundPage(props: ErrorPageProps) {
                         <Typography variant="h1">
                             404
                         </Typography>
-                        <Typography variant="h6">
+                        <Typography variant="h6" sx={{
+                            marginBottom: `${Constants.muiBoxDefaultPadding}px`,
+                        }}>
                             {props.errorMessage ?? "The page you are looking for does not exist"}
                         </Typography>
                         <Button variant="contained" onClick={() => {
