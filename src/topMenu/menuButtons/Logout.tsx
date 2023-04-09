@@ -11,6 +11,7 @@ import ScreenRoutes from "../../utils/constantsAndStaticObjects/screen-routes";
 interface LogoutProps {
     setIsLoggedIn: (isLoggedIn: boolean) => void;
     setUser: (user: UserWithCampaigns) => void;
+    ///
 }
 
 function Logout(props: LogoutProps): JSX.Element {
