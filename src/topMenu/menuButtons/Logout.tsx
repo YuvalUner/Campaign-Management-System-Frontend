@@ -1,4 +1,5 @@
 import React from "react";
+// import {useEffect} from "react";
 import {googleLogout} from "@react-oauth/google";
 import {Box} from "@mui/material";
 import ServerRequestMaker from "../../utils/server-request-maker";
@@ -15,7 +16,7 @@ interface LogoutProps {
 
 function Logout(props: LogoutProps): JSX.Element {
 
-    //const windowClosedEvent = "beforeunload";
+    // const windowClosedEvent = "beforeunload";
     const nav = useNavigate();
 
     const logout = async (): Promise<void> => {
