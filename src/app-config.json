@@ -32,7 +32,8 @@
     "Campaigns": {
       "Base": "api/Campaigns/",
       "CreateCampaign": "create",
-      "GetInfoByInviteGuid": "info-by-invite-guid/"
+      "GetInfoByInviteGuid": "info-by-invite-guid/",
+      "Enter": "enter/"
     },
     "Invites": {
       "Base": "api/Invites/",
