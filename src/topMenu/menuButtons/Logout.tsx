@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {googleLogout} from "@react-oauth/google";
 import {Box} from "@mui/material";
 import ServerRequestMaker from "../../utils/server-request-maker";
@@ -15,7 +15,7 @@ interface LogoutProps {
 
 function Logout(props: LogoutProps): JSX.Element {
 
-    const windowClosedEvent = "beforeunload";
+    //const windowClosedEvent = "beforeunload";
     const nav = useNavigate();
 
     const logout = async (): Promise<void> => {
@@ -30,16 +30,23 @@ function Logout(props: LogoutProps): JSX.Element {
         nav(ScreenRoutes.HomePage);
     };
 
-    useEffect(() => {
-        // Make sure that the user is logged out when the window is closed.
-        // This is used instead of the Events.subscribed method because that method subscribes to document events,
-        // which are not triggered when the window is closed.
-        window.addEventListener(windowClosedEvent, logout);
-        // Unsubscribe from the event when the component is unmounted.
-        return () => {
-            window.removeEventListener(windowClosedEvent, logout);
-        };
-    }, []);
+    /**
+     * Uncomment this to log the user out when the window is closed.
+     * Keep in mind that this will also log the user out when the window is refreshed.
+     * This is currently disabled because for now, I figure its better to have the user stay logged in,
+     * and it is also much easier to test the app without constantly having to log in.
+     * For security purposes, enabling this is better, but for convenience, it is better to disable it.
+     */
+    // useEffect(() => {
+    //     // Make sure that the user is logged out when the window is closed.
+    //     // This is used instead of the Events.subscribed method because that method subscribes to document events,
+    //     // which are not triggered when the window is closed.
+    //     window.addEventListener(windowClosedEvent, logout);
+    //     // Unsubscribe from the event when the component is unmounted.
+    //     return () => {
+    //         window.removeEventListener(windowClosedEvent, logout);
+    //     };
+    // }, []);
 
     return (
         <Box onClick={logout}>
