@@ -4,7 +4,6 @@ import GenericRequestMaker from "../utils/generic-request-maker";
 import config from "../app-config.json";
 import {HttpStatusCode} from "axios";
 import ErrorCodeExtractor from "../utils/error-code-extractor";
-import userPrivateInfo from "../models/user-private-info";
 import { Alert, AlertTitle } from "@mui/material"; // For Material-UI
 //import { Alert, AlertTitle } from "react-bootstrap"; // For Bootstrap
 
@@ -17,10 +16,43 @@ function ProfilePage(): JSX.Element {
         cityName: "",
     });
 
+    const [isVerified, setIsVerified] = useState(false);
+
     // Define a state variable to track whether the form has been submitted
     const [submitted, setSubmitted] = useState(false);
     //set Alert definition
     const [alertMessage, setAlertMessage] = useState<React.ReactNode>(null);
+
+    useEffect(() => {
+        GenericRequestMaker.MakeGetRequest(
+            config.ControllerUrls.Users.Base + config.ControllerUrls.Users.GetVerifiedStatus
+        ).then((res) => {
+            setIsVerified(res.data.isVerified === true);
+        });
+    }, []);
+
+    useEffect(() => {
+        GenericRequestMaker.MakeGetRequest(
+            config.ControllerUrls.Users.Base + config.ControllerUrls.Users.GetProfilePageInfo
+        ).then((res) => {
+            const updatedUserDetails = {
+                firstNameHeb: res.data.firstNameHeb,
+                lastNameHeb: res.data.lastNameHeb,
+                idNumber: -1,
+                cityName: res.data.cityName,
+            };
+            setUserDetails(updatedUserDetails);
+        });
+    }, []);
+
+    /*useEffect(() => {
+        GenericRequestMaker.MakeGetRequest(
+            config.ServerBaseUrl + config.ControllerUrls.Cities.Base + "GetAllCities"
+        ).then((res) => {
+
+        });
+    }, []);*/
+
     //Define a show alert function
     const showAlert = (message: string, severity: "error" | "warning" | "info" | "success") => {
         setAlertMessage(
@@ -54,7 +86,6 @@ function ProfilePage(): JSX.Element {
             showAlert("ID number must be exactly 9 digits", "error");
             return;
         }
-
         setSubmitted(true);
 
         const res = await GenericRequestMaker.MakePutRequest(
@@ -62,9 +93,9 @@ function ProfilePage(): JSX.Element {
             userDetails
         );
 
-
         if (res.status === HttpStatusCode.Ok){
             showAlert("User private info updated successfully!", "success");
+            setIsVerified(true);
         } else{
             const errNum = ErrorCodeExtractor(res.data);
             if (res.status !== HttpStatusCode.Unauthorized) {
@@ -99,12 +130,11 @@ function ProfilePage(): JSX.Element {
     return (
         <div>
             <h1>Profile Page</h1>
-            {submitted ? (
-                // If the form has been submitted, display the user's personal details in read-only format
+            {isVerified ? (
+                // If the form has been submitted and verified, display the user's personal details in read-only format
                 <div>
                     <p>Name: {userDetails.firstNameHeb}</p>
                     <p>Surname: {userDetails.lastNameHeb}</p>
-                    <p>ID: {userDetails.idNumber}</p>
                     <p>Address: {userDetails.cityName}</p>
                 </div>
             ) : (

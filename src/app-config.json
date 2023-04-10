@@ -10,11 +10,17 @@
     "Users": {
       "Base": "api/Users/",
       "HomePageInfo": "HomePageInfo",
-      "UserPrivateInfo": "UserPrivateInfo"
+      "UserPrivateInfo": "UserPrivateInfo",
+      "GetVerifiedStatus": "get-verified-status",
+      "GetProfilePageInfo": "get-profile-page-info"
     },
     "PublicBoard": {
       "Base": "api/PublicBoard/",
       "GetPublicBoard": "public-board"
+    },
+    "Cities": {
+      "Base": "api/Cities/",
+      "GetAllCities": ""
     }
   }
 }
