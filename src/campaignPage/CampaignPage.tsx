@@ -21,6 +21,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import TestPage from "./TabPages/TestPage";
 import {TabPage} from "../models/tab-page";
 import TabNames from "./utils/tabNames";
+import MainPage from "./MainPage";
 
 
 interface MenuListItem {
@@ -101,6 +102,7 @@ function CampaignPage(): JSX.Element {
             }
         }).finally(() => {
             setLoading(false);
+            setActiveTabs([]);
         });
     }, [campaignGuid, loggedInStatus]);
 
@@ -109,21 +111,25 @@ function CampaignPage(): JSX.Element {
             !enteredCampaign ?
                 <NotAuthorizedPage errorMessage={"You are not a member of this campaign or you are not logged in"}/>
                 : <>
-                    <TabComponent heightAdjustMode="Auto"
-                        overflowMode="Scrollable"
-                        enablePersistence={true} key={activeTabs.length}
-                    >
-                        <TabItemsDirective>
-                            {activeTabs.map((tab, index) => {
-                                return (
-                                    <TabItemDirective key={index} header={tab.header} content={tab.component}>
-                                        {tab.component()}
-                                    </TabItemDirective>
-                                );
-                            })
-                            }
-                        </TabItemsDirective>
-                    </TabComponent>
+                    {activeTabs.length > 0 ?
+                        <TabComponent heightAdjustMode="Auto"
+                            overflowMode="Scrollable"
+                            enablePersistence={true}
+                            //key={activeTabs.length}
+                        >
+                            <TabItemsDirective>
+                                {activeTabs.map((tab, index) => {
+                                    return (
+                                        <TabItemDirective key={index} header={tab.header} content={tab.component}>
+                                            {tab.component()}
+                                        </TabItemDirective>
+                                    );
+                                })
+                                }
+                            </TabItemsDirective>
+                        </TabComponent>
+                        : <MainPage campaign={campaign}/>
+                    }
                 </>
         );
     };

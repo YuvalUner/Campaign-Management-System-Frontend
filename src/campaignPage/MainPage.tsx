@@ -1,6 +1,5 @@
 import React from "react";
 import Campaign from "../models/campaign";
-import Constants from "../utils/constantsAndStaticObjects/constants";
 import {Alert, Avatar, Stack, Typography} from "@mui/material";
 
 interface MainPageProps {
@@ -12,7 +11,6 @@ function MainPage(props: MainPageProps): JSX.Element {
         <Stack sx={{
             height: "100%",
             width: "100%",
-            marginLeft: `${Constants.muiBoxDefaultPadding}px`
         }} direction={"column"} spacing={2}>
             {props.campaign === null ?
                 <Alert severity={"error"}>Error loading campaign</Alert>

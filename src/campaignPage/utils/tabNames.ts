@@ -1,5 +1,5 @@
 const TabNames = {
-    Scheduler: "Scheduler",
+    Scheduler: "Schedule",
 };
 
 export default TabNames;
