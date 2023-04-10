@@ -44,6 +44,10 @@ function CampaignPage(): JSX.Element {
     const addTab = (tab: TabPage): void => {
         if (!activeTabs.some((activeTab) => activeTab.header.text === tab.header.text)) {
             setActiveTabs([tab, ...activeTabs]);
+        } else if(tab.header.text !== activeTabs[0].header.text) {
+            // Set the tab to active by putting it at the front of the array
+            setActiveTabs([tab, ...activeTabs.filter((activeTab) =>
+                activeTab.header.text !== tab.header.text)]);
         }
     };
 
@@ -51,12 +55,13 @@ function CampaignPage(): JSX.Element {
         setActiveTabs(activeTabs.filter((activeTab) => activeTab.header.text !== tab));
     };
 
+
     const sideMenuList: MenuListItem[] = [
         {
             name: TabNames.Scheduler,
             icon: <CalendarMonthIcon/>,
             tab: {
-                header: {text: "Schedule"},
+                header: {text: TabNames.Scheduler},
                 component: () => {
                     return <ScheduleTab campaign={campaign} name={TabNames.Scheduler} closeFunction={removeTab}/>;
                 }
@@ -99,7 +104,6 @@ function CampaignPage(): JSX.Element {
         });
     }, [campaignGuid, loggedInStatus]);
 
-
     const renderMainPage = (): JSX.Element => {
         return (
             !enteredCampaign ?
@@ -107,16 +111,17 @@ function CampaignPage(): JSX.Element {
                 : <>
                     <TabComponent heightAdjustMode="Auto"
                         overflowMode="Scrollable"
-                        allowDragAndDrop={true}
-                        enablePersistence={true}
-                        id={"draggableTab"} dragArea="#container"
+                        enablePersistence={true} key={activeTabs.length}
                     >
                         <TabItemsDirective>
                             {activeTabs.map((tab, index) => {
                                 return (
-                                    <TabItemDirective key={index} header={tab.header} content={tab.component}/>
+                                    <TabItemDirective key={index} header={tab.header} content={tab.component}>
+                                        {tab.component()}
+                                    </TabItemDirective>
                                 );
-                            })}
+                            })
+                            }
                         </TabItemsDirective>
                     </TabComponent>
                 </>
