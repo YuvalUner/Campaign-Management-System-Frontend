@@ -15,6 +15,7 @@
     "@syncfusion/ej2-react-base": "^21.1.38",
     "@syncfusion/ej2-react-grids": "^21.1.38",
     "@syncfusion/ej2-react-layouts": "^21.1.37",
+    "@syncfusion/ej2-react-navigations": "^21.1.38",
     "@syncfusion/ej2-react-schedule": "^21.1.38",
     "@syncfusion/ej2-schedule": "^21.1.38",
     "@testing-library/jest-dom": "^5.16.5",

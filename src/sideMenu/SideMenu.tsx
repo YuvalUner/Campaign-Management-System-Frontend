@@ -81,10 +81,10 @@ function SideMenu(props: SideMenuProps): JSX.Element {
         <DrawerOpenContext.Provider value={isOpen}>
             <Drawer
                 sx={{
-                    width: Constants.drawerWidth,
+                    width: Constants.leftDrawerWidth,
                     flexShrink: 0,
                     "& .MuiDrawer-paper": {
-                        width: Constants.drawerWidth,
+                        width: Constants.leftDrawerWidth,
                         boxSizing: "border-box",
                         marginTop: `${Constants.topMenuHeight}px`,
                         height: `calc(100% - ${Constants.topMenuHeight}px)`

@@ -32,7 +32,7 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
             flexDirection: "column",
             height: `calc(100% - ${Constants.topMenuHeight}px)`,
             paddingBottom: "px",
-            marginLeft: isDrawerOpen ? `${Constants.drawerWidth}px` : "0px",
+            marginLeft: isDrawerOpen ? `${Constants.leftDrawerWidth}px` : "0px",
         }}>
             <Box sx={{
                 // Negative margin used to prevent the content from ending too close to the top menu.
