@@ -4,16 +4,12 @@ import ServerRequestMaker from "../utils/server-request-maker";
 import config from "../app-config.json";
 import {HttpStatusCode} from "axios";
 import {
-    Alert,
-    Avatar,
     Box,
     CircularProgress,
     Drawer,
     List,
     ListItem,
     ListItemButton, ListItemIcon, ListItemText,
-    Stack,
-    Typography,
 } from "@mui/material";
 import NotAuthorizedPage from "../notAuthorizedPage/notAuthorizedPage";
 import {UserLoggedInContext} from "../App";
@@ -38,7 +34,7 @@ function CampaignPage(): JSX.Element {
     const [loading, setLoading] = useState(true);
     const [enteredCampaign, setEnteredCampaign] = useState(false);
     const loggedInStatus = useContext(UserLoggedInContext);
-    const [campaign, setCampaign] = useState<Campaign | null>(null);
+    const [campaign, setCampaign] = useState<Campaign | null>({} as Campaign);
 
     const sideMenuList: MenuListItem[] = [
         {
@@ -59,10 +55,12 @@ function CampaignPage(): JSX.Element {
                 ServerRequestMaker.MakeGetRequest(
                     config.ControllerUrls.Campaigns.Base + config.ControllerUrls.Campaigns.GetBasicInfo
                     + campaignGuid,
-                ).then((res) => {
-                    if (res.status === HttpStatusCode.Ok){
+                ).then((response) => {
+                    if (response.status === HttpStatusCode.Ok){
                         setCampaign(res.data);
                     }
+                }).catch(() => {
+                    setCampaign(null);
                 });
             }
         }).finally(() => {

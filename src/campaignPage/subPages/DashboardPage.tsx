@@ -1,9 +1,11 @@
 import React from "react";
 import {Alert, Avatar, Stack, Typography} from "@mui/material";
 import Campaign from "../../models/campaign";
-import {ScheduleComponent, ViewsDirective, ViewDirective, MonthAgenda, Inject} from "@syncfusion/ej2-react-schedule";
-import {extend} from "@syncfusion/ej2-base";
-import dataSource from "./datasource.json";
+import {
+    ScheduleComponent, ViewsDirective, ViewDirective, Day, Week, WorkWeek, Month,
+    Inject, Resize, DragAndDrop,
+} from "@syncfusion/ej2-react-schedule";
+import Constants from "../../utils/constantsAndStaticObjects/constants";
 
 interface DashboardPageProps {
     campaign: Campaign | null;
@@ -11,14 +13,12 @@ interface DashboardPageProps {
 
 function DashboardPage(props: DashboardPageProps): JSX.Element {
 
-    const data: Record<string, any>[] = extend([], (dataSource as Record<string, any>).fifaEventsData,
-        undefined, true) as Record<string, any>[];
-
 
     return (
         <Stack sx={{
             height: "100%",
             width: "100%",
+            marginLeft: `${Constants.muiBoxDefaultPadding}px`
         }} direction={"column"} spacing={2}>
             {props.campaign === null ?
                 <Alert severity={"error"}>Error loading campaign</Alert>
@@ -30,20 +30,19 @@ function DashboardPage(props: DashboardPageProps): JSX.Element {
                         }}/>
                         <Typography variant={"h4"}>{props.campaign.campaignName}</Typography>
                     </Stack>
-                    <div className='schedule-control-section'>
-                        <div className='col-lg-12 control-section'>
-                            <div className='control-wrapper schedule-wrapper'>
-                                <ScheduleComponent width='100%' height='510px'
-                                    selectedDate={new Date(2021, 5, 20)}
-                                    eventSettings={{ dataSource: data }}>
-                                    <ViewsDirective>
-                                        <ViewDirective option='MonthAgenda' />
-                                    </ViewsDirective>
-                                    <Inject services={[MonthAgenda]} />
-                                </ScheduleComponent>
-                            </div>
-                        </div>
-                    </div>
+                    <Typography variant={"h5"}>My campaign schedule</Typography>
+                    <ScheduleComponent width="80%" height="100%"
+                        allowDragAndDrop={false} allowKeyboardInteraction={false} allowResizing={false}
+                        firstDayOfWeek={0} readonly={true} selectedDate={new Date()} workDays={[0, 1, 2, 3, 4,]}
+                    >
+                        <ViewsDirective>
+                            <ViewDirective option="Day"/>
+                            <ViewDirective option="Week"/>
+                            <ViewDirective option="WorkWeek"/>
+                            <ViewDirective option="Month"/>
+                        </ViewsDirective>
+                        <Inject services={[Day, Week, WorkWeek, Month, Resize, DragAndDrop]}/>
+                    </ScheduleComponent>
                 </>
             }
         </Stack>
