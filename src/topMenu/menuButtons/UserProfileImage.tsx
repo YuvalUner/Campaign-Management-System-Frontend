@@ -7,6 +7,11 @@ interface UserProfileImageProps {
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
+/**
+ * The profile image displayed in the top menu.
+ * @param props
+ * @constructor
+ */
 function UserProfileImage(props: UserProfileImageProps): JSX.Element {
 
     if (props.user.displayNameEng === undefined || props.user.displayNameEng === null) {

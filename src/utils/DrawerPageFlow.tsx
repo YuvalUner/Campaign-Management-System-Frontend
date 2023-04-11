@@ -10,6 +10,11 @@ interface DrawerPageFlowProps {
     children: JSX.Element;
 }
 
+/**
+ * A helper component, meant to manage the page flow when the left drawer is open or closed.
+ * @param props
+ * @constructor
+ */
 function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
 
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
@@ -17,6 +22,7 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
 
 
     useEffect(() => {
+        // Listen to the drawer opening and closing
         Events.subscribe(Events.EventNames.LeftDrawerOpened, () => {
             setIsDrawerOpen(true);
         });
@@ -41,6 +47,7 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
                 marginLeft: isLoggedIn ? `${Constants.muiBoxDefaultPadding}px` : "0px",
                 height: "100%",
             }} id={componentIds.DrawerPageFlowMainBoxId}>
+                {/* The whole application is here */}
                 {props.children}
             </Box>
             {isLoggedIn && <Box sx={{
@@ -62,6 +69,7 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
                         marginLeft: `${-Constants.muiBoxDefaultPadding}px`,
                     }}
                 >
+                    {/* The button for closing and opening the drawer */}
                     <IconButton color={"primary"} sx={{
                         position: "absolute",
                         display: "block",

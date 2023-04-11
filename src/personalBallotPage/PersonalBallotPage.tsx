@@ -11,6 +11,11 @@ import Map from "./Map";
 import Constants from "../utils/constantsAndStaticObjects/constants";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
+/**
+ * A page displaying the ballot the user is assigned to.
+ * Includes a map of the location of the ballot.
+ * @constructor
+ */
 function PersonalBallotPage(): JSX.Element {
 
     const [ballot, setBallot] = React.useState<Ballot>({
@@ -23,6 +28,7 @@ function PersonalBallotPage(): JSX.Element {
     const [responseStatus, setResponseStatus] = React.useState<number>(0);
 
     useEffect(() => {
+        // Get the ballot assigned to the user.
         ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.ElectionDay.Base + config.ControllerUrls.ElectionDay.GetSelfBallot,
         ).then((response) => {
@@ -35,6 +41,9 @@ function PersonalBallotPage(): JSX.Element {
         });
     }, []);
 
+    /**
+     * If the user is not authenticated, display a message telling them to verify first.
+     */
     const renderNotAuthenticatedError = () => {
         return (
             <Box sx={{
@@ -48,6 +57,10 @@ function PersonalBallotPage(): JSX.Element {
         );
     };
 
+    /**
+     * If the user is not assigned a ballot, display a message telling them to contact their local election office,
+     * because something went horribly wrong somewhere and we don't know what.
+     */
     const renderNotFoundError = () => {
         return (
             <Box sx={{
@@ -61,6 +74,10 @@ function PersonalBallotPage(): JSX.Element {
         );
     };
 
+    /**
+     * If the user is assigned a ballot, display the ballot and a map of the location of the ballot.
+     * @param status
+     */
     const renderGoogleMap = (status: Status) => {
         switch (status) {
         case Status.LOADING:
@@ -74,6 +91,10 @@ function PersonalBallotPage(): JSX.Element {
         }
     };
 
+    /**
+     * The main part of the page, displaying the ballot and the map.
+     * @param status
+     */
     const renderBallotWithMap = (status: Status) => {
         return (
             <Grid2 container spacing={2} sx={{

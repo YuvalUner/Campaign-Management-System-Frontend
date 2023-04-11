@@ -24,12 +24,21 @@ interface SideMenuProps {
 
 const DrawerOpenContext = React.createContext(false);
 
+/**
+ * The side menu displayed on the left side of the screen.
+ * Contains the list of campaigns the user is a member of and links to them.
+ * @param props
+ * @constructor
+ */
 function SideMenu(props: SideMenuProps): JSX.Element {
 
     const [isOpen, setIsOpen] = useState(false);
 
     const nav = useNavigate();
 
+    /**
+     * Refreshes the list of campaigns the user is a member of.
+     */
     const refreshCampaignList = async (): Promise<void> => {
         const res = await ServerRequestMaker.MakeGetRequest<UserWithCampaigns>(
             config.ControllerUrls.Users.Base + config.ControllerUrls.Users.HomePageInfo,
@@ -42,6 +51,7 @@ function SideMenu(props: SideMenuProps): JSX.Element {
         //     Events.dispatch(Events.EventNames.LeftDrawerOpened);
         // });
 
+        // When the user logs out, close the drawer.
         Events.subscribe(Events.EventNames.UserLoggedOut, () => {
             Events.dispatch(Events.EventNames.LeftDrawerClosed);
         });
@@ -54,6 +64,7 @@ function SideMenu(props: SideMenuProps): JSX.Element {
             setIsOpen(true);
         });
 
+        // When the user joins or creates a campaign, refresh the list of campaigns.
         Events.subscribe(Events.EventNames.RefreshCampaignsList, refreshCampaignList);
 
         return () => {

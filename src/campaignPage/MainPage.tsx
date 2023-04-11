@@ -6,6 +6,12 @@ interface MainPageProps {
     campaign: Campaign | null;
 }
 
+/**
+ * The main page of the campaign page, that displays the campaign's logo and name, as well as the campaign's
+ * description and the adminstrative staff.
+ * @param props
+ * @constructor
+ */
 function MainPage(props: MainPageProps): JSX.Element {
     return (
         <Stack sx={{

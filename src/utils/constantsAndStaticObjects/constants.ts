@@ -1,3 +1,6 @@
+/**
+ * A collection of many useful constants used in the application.
+ */
 const constants = {
     leftDrawerWidth: 300,
     topMenuHeight: 65,

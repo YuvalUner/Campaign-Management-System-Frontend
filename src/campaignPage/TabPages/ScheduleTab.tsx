@@ -14,6 +14,10 @@ interface DashboardPageProps extends TabPageBaseProps{
     campaign: Campaign | null;
 }
 
+/**
+ * The ScheduleTab component is the tab that displays the personal schedule of the user within a campaign.
+ * It should be a child of the CampaignPage component, and is meant to be one of the tabs that can be opened.
+ */
 function ScheduleTab(props: DashboardPageProps): JSX.Element {
 
     const drawerOpen = useContext(DrawerOpenContext);

@@ -14,11 +14,20 @@ interface LogoutProps {
     setUser: (user: UserWithCampaigns) => void;
 }
 
+/**
+ * Logs the user out of the app.
+ * @param props
+ * @constructor
+ */
 function Logout(props: LogoutProps): JSX.Element {
 
     // const windowClosedEvent = "beforeunload";
     const nav = useNavigate();
 
+    /**
+     * Logs the user out of the app.
+     * Handles logging the user out of the server, the google account, and the app.
+     */
     const logout = async (): Promise<void> => {
         props.setIsLoggedIn(false);
         googleLogout();

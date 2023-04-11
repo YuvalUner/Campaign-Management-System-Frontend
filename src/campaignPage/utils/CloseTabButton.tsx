@@ -8,6 +8,12 @@ interface CloseTabButtonProps {
     tabName: string;
 }
 
+/**
+ * The CloseTabButton component is a button that can be used to close a tab.
+ * It is an auxiliary component for each tab, that should be included in the beginning of the tab's return statement.
+ * @param props the function that should be called when the button is clicked,
+ * and the name of the tab that should be closed.
+ */
 function CloseTabButton(props: CloseTabButtonProps): JSX.Element {
     return (
         <Tooltip title={"Close tab"}>
