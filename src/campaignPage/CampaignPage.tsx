@@ -23,6 +23,7 @@ import TabNames from "./utils/tabNames";
 import MainPage from "./MainPage";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import MainPageAsTab from "./TabPages/MainPageAsTab";
+import UserWithRole from "../models/user-with-role";
 
 
 interface MenuListItem {
@@ -44,6 +45,7 @@ function CampaignPage(): JSX.Element {
     const [enteredCampaign, setEnteredCampaign] = useState(false);
     const loggedInStatus = useContext(UserLoggedInContext);
     const [campaign, setCampaign] = useState<Campaign | null>({} as Campaign);
+    const [campaignAdmins, setCampaignAdmins] = useState<UserWithRole[]>([]);
 
     const [activeTabs, setActiveTabs] = useState<TabPage[]>([]);
 
@@ -78,7 +80,8 @@ function CampaignPage(): JSX.Element {
             tab: {
                 header: {text: TabNames.MainPage},
                 component: () => {
-                    return <MainPageAsTab campaign={campaign} name={TabNames.MainPage} closeFunction={removeTab}/>;
+                    return <MainPageAsTab campaign={campaign} name={TabNames.MainPage}
+                        closeFunction={removeTab} campaignAdmins={campaignAdmins}/>;
                 }
             }
         },
@@ -116,6 +119,17 @@ function CampaignPage(): JSX.Element {
                 }).catch(() => {
                     setCampaign(null);
                 });
+
+                ServerRequestMaker.MakeGetRequest(
+                    config.ControllerUrls.Campaigns.Base
+                    + config.ControllerUrls.Campaigns.GetCampaignAdmins + campaignGuid
+                ).then((response) => {
+                    if (response.status === HttpStatusCode.Ok) {
+                        setCampaignAdmins(response.data);
+                    }
+                }).catch(() => {
+                    setCampaignAdmins([]);
+                });
             }
         }).catch(() => {
             // If the server returned 401, do not approve entry on client side as well.
@@ -152,7 +166,7 @@ function CampaignPage(): JSX.Element {
                                 }
                             </TabItemsDirective>
                         </TabComponent>
-                        : <MainPage campaign={campaign}/>
+                        : <MainPage campaign={campaign} campaignAdmins={campaignAdmins}/>
                     }
                 </>
         );

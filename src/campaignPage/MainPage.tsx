@@ -1,11 +1,14 @@
 import React, {useContext} from "react";
 import Campaign from "../models/campaign";
-import {Alert, Avatar, Box, Stack, Typography} from "@mui/material";
+import {Alert, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography} from "@mui/material";
 import Constants from "../utils/constantsAndStaticObjects/constants";
 import {DrawerOpenContext} from "../sideMenu/SideMenu";
+import UserWithRole, {sortUsersByRoleLevel} from "../models/user-with-role";
+import Grid2 from "@mui/material/Unstable_Grid2";
 
-interface MainPageProps {
+export interface MainPageProps {
     campaign: Campaign | null;
+    campaignAdmins: UserWithRole[];
 }
 
 /**
@@ -17,6 +20,35 @@ interface MainPageProps {
 function MainPage(props: MainPageProps): JSX.Element {
 
     const drawerOpen = useContext(DrawerOpenContext);
+    // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+    const [_, campaignManagers, candidates, campaignOwners] = sortUsersByRoleLevel(props.campaignAdmins);
+
+    const renderAdminStaffList = (users: UserWithRole[], roleName: string) => {
+        return (
+            <Stack direction={"column"} spacing={2} sx={{
+                border: "1px solid black",
+                height: "100%",
+                overflow: "auto",
+            }}>
+                <Typography variant={"h5"} sx={{
+                    textAlign: "center",
+                    marginTop: "8px",
+                }}>{roleName}</Typography>
+                <List>
+                    {users.map((user, index) => {
+                        return(
+                            <ListItem key={index}>
+                                <ListItemAvatar>
+                                    <Avatar src={user.profilePicUrl ?? ""} alt={user.displayNameEng}/>
+                                </ListItemAvatar>
+                                <ListItemText primary={user.firstNameHeb + " " + user.lastNameHeb}/>
+                            </ListItem>
+                        );
+                    })}
+                </List>
+            </Stack>
+        );
+    };
 
     return (
         <Stack sx={{
@@ -49,6 +81,19 @@ function MainPage(props: MainPageProps): JSX.Element {
                             <Typography paragraph>{props.campaign.campaignDescription}</Typography>
                         </Box>
                     </Stack>
+                    <Grid2 container spacing={2} sx={{
+                        height: "100%",
+                    }}>
+                        <Grid2 xs={4}>
+                            {renderAdminStaffList(campaignOwners, "Campaign Owners")}
+                        </Grid2>
+                        <Grid2 xs={4}>
+                            {renderAdminStaffList(candidates, "Candidates")}
+                        </Grid2>
+                        <Grid2 xs={4}>
+                            {renderAdminStaffList(campaignManagers, "Campaign Managers")}
+                        </Grid2>
+                    </Grid2>
                 </>
             }
         </Stack>

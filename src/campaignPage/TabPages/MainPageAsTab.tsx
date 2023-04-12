@@ -1,11 +1,9 @@
 import React from "react";
-import MainPage from "../MainPage";
-import Campaign from "../../models/campaign";
+import MainPage, {MainPageProps} from "../MainPage";
 import TabPageBaseProps from "../utils/tabPageBaseProps";
 import CloseTabButton from "../utils/CloseTabButton";
 
-interface MainPageAsTabProps extends TabPageBaseProps{
-    campaign: Campaign | null;
+interface MainPageAsTabProps extends TabPageBaseProps, MainPageProps{
 }
 
 /**
@@ -15,7 +13,7 @@ function MainPageAsTab(props: MainPageAsTabProps): JSX.Element {
     return (
         <>
             <CloseTabButton closeFunction={props.closeFunction} tabName={props.name}/>
-            <MainPage campaign={props.campaign}/>
+            <MainPage campaign={props.campaign} campaignAdmins={props.campaignAdmins}/>
         </>
     );
 }
