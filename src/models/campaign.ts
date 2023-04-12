@@ -8,7 +8,8 @@ interface Campaign {
     campaignIsActive?: boolean;
     isSubCampaign?: boolean;
     cityName?: string;
-    campaignLogoUrl?: string;
+    campaignLogoUrl?: string | null;
+    isMunicipal?: boolean;
 }
 
 export default Campaign;

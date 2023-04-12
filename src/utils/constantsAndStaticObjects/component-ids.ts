@@ -6,6 +6,10 @@
 const componentIds = {
     DrawerPageFlowMainBoxId: "drawer-page-flow-main-box",
     HomePagePaper: "home-page-paper",
+    MapDiv: "Map",
+    CitySelectLabel: "city-select-label",
+    MunicipalChoiceLabel: "municipal-choice-label",
+    CampaignCreationLogoUploadInputField: "campaign-creation-logo-upload-input-field",
 };
 
 export default componentIds;

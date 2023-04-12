@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import HomePageControl from "../models/home-page-control";
-import GenericRequestMaker from "../utils/generic-request-maker";
+import ServerRequestMaker from "../utils/server-request-maker";
 import config from "../app-config.json";
 import {HttpStatusCode} from "axios";
 import AnnouncementWithPublisherDetails from "../models/announcement-with-publisher-details";
@@ -11,12 +11,12 @@ import {
     Paper,
 } from "@mui/material";
 
-import Constants from "../utils/constants";
+import Constants from "../utils/constantsAndStaticObjects/constants";
 import InfiniteScroll from "react-infinite-scroll-component";
-import componentIds from "../utils/component-ids";
-import AnnouncementCard from "./AnnouncementCard";
-import EventCard from "./EventCard";
-import ComponentIds from "../utils/component-ids";
+import componentIds from "../utils/constantsAndStaticObjects/component-ids";
+import AnnouncementCard from "./cards/AnnouncementCard";
+import EventCard from "./cards/EventCard";
+import ComponentIds from "../utils/constantsAndStaticObjects/component-ids";
 
 const instanceOfAnnouncementWithPublisherDetails =
     (object: AnnouncementWithPublisherDetails | PublishedEventWithPublisher):
@@ -61,7 +61,7 @@ function HomePage(props: HomePageProps): JSX.Element {
         if (!loading && props.homePageControl.hasMore) {
             setLoading(true);
             const query = `?limit=${props.homePageControl.limit}&offset=${props.homePageControl.offset}`;
-            const res = await GenericRequestMaker.MakeGetRequest<HomePageControl>(
+            const res = await ServerRequestMaker.MakeGetRequest<HomePageControl>(
                 config.ControllerUrls.PublicBoard.Base + config.ControllerUrls.PublicBoard.GetPublicBoard + query,
             );
             if (res.status === HttpStatusCode.Ok) {

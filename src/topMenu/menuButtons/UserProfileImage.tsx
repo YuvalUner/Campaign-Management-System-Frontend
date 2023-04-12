@@ -1,6 +1,6 @@
 import React from "react";
 import {Avatar, IconButton} from "@mui/material";
-import User from "../models/user";
+import User from "../../models/user";
 
 interface UserProfileImageProps {
     user: User;
@@ -8,12 +8,13 @@ interface UserProfileImageProps {
 }
 
 function UserProfileImage(props: UserProfileImageProps): JSX.Element {
-    if (props.user.profilePicUrl === null){
-        props.user.profilePicUrl = "";
+
+    if (props.user.displayNameEng === undefined || props.user.displayNameEng === null) {
+        props.user.displayNameEng = "Unknown";
     }
 
-    if (props.user.displayNameEng === null){
-        props.user.displayNameEng = "";
+    if (props.user.profilePicUrl === undefined || props.user.profilePicUrl === null) {
+        props.user.profilePicUrl = "";
     }
 
     return (

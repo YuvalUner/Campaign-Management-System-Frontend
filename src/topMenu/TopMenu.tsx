@@ -1,15 +1,15 @@
 import React, {useEffect} from "react";
-import LogIn from "./LogIn";
+import LogIn from "./menuButtons/LogIn";
 import {AppBar, Box, Button, Menu, MenuItem, Toolbar} from "@mui/material";
-import Logout from "./Logout";
+import Logout from "./menuButtons/Logout";
 import Events from "../utils/events";
 import UserWithCampaigns from "../models/user-with-campaigns";
-import GenericRequestMaker from "../utils/generic-request-maker";
+import ServerRequestMaker from "../utils/server-request-maker";
 import config from "../app-config.json";
-import UserProfileImage from "./UserProfileImage";
+import UserProfileImage from "./menuButtons/UserProfileImage";
 import {useNavigate} from "react-router-dom";
-import ScreenRoutes from "../utils/screen-routes";
-import Constants from "../utils/constants";
+import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
+import Constants from "../utils/constantsAndStaticObjects/constants";
 
 interface TopMenuProps {
     isLoggedIn: boolean;
@@ -33,15 +33,20 @@ function TopMenu(props: TopMenuProps): JSX.Element {
         setIsUserMenuOpen(event.currentTarget);
     };
 
+    const retrieveMainDisplayInfo = async (): Promise<void> => {
+        const res = await ServerRequestMaker.MakeGetRequest<UserWithCampaigns>(
+            config.ControllerUrls.Users.Base + config.ControllerUrls.Users.HomePageInfo,
+        );
+        const user: UserWithCampaigns = res.data;
+        props.setUser(user);
+        props.setIsLoggedIn(true);
+    };
+
     useEffect(() => {
-        Events.subscribe(Events.EventNames.UserLoggedIn, async () => {
-            const res = await GenericRequestMaker.MakeGetRequest<UserWithCampaigns>(
-                config.ControllerUrls.Users.Base + config.ControllerUrls.Users.HomePageInfo,
-            );
-            const user: UserWithCampaigns = res.data;
-            props.setUser(user);
-            props.setIsLoggedIn(true);
-        });
+        Events.subscribe(Events.EventNames.UserLoggedIn, retrieveMainDisplayInfo);
+        return () => {
+            Events.unsubscribe(Events.EventNames.UserLoggedIn, retrieveMainDisplayInfo);
+        };
     }, []);
 
     const renderUserImageMenu = (): JSX.Element => {
@@ -61,12 +66,24 @@ function TopMenu(props: TopMenuProps): JSX.Element {
                     }}>
                         Profile
                     </MenuItem>
+                    <MenuItem onClick={() => {
+                        handleClose();
+                        nav(ScreenRoutes.PersonalBallotPage);
+                    }}>
+                        My Ballot
+                    </MenuItem>
                     <MenuItem onClick={handleClose}>
                         <Logout setIsLoggedIn={props.setIsLoggedIn} setUser={props.setUser}/>
                     </MenuItem>
                 </Menu>
             </div>
         );
+    };
+
+    const renderMenuAvailableToLoggedInUsers = (): JSX.Element => {
+        return (<>
+            <Button color={"inherit"} onClick={() => nav(ScreenRoutes.CreateCampaignPage)}>Create Campaign</Button>
+        </>);
     };
 
 
@@ -77,6 +94,7 @@ function TopMenu(props: TopMenuProps): JSX.Element {
             <Toolbar sx={{justifyContent: "space-between"}}>
                 <Box>
                     <Button color={"inherit"} onClick={() => nav(ScreenRoutes.HomePage)}>Home</Button>
+                    {props.isLoggedIn && renderMenuAvailableToLoggedInUsers()}
                 </Box>
                 <Box>
                     {props.isLoggedIn ?

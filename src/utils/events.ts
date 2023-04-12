@@ -14,6 +14,11 @@ class Events{
         PageBottomReached: "PageBottomReached",
         ShouldScrollToRecordedPosition: "ShouldScrollToRecordedPosition",
         ShouldResetScrollPosition: "ShouldResetScrollPosition",
+        NewCampaignSubmitted: "NewCampaignSubmitted",
+        CampaignNameInvalid: "CampaignNameInvalid",
+        CampaignCityInvalid: "CampaignCityInvalid",
+        RefreshCampaignsList: "RefreshCampaignsList",
+        ShouldHideEffects: "ShouldHideEffects",
     };
 
     /**

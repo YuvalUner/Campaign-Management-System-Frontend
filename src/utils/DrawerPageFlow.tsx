@@ -1,9 +1,9 @@
 import React, {useEffect, memo, useContext} from "react";
-import Constants from "./constants";
+import Constants from "./constantsAndStaticObjects/constants";
 import {Box, IconButton, Tooltip} from "@mui/material";
 import Events from "./events";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
-import componentIds from "./component-ids";
+import componentIds from "./constantsAndStaticObjects/component-ids";
 import {UserLoggedInContext} from "../App";
 
 interface DrawerPageFlowProps {
@@ -30,8 +30,8 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
         <Box sx={{
             display: "flex",
             flexDirection: "column",
-            height: `calc(100% - ${Constants.topMenuHeight * 2}px)`,
-            paddingBottom: "0px",
+            height: `calc(100% - ${Constants.topMenuHeight}px)`,
+            paddingBottom: "px",
             marginLeft: isDrawerOpen ? `${Constants.drawerWidth}px` : "0px",
         }}>
             <Box sx={{
@@ -39,6 +39,7 @@ function DrawerPageFlow(props: DrawerPageFlowProps): JSX.Element {
                 marginBottom: `${-Constants.muiBoxDefaultPadding}px`,
                 overflow: "auto",
                 marginLeft: isLoggedIn ? `${Constants.muiBoxDefaultPadding}px` : "0px",
+                height: "100%",
             }} id={componentIds.DrawerPageFlowMainBoxId}>
                 {props.children}
             </Box>

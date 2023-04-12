@@ -1,6 +1,11 @@
 {
   "OAuthProvider": "Google",
   "ServerBaseUrl": "https://localhost:7065/",
+  "GoogleMapsApiKey": "AIzaSyAhj6Ks-mb8uH9Co5e9YPZZLSGXX-HKDWc",
+  "ImgBbConfig": {
+    "UploadUrl": "https://api.imgbb.com/1/upload?key=",
+    "ApiKey": "f62f9f34ecef275cf31a659b34210726"
+  },
   "ControllerUrls" : {
     "Tokens": {
       "Base": "api/Token/",
@@ -10,17 +15,28 @@
     "Users": {
       "Base": "api/Users/",
       "HomePageInfo": "HomePageInfo",
-      "UserPrivateInfo": "UserPrivateInfo",
-      "GetVerifiedStatus": "get-verified-status",
-      "GetProfilePageInfo": "get-profile-page-info"
+      "GetVerifiedStatus": "get-verified-status"
     },
     "PublicBoard": {
       "Base": "api/PublicBoard/",
       "GetPublicBoard": "public-board"
     },
+    "ElectionDay": {
+      "Base": "api/ElectionDay/",
+      "GetSelfBallot": "ballot"
+    },
     "Cities": {
       "Base": "api/Cities/",
       "GetAllCities": ""
+    },
+    "Campaigns": {
+      "Base": "api/Campaigns/",
+      "CreateCampaign": "create",
+      "GetInfoByInviteGuid": "info-by-invite-guid/"
+    },
+    "Invites": {
+      "Base": "api/Invites/",
+      "AcceptInvite": "AcceptInvite/"
     }
   }
 }
