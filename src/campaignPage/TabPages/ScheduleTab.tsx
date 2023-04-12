@@ -7,7 +7,7 @@ import {
 } from "@syncfusion/ej2-react-schedule";
 import Constants from "../../utils/constantsAndStaticObjects/constants";
 import {DrawerOpenContext} from "../../sideMenu/SideMenu";
-import TabPageBaseProps from "../utils/tabPageBaseProps";
+import TabPageBaseProps from "../utils/tab-page-base-props";
 import CloseTabButton from "../utils/CloseTabButton";
 
 interface DashboardPageProps extends TabPageBaseProps{

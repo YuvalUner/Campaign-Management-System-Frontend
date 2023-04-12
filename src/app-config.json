@@ -41,6 +41,10 @@
     "Invites": {
       "Base": "api/Invites/",
       "AcceptInvite": "AcceptInvite/"
+    },
+    "Permissions": {
+      "Base": "api/Permissions/",
+      "GetSelfPermissions": "getSelf/"
     }
   }
 }
