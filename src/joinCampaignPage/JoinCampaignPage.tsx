@@ -18,6 +18,10 @@ import errorCodeExtractor from "../utils/error-code-extractor";
 import CustomStatusCode from "../utils/constantsAndStaticObjects/custom-status-code";
 
 
+/**
+ * The page for accepting campaign invites and joining campaigns.
+ * @constructor
+ */
 function JoinCampaignPage(): JSX.Element {
 
     const params = useParams();
@@ -31,6 +35,7 @@ function JoinCampaignPage(): JSX.Element {
     const [alreadyJoined, setAlreadyJoined] = useState<boolean>(false);
 
     useEffect(() => {
+        // Get the campaign info from the invite guid.
         ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.Campaigns.Base + config.ControllerUrls.Campaigns.GetInfoByInviteGuid + inviteGuid,
         ).then((res) => {
@@ -45,30 +50,43 @@ function JoinCampaignPage(): JSX.Element {
     }, []);
 
     useEffect(() => {
+        // While this page is loaded, hide effects such as drawer opening upon logging in.
         Events.dispatch(Events.EventNames.ShouldHideEffects, true);
         return () => {
+            // When the page is unloaded, show effects again.
             Events.dispatch(Events.EventNames.ShouldHideEffects, false);
         };
     }, []);
 
+    /**
+     * Accepts the invite and navigates to the campaign page.
+     */
     const acceptInvite = async (): Promise<void> => {
         ServerRequestMaker.MakePostRequest(
             config.ControllerUrls.Invites.Base + config.ControllerUrls.Invites.AcceptInvite + inviteGuid,
             {}
         ).then((res) => {
+            // Campaign invite accepted successfully, navigate to the campaign page.
             const campaignGuid = res.data.CampaignGuid;
             Events.dispatch(Events.EventNames.RefreshCampaignsList);
             nav(ScreenRoutes.CampaignPage + campaignGuid);
         }).catch((err) => {
             const errCode = errorCodeExtractor(err.response.data);
+            // Request rejected because user is already a member of the campaign, show error message.
             if (errCode === CustomStatusCode.DuplicateKey){
                 setAlreadyJoined(true);
+                // Request rejected because user is not verified, show error message.
             } else if (errCode === CustomStatusCode.VerificationStatusError){
                 setVerifiedError(true);
             }
         });
     };
 
+    /**
+     * onSuccess function for the GoogleLogin component. Sends the id token to the server to log in the user.
+     * Afterwards, calls acceptInvite to accept the invite.
+     * @param response
+     */
     const onSuccess = async (response: CredentialResponse): Promise<void> => {
 
         const externalAuth: ExternalAuthDto = {
@@ -87,6 +105,10 @@ function JoinCampaignPage(): JSX.Element {
         });
     };
 
+    /**
+     * Renders the accept button. If the user is logged in, the button is enabled and calls acceptInvite.
+     * Otherwise, a Google login button is rendered, that calls onSuccess when the user logs in.
+     */
     const renderAcceptButton = (): JSX.Element => {
         return (
             <Stack direction={"column"} spacing={1} alignItems={"center"} alignContent={"center"}>
@@ -106,6 +128,9 @@ function JoinCampaignPage(): JSX.Element {
         );
     };
 
+    /**
+     * Render the main visual content of the page.
+     */
     const renderMainContent = (): JSX.Element => {
         return (
             <>

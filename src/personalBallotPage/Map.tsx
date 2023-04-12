@@ -7,6 +7,12 @@ interface MapProps {
     ballot: Ballot;
 }
 
+/**
+ * The Map component is a helper component that renders a map with a marker at the address of the ballot.
+ * It uses the Google Maps API.
+ * @param props
+ * @constructor
+ */
 function Map(props: MapProps): JSX.Element {
 
     let map = null;
@@ -18,6 +24,8 @@ function Map(props: MapProps): JSX.Element {
     const geocoder = new google.maps.Geocoder();
 
     useEffect(() => {
+        // Get the lat and lng of the address and set the map and marker to that location.
+        // Code taken from Google's API documentation.
         geocoder.geocode({address: AddressFormatter(props.ballot.ballotAddress + props.ballot.cityName)},
             (results, status) => {
                 if (status === "OK") {

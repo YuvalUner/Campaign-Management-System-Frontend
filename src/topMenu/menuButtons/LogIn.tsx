@@ -8,12 +8,21 @@ import {useNavigate} from "react-router-dom";
 import ScreenRoutes from "../../utils/constantsAndStaticObjects/screen-routes";
 import Events from "../../utils/events";
 
-
+/**
+ * The login button for logging in with Google.
+ * Handles the login process and redirects to the profile page if the user is new.
+ * @constructor
+ */
 function LogIn(): JSX.Element {
 
     const navigate = useNavigate();
     const [shouldHideEffect, setShouldHideEffect] = React.useState(false);
 
+    /**
+     * onSuccess function for the GoogleLogin component.
+     * Sends the id token to the server to verify it and log the user in.
+     * @param response
+     */
     const onSuccess = async (response: CredentialResponse): Promise<void> => {
 
         const externalAuth: ExternalAuthDto = {
@@ -39,6 +48,8 @@ function LogIn(): JSX.Element {
     };
 
     useEffect(() => {
+        // Subscribe to the ShouldHideEffects event.
+        // This event lets other components decide if the drawer should be opened when the user logs in.
         Events.subscribe(Events.EventNames.ShouldHideEffects, ((evt: CustomEvent) => {
             setShouldHideEffect(evt.detail as boolean);
         }) as EventListenerOrEventListenerObject);
