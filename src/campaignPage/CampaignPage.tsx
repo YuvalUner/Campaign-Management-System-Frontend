@@ -291,7 +291,11 @@ function CampaignPage(): JSX.Element {
             }}>
                 <CircularProgress/>
             </Box>
-            : <Box>
+            : <Box sx={{
+                marginRight: `${Constants.rightDrawerWidth}px`,
+                marginLeft: `${Constants.muiBoxDefaultPadding}px`,
+                height: "100%",
+            }}>
                 {renderMainPage()}
                 {renderDrawerMenu()}
             </Box>

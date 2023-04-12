@@ -4,14 +4,13 @@
 */
 interface VotersLedgerFilter
 {
-    campaignGuid: string | null;
-    idNum: number | null;
-    firstName: string | null;
-    lastName: string | null;
-    ballotId: number | null;
-    cityName: string | null;
-    streetName: string | null;
-    supportStatus: boolean | null;
+    idNum?: number | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    ballotId?: number | null;
+    cityName?: string | null;
+    streetName?: string | null;
+    supportStatus?: boolean | null;
 }
 
 export default VotersLedgerFilter;

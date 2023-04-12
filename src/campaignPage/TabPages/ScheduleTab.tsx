@@ -20,15 +20,11 @@ interface DashboardPageProps extends TabPageBaseProps{
  */
 function ScheduleTab(props: DashboardPageProps): JSX.Element {
 
-    const drawerOpen = useContext(DrawerOpenContext);
-
     return (
         <Box>
             <CloseTabButton closeFunction={props.closeFunction} tabName={props.name}/>
             <ScheduleComponent  style={{
                 height: "100%",
-                width: `calc(100% - ${Constants.rightDrawerWidth} - ${drawerOpen ? Constants.leftDrawerWidth : 0})px`,
-                marginRight: `${Constants.rightDrawerWidth}px`,
                 marginTop: `${Constants.muiBoxDefaultPadding / 2}px`,
             }}
             allowDragAndDrop={false} allowKeyboardInteraction={false} allowResizing={false}
