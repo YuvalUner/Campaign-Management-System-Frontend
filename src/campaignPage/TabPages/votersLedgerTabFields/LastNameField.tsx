@@ -10,9 +10,7 @@ function LastNameField(props: VotersLedgerFieldProps): JSX.Element {
 
     return (
         <FormControl fullWidth>
-            <TextField type={"text"} fullWidth={true} label={"Last Name"} value={props.filterParams.current.lastName}
-                onChange={handleChange}
-            />
+            <TextField type={"text"} fullWidth={true} label={"Last Name"} onChange={handleChange}/>
         </FormControl>
     );
 }

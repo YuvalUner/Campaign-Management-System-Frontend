@@ -10,9 +10,7 @@ function IdNumberField(props: VotersLedgerFieldProps): JSX.Element {
 
     return (
         <FormControl fullWidth={true}>
-            <TextField type={"number"} label={"Id Number"} value={props.filterParams.current.idNum}
-                onChange={handleChange}
-            />
+            <TextField type={"number"} label={"Id Number"} onChange={handleChange}/>
         </FormControl>
     );
 }

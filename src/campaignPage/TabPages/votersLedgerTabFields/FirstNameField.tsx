@@ -10,9 +10,7 @@ function FirstNameField(props: VotersLedgerFieldProps): JSX.Element {
 
     return (
         <FormControl fullWidth>
-            <TextField type={"text"} label={"First name"} value={props.filterParams.current.firstName}
-                onChange={handleChange}
-            />
+            <TextField type={"text"} label={"First name"} onChange={handleChange}/>
         </FormControl>
     );
 }

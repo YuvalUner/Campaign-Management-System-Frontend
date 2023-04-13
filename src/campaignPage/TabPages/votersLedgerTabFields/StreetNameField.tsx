@@ -10,9 +10,7 @@ function StreetNameField(props: VotersLedgerFieldProps): JSX.Element {
 
     return (
         <FormControl fullWidth>
-            <TextField type={"text"} fullWidth={true} label={"Street Name"}
-                value={props.filterParams.current.streetName} onChange={handleChange}
-            />
+            <TextField type={"text"} fullWidth={true} label={"Street Name"} onChange={handleChange}/>
         </FormControl>
     );
 }
