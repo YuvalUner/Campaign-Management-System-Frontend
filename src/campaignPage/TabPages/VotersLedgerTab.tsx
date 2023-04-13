@@ -17,11 +17,11 @@ import VotersLedgerFilterRecord from "../../models/voters-ledger-filter-record";
 import ServerRequestMaker from "../../utils/server-request-maker";
 import config from "../../app-config.json";
 import {
+    ActionEventArgs,
     ColumnDirective,
-    ColumnsDirective, Edit, ExcelExport,
-    Grid,
+    ColumnsDirective, Edit, EditSettingsModel, ExcelExport,
     GridComponent,
-    Page, PdfExport,
+    Page,
     Resize,
     Sort, Toolbar,
 } from "@syncfusion/ej2-react-grids";
@@ -31,7 +31,7 @@ import {ClickEventArgs} from "@syncfusion/ej2-react-navigations";
 
 function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
 
-    let grid: Grid | null;
+    let gridInstance: GridComponent | null;
 
     const params = useParams();
     const campaignGuid = params.campaignGuid;
@@ -64,6 +64,15 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
         );
     };
 
+    const mapSupportStatusToString = (supportStatus: boolean | null) => {
+        if (supportStatus){
+            return "Supporting";
+        } else if (supportStatus === false){
+            return "Opposing";
+        }
+        return "Unknown";
+    };
+
     const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
@@ -73,6 +82,9 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
             config.ControllerUrls.VotersLedger.Base + config.ControllerUrls.VotersLedger.Filter + campaignGuid,
             filterParams.current,
         ).then((res) => {
+            res.data.forEach((record: VotersLedgerFilterRecord) => {
+                record.supportStatusString = mapSupportStatusToString(record.supportStatus);
+            });
             setSearchResults(res.data);
             setLoading(false);
         }).catch(() => {
@@ -82,21 +94,43 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
     };
 
 
-    const toolbarOptions = ["Edit", "ExcelExport", "PdfExport"];
-    const editOptions = { allowEditing: true, allowAdding: false, allowDeleting: false };
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    const editNames: { [key: string] : string } [] = [
-        { supportStatus: "Supporting", destId: "true"},
-        { supportStatus: "Opposing", destId: "false"},
-        { supportStatus: "Unknown", destId: "null"},
-    ];
+    const toolbarOptions = ["Edit", "ExcelExport"];
+    const editOptions: EditSettingsModel =
+        { allowEditing: true, allowAdding: false, allowDeleting: false};
 
     const toolbarClick = (args: ClickEventArgs) => {
-        if (grid && args.item.id === "grid_excelexport") {
-            grid.excelExport();
+        // eslint-disable-next-line default-case
+        switch (args.item.text) {
+        case "Excel Export":
+            gridInstance?.excelExport();
+            break;
         }
-        if (grid && args.item.id === "grid_pdfexport") {
-            grid.pdfExport();
+    };
+
+    const mapToBool = (value: string) => {
+        if (value === "Supporting") {
+            return true;
+        } else if (value === "Opposing") {
+            return false;
+        }
+        return null;
+    };
+
+    const onActionComplete = (args: ActionEventArgs) => {
+        if (args.requestType === "save"){
+            if (args.primaryKeyValue && args.data && args.primaryKeyValue.length > 0) {
+                const idNum = args.primaryKeyValue[0];
+                const row = args.data as {supportStatusString: string};
+                const newSupportStatus = mapToBool(row.supportStatusString);
+                ServerRequestMaker.MakePutRequest(
+                    config.ControllerUrls.VotersLedger.Base + config.ControllerUrls.VotersLedger.UpdateSupportStatus
+                    + campaignGuid,
+                    {
+                        idNum: idNum,
+                        supportStatus: newSupportStatus,
+                    }
+                );
+            }
         }
     };
 
@@ -126,10 +160,15 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
                     allowResizing={true}
                     toolbar={toolbarOptions}
                     editSettings={editOptions}
-                    ref={(g) => grid = g}
+                    ref={(g) => gridInstance = g}
                     toolbarClick={toolbarClick}
+                    allowExcelExport={true}
+                    allowReordering={true}
+                    actionComplete={onActionComplete}
+                    cellSaved={onActionComplete}
+                    cellSave={onActionComplete}
                 >
-                    <Inject services={[Page, Sort, Resize, Edit, Toolbar, ExcelExport, PdfExport]}/>
+                    <Inject services={[Page, Sort, Resize, Edit, Toolbar, ExcelExport]}/>
                     <ColumnsDirective>
                         <ColumnDirective field="idNum" isPrimaryKey={true}
                             headerText="Id Number" width="150" textAlign="Right"/>
@@ -159,13 +198,8 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
                             headerText={"Ballot Location"} width="150" textAlign="Right"/>
                         <ColumnDirective field="ballotAddress" allowEditing={false}
                             headerText={"Ballot Address"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="supportStatus" editType="dropdownedit" edit={{
-                            params: {
-                                allowFiltering: true,
-                                dataSource: editNames,
-                            }
-                        }}
-                        headerText={"Support status"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="supportStatusString" editType="dropdownedit"
+                            headerText={"Support status"} width="150" textAlign="Right"/>
                     </ColumnsDirective>
                 </GridComponent>
                 {loading && firstSearchDone && <Stack sx={{

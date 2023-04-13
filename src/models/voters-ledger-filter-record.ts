@@ -16,5 +16,6 @@ interface VotersLedgerFilterRecord extends VotersLedgerRecord
     accessible: boolean | null;
     elligibleVoters: number | null;
     supportStatus: boolean | null;
+    supportStatusString: string | null;
 }
 export default VotersLedgerFilterRecord;

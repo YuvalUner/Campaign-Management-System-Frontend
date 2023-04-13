@@ -48,7 +48,8 @@
     },
     "VotersLedger": {
       "Base": "api/VotersLedger/",
-      "Filter": "filter/"
+      "Filter": "filter/",
+      "UpdateSupportStatus": "updateSupportStatus/"
     }
   }
 }
