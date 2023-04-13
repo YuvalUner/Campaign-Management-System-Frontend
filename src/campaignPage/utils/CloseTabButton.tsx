@@ -15,6 +15,10 @@ interface CloseTabButtonProps {
  * and the name of the tab that should be closed.
  */
 function CloseTabButton(props: CloseTabButtonProps): JSX.Element {
+    const handleClick = () => {
+        props.closeFunction(props.tabName);
+    };
+
     return (
         <Tooltip title={"Close tab"}>
             <Fab sx={{
@@ -22,7 +26,7 @@ function CloseTabButton(props: CloseTabButtonProps): JSX.Element {
                 top: `${Constants.topMenuHeight + 4}px`,
                 right: `${Constants.rightDrawerWidth + 20}px`,
                 zIndex: 1,
-            }} size={"small"} color={"primary"} onClick={() => props.closeFunction(props.tabName)}>
+            }} size={"small"} color={"primary"} onClick={handleClick}>
                 <CloseIcon/>
             </Fab>
         </Tooltip>

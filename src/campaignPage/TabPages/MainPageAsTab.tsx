@@ -1,6 +1,6 @@
 import React from "react";
 import MainPage, {MainPageProps} from "../MainPage";
-import TabPageBaseProps from "../utils/tabPageBaseProps";
+import TabPageBaseProps from "../utils/tab-page-base-props";
 import CloseTabButton from "../utils/CloseTabButton";
 
 interface MainPageAsTabProps extends TabPageBaseProps, MainPageProps{

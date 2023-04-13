@@ -41,6 +41,15 @@
     "Invites": {
       "Base": "api/Invites/",
       "AcceptInvite": "AcceptInvite/"
+    },
+    "Permissions": {
+      "Base": "api/Permissions/",
+      "GetSelfPermissions": "getSelf/"
+    },
+    "VotersLedger": {
+      "Base": "api/VotersLedger/",
+      "Filter": "filter/",
+      "UpdateSupportStatus": "updateSupportStatus/"
     }
   }
 }

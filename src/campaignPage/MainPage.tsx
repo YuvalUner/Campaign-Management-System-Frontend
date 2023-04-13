@@ -19,7 +19,6 @@ export interface MainPageProps {
  */
 function MainPage(props: MainPageProps): JSX.Element {
 
-    const drawerOpen = useContext(DrawerOpenContext);
     // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
     const [_, campaignManagers, candidates, campaignOwners] = sortUsersByRoleLevel(props.campaignAdmins);
 
@@ -53,9 +52,6 @@ function MainPage(props: MainPageProps): JSX.Element {
     return (
         <Stack sx={{
             height: "100%",
-            width: `calc(100% - ${Constants.rightDrawerWidth} 
-                        - ${drawerOpen ? Constants.leftDrawerWidth : 0})px`,
-            marginRight: `${Constants.rightDrawerWidth}px`,
             paddingRight: `${Constants.muiBoxDefaultPadding}px`,
             paddingLeft: `${Constants.muiBoxDefaultPadding}px`,
             marginTop: `${Constants.muiBoxDefaultPadding}px`,

@@ -5,6 +5,7 @@
 const TabNames = {
     Scheduler: "Schedule",
     MainPage: "Campaign Profile",
+    VotersLedger: "Voters Ledger",
 };
 
 export default TabNames;
