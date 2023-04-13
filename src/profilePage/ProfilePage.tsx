@@ -101,15 +101,15 @@ function ProfilePage(): JSX.Element {
             if (res.status !== HttpStatusCode.Unauthorized) {
                 if (errNum === CustomStatusCode.DuplicateKey) {
                     showAlert("ID number already exists when verifying info.", "error");
-                } else if (errNum === 12) {
+                } else if (errNum === CustomStatusCode.AlreadyVerified) {
                     showAlert("Phone number already verified.", "error");
                 } else {
                     showAlert("Unauthorized request.", "error");
                 }
             } else {
-                if (errNum === 4) {
+                if (errNum === CustomStatusCode.ValueNotFound) {
                     showAlert("Verification failed. Please check your info and try again.", "error");
-                } else if (errNum === 1) {
+                } else if (errNum === CustomStatusCode.DuplicateKey) {
                     showAlert("ID number already exists when verifying info.", "error");
                 } else {
                     showAlert("Bad request.", "error");
