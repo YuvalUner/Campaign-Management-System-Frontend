@@ -5,6 +5,10 @@ import VotersLedgerFieldProps from "./utils/voters-ledger-field-props";
 function FirstNameField(props: VotersLedgerFieldProps): JSX.Element {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value === "") {
+            props.filterParams.current.firstName = null;
+            return;
+        }
         props.filterParams.current.firstName = event.target.value;
     };
 

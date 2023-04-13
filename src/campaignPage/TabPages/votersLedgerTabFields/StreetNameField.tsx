@@ -4,7 +4,12 @@ import VotersLedgerFieldProps from "./utils/voters-ledger-field-props";
 
 function StreetNameField(props: VotersLedgerFieldProps): JSX.Element {
 
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value === "") {
+            props.filterParams.current.streetName = null;
+            return;
+        }
         props.filterParams.current.streetName = event.target.value;
     };
 

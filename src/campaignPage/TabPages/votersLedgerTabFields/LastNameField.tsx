@@ -4,7 +4,12 @@ import VotersLedgerFieldProps from "./utils/voters-ledger-field-props";
 
 function LastNameField(props: VotersLedgerFieldProps): JSX.Element {
 
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value === "") {
+            props.filterParams.current.lastName = null;
+            return;
+        }
         props.filterParams.current.lastName = event.target.value;
     };
 
