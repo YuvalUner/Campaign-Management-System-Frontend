@@ -16,7 +16,11 @@ import {UserLoggedInContext} from "../App";
 import Campaign from "../models/campaign";
 import Constants from "../utils/constantsAndStaticObjects/constants";
 import ScheduleTab from "./TabPages/ScheduleTab";
-import {TabComponent, TabItemDirective, TabItemsDirective} from "@syncfusion/ej2-react-navigations";
+import {
+    TabComponent,
+    TabItemDirective,
+    TabItemsDirective,
+} from "@syncfusion/ej2-react-navigations";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {TabPage} from "../models/tab-page";
 import TabNames from "./utils/tabNames";
@@ -108,8 +112,8 @@ function CampaignPage(): JSX.Element {
             tab: {
                 header: {text: TabNames.MainPage},
                 component: () => {
-                    return <MainPageAsTab campaign={campaign} name={TabNames.MainPage}
-                        closeFunction={removeTab} campaignAdmins={campaignAdmins}/>;
+                    return <MainPageAsTab key={"MainPageTab" + campaignGuid} campaign={campaign}
+                        name={TabNames.MainPage} closeFunction={removeTab} campaignAdmins={campaignAdmins}/>;
                 }
             }
         },
@@ -119,7 +123,8 @@ function CampaignPage(): JSX.Element {
             tab: {
                 header: {text: TabNames.Scheduler},
                 component: () => {
-                    return <ScheduleTab campaign={campaign} name={TabNames.Scheduler} closeFunction={removeTab}/>;
+                    return <ScheduleTab key={"Scheduler" + campaignGuid}
+                        campaign={campaign} name={TabNames.Scheduler} closeFunction={removeTab}/>;
                 }
             }
         },

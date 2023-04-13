@@ -1,8 +1,7 @@
-import React, {useContext} from "react";
+import React from "react";
 import Campaign from "../models/campaign";
 import {Alert, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography} from "@mui/material";
 import Constants from "../utils/constantsAndStaticObjects/constants";
-import {DrawerOpenContext} from "../sideMenu/SideMenu";
 import UserWithRole, {sortUsersByRoleLevel} from "../models/user-with-role";
 import Grid2 from "@mui/material/Unstable_Grid2";
 

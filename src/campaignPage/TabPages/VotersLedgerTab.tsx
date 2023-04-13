@@ -28,6 +28,7 @@ import {
 import {useParams} from "react-router-dom";
 import {Inject} from "@syncfusion/ej2-react-schedule";
 import {ClickEventArgs} from "@syncfusion/ej2-react-navigations";
+import {PermissionTypes} from "../../models/permission";
 
 function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
 
@@ -49,6 +50,14 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
         <BallotNumberField filterParams={filterParams} key={FieldKeys.BallotNumberField}/>,
         <SupportStatusField filterParams={filterParams} key={FieldKeys.SupportStatusField}/>,
     ];
+
+    const injectedServices = props.permission.permissionType === PermissionTypes.Edit ?
+        [Page, Sort, Resize, Edit, Toolbar, ExcelExport]
+        : [Page, Sort, Resize, Toolbar, ExcelExport];
+
+    const toolbarOptions = props.permission.permissionType === PermissionTypes.Edit ?
+        ["Edit", "ExcelExport"]
+        : ["ExcelExport"];
 
     const renderFields = () => {
         return (
@@ -93,10 +102,9 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
         });
     };
 
-
-    const toolbarOptions = ["Edit", "ExcelExport"];
     const editOptions: EditSettingsModel =
-        { allowEditing: true, allowAdding: false, allowDeleting: false};
+        { allowEditing: props.permission.permissionType === PermissionTypes.Edit,
+            allowAdding: false, allowDeleting: false};
 
     const toolbarClick = (args: ClickEventArgs) => {
         // eslint-disable-next-line default-case
@@ -117,7 +125,7 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
     };
 
     const onActionComplete = (args: ActionEventArgs) => {
-        if (args.requestType === "save"){
+        if (args.requestType === "save" && props.permission.permissionType === PermissionTypes.Edit) {
             if (args.primaryKeyValue && args.data && args.primaryKeyValue.length > 0) {
                 const idNum = args.primaryKeyValue[0];
                 const row = args.data as {supportStatusString: string};
@@ -165,10 +173,8 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
                     allowExcelExport={true}
                     allowReordering={true}
                     actionComplete={onActionComplete}
-                    cellSaved={onActionComplete}
-                    cellSave={onActionComplete}
                 >
-                    <Inject services={[Page, Sort, Resize, Edit, Toolbar, ExcelExport]}/>
+                    <Inject services={injectedServices}/>
                     <ColumnsDirective>
                         <ColumnDirective field="idNum" isPrimaryKey={true}
                             headerText="Id Number" width="150" textAlign="Right"/>
