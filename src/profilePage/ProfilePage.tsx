@@ -43,8 +43,8 @@ function ProfilePage(): JSX.Element {
             config.ControllerUrls.Users.Base + config.ControllerUrls.Users.GetProfilePageInfo
         ).then((res: AxiosResponse) => {
             const updatedUserDetails = {
-                firstNameHeb: res.data.firstNameEng,
-                lastNameHeb: res.data.lastNameEng,
+                firstNameHeb: res.data.firstNameHeb,
+                lastNameHeb: res.data.lastNameHeb,
                 idNumber: 0,
                 cityName: res.data.cityName,
             };
@@ -75,10 +75,17 @@ function ProfilePage(): JSX.Element {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        console.log(userDetails);
-
         if (!userDetails.firstNameHeb || !userDetails.lastNameHeb || !userDetails.idNumber || !userDetails.cityName) {
             showAlert("Please fill in all fields", "error");
+            return;
+        }
+        if (!/^[\u0590-\u05FF]+$/.test(userDetails.firstNameHeb)) {
+            showAlert("First name should contain only Hebrew letters", "error");
+            return;
+        }
+        
+        if (!/^[\u0590-\u05FF]+$/.test(userDetails.lastNameHeb)) {
+            showAlert("Last name should contain only Hebrew letters", "error");
             return;
         }
         if (userDetails.idNumber.toString().length !== 9) {
@@ -151,6 +158,7 @@ function ProfilePage(): JSX.Element {
                     {alertMessage}
                     <form onSubmit={handleSubmit}>
                         <label>
+                            {/* <FirstNameField showAlert={showAlert} /> */}
                             <TextField id="outlined-basic" label="First Name" variant="outlined"
                                 type="text"
                                 name="firstNameHeb"
