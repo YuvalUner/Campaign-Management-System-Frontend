@@ -8,6 +8,7 @@ import {
     MenuItem, Select, SelectChangeEvent, TextField
 } from "@mui/material";
 import ServerRequestMaker from "../utils/server-request-maker";
+import CustomStatusCode from "../utils/constantsAndStaticObjects/custom-status-code";
 //import { Alert, AlertTitle } from "react-bootstrap"; // For Bootstrap
 
 function ProfilePage(): JSX.Element {
@@ -74,6 +75,8 @@ function ProfilePage(): JSX.Element {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        console.log(userDetails);
+
         if (!userDetails.firstNameHeb || !userDetails.lastNameHeb || !userDetails.idNumber || !userDetails.cityName) {
             showAlert("Please fill in all fields", "error");
             return;
@@ -96,7 +99,7 @@ function ProfilePage(): JSX.Element {
         } else {
             const errNum = ErrorCodeExtractor(res.data);
             if (res.status !== HttpStatusCode.Unauthorized) {
-                if (errNum === 1) {
+                if (errNum === CustomStatusCode.DuplicateKey) {
                     showAlert("ID number already exists when verifying info.", "error");
                 } else if (errNum === 12) {
                     showAlert("Phone number already verified.", "error");
@@ -124,12 +127,12 @@ function ProfilePage(): JSX.Element {
         }));
     };
 
-    const handleCityChange = (event: SelectChangeEvent<number>) => {
-        const { value } = event.target;
-        const cityName = cities.find(city => city.cityId === value)?.cityName || "";
+    const handleCityChange = (event: SelectChangeEvent<HTMLSelectElement>) => {
+        const cityName = event.target.value as string;
+        //const cityName = cities.find(city => city.cityId === value)?.cityName || "";
         setUserDetails((prevState) => ({
             ...prevState,
-            cityName: cityName,
+            cityName: cityName
         }));
     };
 
@@ -177,16 +180,16 @@ function ProfilePage(): JSX.Element {
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={
-                                        cities.find(city => city.cityName === userDetails.cityName)?.cityId
-                                        || undefined
-                                    }
+                                    // value={
+                                    //     userDetails.cityName
+                                    // }
                                     label="City"
-                                    onChange={handleCityChange}>
+                                    onChange={handleCityChange} native>
+                                    <option value=""/>
                                     {cities.map(city => {
-                                        return <MenuItem key={city.cityId} value={city.cityId}>
+                                        return <option key={city.cityId} value={city.cityName}>
                                             {city.cityName}
-                                        </MenuItem>;
+                                        </option>;
                                     }
                                     )
                                     }

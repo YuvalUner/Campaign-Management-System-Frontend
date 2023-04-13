@@ -29,7 +29,7 @@
     },
     "Cities": {
       "Base": "api/Cities/",
-      "GetAllCities": "GetAllCities"
+      "GetAllCities": ""
     },
     "Campaigns": {
       "Base": "api/Campaigns/",
