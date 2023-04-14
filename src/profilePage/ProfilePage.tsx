@@ -5,11 +5,10 @@ import { AxiosResponse, HttpStatusCode } from "axios";
 import ErrorCodeExtractor from "../utils/error-code-extractor";
 import {
     Alert, AlertTitle, Button, FormControl, InputLabel,
-    MenuItem, Select, SelectChangeEvent, TextField
+    MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography, makeStyles
 } from "@mui/material";
 import ServerRequestMaker from "../utils/server-request-maker";
 import CustomStatusCode from "../utils/constantsAndStaticObjects/custom-status-code";
-//import { Alert, AlertTitle } from "react-bootstrap"; // For Bootstrap
 
 function ProfilePage(): JSX.Element {
     // Define state object to store user's personal details
@@ -143,9 +142,17 @@ function ProfilePage(): JSX.Element {
         }));
     };
 
+    const styles = {
+        formControl: {
+            width: "50%",
+        },
+    };
+
     return (
         <div>
-            <h1>Profile Page</h1>
+            <Typography variant={"h4"}>
+                Profile Page
+            </Typography>
             {isVerified ? (
                 // If the form has been submitted and verified, display the user's personal details in read-only format
                 <div>
@@ -154,59 +161,58 @@ function ProfilePage(): JSX.Element {
                 </div>
             ) : (
                 // If the form hasn't been submitted yet, display the form for the user to enter their personal details
-                <>
-                    {alertMessage}
+                <>  
                     <form onSubmit={handleSubmit}>
-                        <label>
-                            {/* <FirstNameField showAlert={showAlert} /> */}
-                            <TextField id="outlined-basic" label="First Name" variant="outlined"
-                                type="text"
-                                name="firstNameHeb"
-                                value={userDetails.firstNameHeb}
-                                onChange={handleInputChange}
-                            />
-                        </label>
-                        <label>
-                            <TextField id="outlined-basic" label="Last Name" variant="outlined"
-                                type="text"
-                                name="lastNameHeb"
-                                value={userDetails.lastNameHeb}
-                                onChange={handleInputChange}
-                            />
-                        </label>
-                        <label>
-                            <TextField id="outlined-basic" label="ID" variant="outlined"
-                                type="text"
-                                name="idNumber"
-                                value={userDetails.idNumber}
-                                onChange={handleInputChange}
-                            />
-                        </label>
-                        <label>
-                            <p><FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label" variant="outlined">City</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    // value={
-                                    //     userDetails.cityName
-                                    // }
-                                    label="City"
-                                    onChange={handleCityChange} native>
-                                    <option value=""/>
-                                    {cities.map(city => {
-                                        return <option key={city.cityId} value={city.cityName}>
-                                            {city.cityName}
-                                        </option>;
-                                    }
-                                    )
-                                    }
-                                </Select>
-                            </FormControl>
-                            </p>
-                        </label>
-                        <Button type="submit" id="outlined-basic"
-                            variant="outlined" color="inherit">Submit</Button>
+                        <Stack direction={"column"} spacing={1}>
+                            {alertMessage}
+                            <label>
+                                {/* <FirstNameField showAlert={showAlert} /> */}
+                                <TextField id="outlined-basic" label="First Name" variant="outlined"
+                                    type="text"
+                                    name="firstNameHeb"
+                                    value={userDetails.firstNameHeb}
+                                    onChange={handleInputChange}
+                                />
+                            </label>
+                            <label>
+                                <TextField id="outlined-basic" label="Last Name" variant="outlined"
+                                    type="text"
+                                    name="lastNameHeb"
+                                    value={userDetails.lastNameHeb}
+                                    onChange={handleInputChange}
+                                />
+                            </label>
+                            <label>
+                                <TextField id="outlined-basic" label="ID" variant="outlined"
+                                    type="text"
+                                    name="idNumber"
+                                    value={userDetails.idNumber}
+                                    onChange={handleInputChange}
+                                />
+                            </label>
+                            <label>
+                                <p><FormControl style={styles.formControl}>
+                                    <InputLabel id="demo-simple-select-label" variant="outlined">City</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="City"
+                                        onChange={handleCityChange} native>
+                                        <option value=""/>
+                                        {cities.map(city => {
+                                            return <option key={city.cityId} value={city.cityName}>
+                                                {city.cityName}
+                                            </option>;
+                                        }
+                                        )
+                                        }
+                                    </Select>
+                                </FormControl>
+                                </p>
+                            </label>
+                            <Button style={styles.formControl} type="submit" id="outlined-basic"
+                                variant="outlined" color="inherit">Submit</Button>
+                        </Stack>
                     </form>
                 </>
             )}
