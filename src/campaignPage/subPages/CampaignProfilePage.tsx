@@ -1,9 +1,8 @@
-import React, {useContext} from "react";
-import Campaign from "../models/campaign";
+import React from "react";
+import Campaign from "../../models/campaign";
 import {Alert, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography} from "@mui/material";
-import Constants from "../utils/constantsAndStaticObjects/constants";
-import {DrawerOpenContext} from "../sideMenu/SideMenu";
-import UserWithRole, {sortUsersByRoleLevel} from "../models/user-with-role";
+import Constants from "../../utils/constantsAndStaticObjects/constants";
+import UserWithRole, {sortUsersByRoleLevel} from "../../models/user-with-role";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
 export interface MainPageProps {
@@ -17,7 +16,7 @@ export interface MainPageProps {
  * @param props
  * @constructor
  */
-function MainPage(props: MainPageProps): JSX.Element {
+function CampaignProfilePage(props: MainPageProps): JSX.Element {
 
     // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
     const [_, campaignManagers, candidates, campaignOwners] = sortUsersByRoleLevel(props.campaignAdmins);
@@ -96,4 +95,4 @@ function MainPage(props: MainPageProps): JSX.Element {
     );
 }
 
-export default MainPage;
+export default CampaignProfilePage;

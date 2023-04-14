@@ -1,14 +1,14 @@
 import React from "react";
 import VotersLedgerFieldProps from "./utils/voters-ledger-field-props";
 import {Checkbox, FormControl, FormControlLabel, FormGroup, Tooltip, Typography} from "@mui/material";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 function SupportStatusField(props: VotersLedgerFieldProps): JSX.Element {
 
     const [checkboxesChecked, setCheckboxesChecked] = React.useState<boolean[]>([false, false]);
     const checkboxNames = {
-        supporting: "supporting",
-        notSupporting: "not supporting",
+        supporting: "Supporting",
+        notSupporting: "Opposing",
     };
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,10 +49,10 @@ function SupportStatusField(props: VotersLedgerFieldProps): JSX.Element {
             <FormGroup row={true}>
                 <FormControlLabel control={
                     <Checkbox name={checkboxNames.supporting} checked={checkboxesChecked[0]} onChange={onChange}/>
-                } label={"Supporting"}/>
+                } label={checkboxNames.supporting}/>
                 <FormControlLabel control={
                     <Checkbox name={checkboxNames.notSupporting} checked={checkboxesChecked[1]} onChange={onChange}/>
-                } label={"Not supporting"}/>
+                } label={checkboxNames.notSupporting}/>
             </FormGroup>
         </FormControl>
     );

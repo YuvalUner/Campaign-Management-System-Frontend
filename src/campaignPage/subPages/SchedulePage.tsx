@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React from "react";
 import {Box} from "@mui/material";
 import Campaign from "../../models/campaign";
 import {
@@ -6,23 +6,19 @@ import {
     Inject, Resize, DragAndDrop,
 } from "@syncfusion/ej2-react-schedule";
 import Constants from "../../utils/constantsAndStaticObjects/constants";
-import {DrawerOpenContext} from "../../sideMenu/SideMenu";
-import TabPageBaseProps from "../utils/tab-page-base-props";
-import CloseTabButton from "../utils/CloseTabButton";
 
-interface DashboardPageProps extends TabPageBaseProps{
+interface SchedulePageProps {
     campaign: Campaign | null;
 }
 
 /**
- * The ScheduleTab component is the tab that displays the personal schedule of the user within a campaign.
+ * The SchedulePage component is the tab that displays the personal schedule of the user within a campaign.
  * It should be a child of the CampaignPage component, and is meant to be one of the tabs that can be opened.
  */
-function ScheduleTab(props: DashboardPageProps): JSX.Element {
+function SchedulePage(props: SchedulePageProps): JSX.Element {
 
     return (
         <Box>
-            <CloseTabButton closeFunction={props.closeFunction} tabName={props.name}/>
             <ScheduleComponent  style={{
                 height: "100%",
                 marginTop: `${Constants.muiBoxDefaultPadding / 2}px`,
@@ -42,4 +38,4 @@ function ScheduleTab(props: DashboardPageProps): JSX.Element {
     );
 }
 
-export default ScheduleTab;
+export default SchedulePage;
