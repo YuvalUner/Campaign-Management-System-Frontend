@@ -7,6 +7,8 @@ import Constants from "../utils/constantsAndStaticObjects/constants";
 
 interface ErrorPageProps {
     errorMessage?: string;
+    linkTo?: string;
+    buttonText?: string;
 }
 
 /**
@@ -27,7 +29,7 @@ export default function NotFoundPage(props: ErrorPageProps) {
         >
             <Container maxWidth="md">
                 <Grid container spacing={2}>
-                    <Grid xs={6}>
+                    <Grid item xs={6}>
                         <Typography variant="h1">
                             404
                         </Typography>
@@ -37,10 +39,10 @@ export default function NotFoundPage(props: ErrorPageProps) {
                             {props.errorMessage ?? "The page you are looking for does not exist"}
                         </Typography>
                         <Button variant="contained" onClick={() => {
-                            nav(ScreenRoutes.HomePage);
-                        }}>Back Home</Button>
+                            nav(props.linkTo ?? ScreenRoutes.HomePage);
+                        }}>{props.buttonText ?? "Back Home"}</Button>
                     </Grid>
-                    <Grid xs={6}>
+                    <Grid item xs={6}>
                         <img
                             src="https://cdn.pixabay.com/photo/2017/03/09/12/31/error-2129569__340.jpg"
                             alt=""

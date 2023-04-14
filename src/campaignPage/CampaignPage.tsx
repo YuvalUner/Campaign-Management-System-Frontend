@@ -71,6 +71,10 @@ function CampaignPage(): JSX.Element {
     // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
     const [permissions, setPermissions] = useState<Permission[]>([]);
 
+    // This weird boolean state is used to prevent a 404 page from rendering before the permissions have been loaded,
+    // as routes related to permissions are loaded dynamically.
+    const [permissionSet, setPermissionSet] = useState(false);
+
 
     /**
      * The list of tabs that can be opened from the side menu.
@@ -145,6 +149,8 @@ function CampaignPage(): JSX.Element {
             }
         }).catch(() => {
             setPermissions([]);
+        }).finally(() => {
+            setPermissionSet(true);
         });
     };
 
@@ -182,7 +188,13 @@ function CampaignPage(): JSX.Element {
             return <Route path={SubScreenRoutes.VotersLedgerRoute} key={permission.permissionTarget}
                 element={<VotersLedgerPage permission={permission}/>}/>;
         default:
-            return <Route path={"Error"} key={permission.permissionTarget} element={<NotFoundPage/>}/>;
+            return <Route path={"Error"} key={permission.permissionTarget}
+                element={<NotFoundPage
+                    linkTo={SubScreenRoutes.CampaignBaseComponent + campaignGuid}
+                    errorMessage={"The page you are looking for does not exist or" +
+                        " you do not have permission to view it"}
+                    buttonText={"Back to campaign page"}
+                />}/>;
         }
     };
 
@@ -195,36 +207,19 @@ function CampaignPage(): JSX.Element {
             !enteredCampaign ?
                 <NotAuthorizedPage errorMessage={"You are not a member of this campaign or you are not logged in"}/>
                 : <>
-                    {/*{activeTabs.length > 0 ?*/}
-                    {/*    <TabComponent heightAdjustMode="Auto"*/}
-                    {/*        overflowMode="Scrollable"*/}
-                    {/*        enablePersistence={true}*/}
-                    {/*        key={activeTabs.length}*/}
-                    {/*    >*/}
-                    {/*        <TabItemsDirective>*/}
-                    {/*            {activeTabs.map((tab, index) => {*/}
-                    {/*                return (*/}
-                    {/*                    <TabItemDirective key={index} header={tab.header} content={tab.component}>*/}
-                    {/*                        {tab.component()}*/}
-                    {/*                    </TabItemDirective>*/}
-                    {/*                );*/}
-                    {/*            })*/}
-                    {/*            }*/}
-                    {/*        </TabItemsDirective>*/}
-                    {/*    </TabComponent>*/}
-                    {/*    : <CampaignProfilePage campaign={campaign} campaignAdmins={campaignAdmins}/>*/}
-                    {/*}*/}
                     <Routes>
                         <Route path={SubScreenRoutes.CampaignBaseRoute}
                             element={<CampaignProfilePage campaign={campaign} campaignAdmins={campaignAdmins}/>}/>
                         <Route path={SubScreenRoutes.SchedulerRoute} element={<SchedulePage campaign={campaign}/>}/>
-                        {/*<Route path={SubScreenRoutes.VotersLedgerRoute} element={<VotersLedgerPage permission={{*/}
-                        {/*    permissionTarget: PermissionTargets.VotersLedger,*/}
-                        {/*    permissionType: PermissionTypes.View,*/}
-                        {/*}}/>}/>*/}
                         {permissions.map((permission) => {
                             return permissionToRouteMapper(permission);
                         })}
+                        {permissionSet && <Route path={"*"} element={<NotFoundPage
+                            linkTo={SubScreenRoutes.CampaignBaseComponent + campaignGuid}
+                            errorMessage={"The page you are looking for does not exist or" +
+                                " you do not have permission to view it"}
+                            buttonText={"Back to campaign page"}
+                        />}/>}
                     </Routes>
                 </>
         );
