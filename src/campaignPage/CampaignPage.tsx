@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {Route, Routes, useNavigate, useParams} from "react-router-dom";
 import ServerRequestMaker from "../utils/server-request-maker";
 import config from "../app-config.json";
 import {HttpStatusCode} from "axios";
@@ -15,23 +15,18 @@ import NotAuthorizedPage from "../notAuthorizedPage/notAuthorizedPage";
 import {UserLoggedInContext} from "../App";
 import Campaign from "../models/campaign";
 import Constants from "../utils/constantsAndStaticObjects/constants";
-import ScheduleTab from "./TabPages/ScheduleTab";
-import {
-    TabComponent,
-    TabItemDirective,
-    TabItemsDirective,
-} from "@syncfusion/ej2-react-navigations";
+import SchedulePage from "./subPages/SchedulePage";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import {TabPage} from "../models/tab-page";
-import TabNames from "./utils/tabNames";
-import MainPage from "./MainPage";
+import SubPageNames from "./utils/sub-page-names";
+import CampaignProfilePage from "./subPages/CampaignProfilePage";
 import CampaignIcon from "@mui/icons-material/Campaign";
-import MainPageAsTab from "./TabPages/MainPageAsTab";
 import UserWithRole from "../models/user-with-role";
-import Permission, {PermissionTypes} from "../models/permission";
+import Permission, {PermissionTargets, PermissionTypes} from "../models/permission";
 import MenuListItem from "./utils/menu-list-item";
 import PermissionToTabMapper from "./utils/permission-to-tab-mapper";
-import ActiveTabsBackup from "./utils/active-tabs-backup";
+import SubScreenRoutes from "./utils/sub-screen-routes";
+import VotersLedgerPage from "./subPages/VotersLedgerPage";
+import NotFoundPage from "../notFoundPage/NotFoundPage";
 
 /**
  * If the user has both edit and view permissions, remove the view permissions - as it is implicit that the user has
@@ -66,6 +61,7 @@ function CampaignPage(): JSX.Element {
 
     const params = useParams();
     const campaignGuid = params.campaignGuid;
+    const nav = useNavigate();
 
     const [loading, setLoading] = useState(true);
     const [enteredCampaign, setEnteredCampaign] = useState(false);
@@ -74,31 +70,7 @@ function CampaignPage(): JSX.Element {
     const [campaignAdmins, setCampaignAdmins] = useState<UserWithRole[]>([]);
     // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
     const [permissions, setPermissions] = useState<Permission[]>([]);
-    const [activeTabs, setActiveTabs] = useState<TabPage[]>([]);
 
-
-    /**
-     * Adds a tab to the active tabs array, if it is not already in the array.
-     * @param tab The tab to add.
-     */
-    const addTab = (tab: TabPage): void => {
-        if (!activeTabs.some((activeTab) => activeTab.header.text === tab.header.text)) {
-            setActiveTabs([tab, ...activeTabs]);
-            ActiveTabsBackup.unshift(tab);
-        }
-    };
-
-    /**
-     * Removes a tab from the active tabs array.
-     * @param tab the name of the tab to remove.
-     */
-    const removeTab = (tab: string): void => {
-        const tabIndex = ActiveTabsBackup.findIndex((activeTab) => activeTab.header.text === tab);
-        if (tabIndex !== -1) {
-            ActiveTabsBackup.splice(tabIndex, 1);
-            setActiveTabs([...ActiveTabsBackup]);
-        }
-    };
 
     /**
      * The list of tabs that can be opened from the side menu.
@@ -107,26 +79,14 @@ function CampaignPage(): JSX.Element {
      */
     const hardcodedSideMenuList: MenuListItem[] = [
         {
-            name: TabNames.MainPage,
+            name: SubPageNames.MainPage,
             icon: <CampaignIcon/>,
-            tab: {
-                header: {text: TabNames.MainPage},
-                component: () => {
-                    return <MainPageAsTab key={"MainPageTab" + campaignGuid} campaign={campaign}
-                        name={TabNames.MainPage} closeFunction={removeTab} campaignAdmins={campaignAdmins}/>;
-                }
-            }
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid,
         },
         {
-            name: TabNames.Scheduler,
+            name: SubPageNames.Scheduler,
             icon: <CalendarMonthIcon/>,
-            tab: {
-                header: {text: TabNames.Scheduler},
-                component: () => {
-                    return <ScheduleTab key={"Scheduler" + campaignGuid}
-                        campaign={campaign} name={TabNames.Scheduler} closeFunction={removeTab}/>;
-                }
-            }
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.SchedulerComponent,
         },
     ];
 
@@ -178,7 +138,7 @@ function CampaignPage(): JSX.Element {
                 const keptPermissions = removeViewPermissions(fullPermissionsList);
                 const addToSideMenuList: MenuListItem[] = [];
                 keptPermissions.forEach((permission: Permission) => {
-                    addToSideMenuList.push(PermissionToTabMapper(permission, removeTab));
+                    addToSideMenuList.push(PermissionToTabMapper(permission, campaignGuid as string));
                 });
                 setPermissions(keptPermissions);
                 setSideMenuList([...hardcodedSideMenuList, ...addToSideMenuList]);
@@ -213,9 +173,18 @@ function CampaignPage(): JSX.Element {
             setEnteredCampaign(false);
         }).finally(() => {
             setLoading(false);
-            setActiveTabs([]);
         });
     }, [campaignGuid, loggedInStatus]);
+
+    const permissionToRouteMapper = (permission: Permission): JSX.Element => {
+        switch (permission.permissionTarget) {
+        case PermissionTargets.VotersLedger:
+            return <Route path={SubScreenRoutes.VotersLedgerRoute} key={permission.permissionTarget}
+                element={<VotersLedgerPage permission={permission}/>}/>;
+        default:
+            return <Route path={"Error"} key={permission.permissionTarget} element={<NotFoundPage/>}/>;
+        }
+    };
 
     /**
      * Renders the main page of the campaign.
@@ -226,25 +195,37 @@ function CampaignPage(): JSX.Element {
             !enteredCampaign ?
                 <NotAuthorizedPage errorMessage={"You are not a member of this campaign or you are not logged in"}/>
                 : <>
-                    {activeTabs.length > 0 ?
-                        <TabComponent heightAdjustMode="Auto"
-                            overflowMode="Scrollable"
-                            enablePersistence={true}
-                            key={activeTabs.length}
-                        >
-                            <TabItemsDirective>
-                                {activeTabs.map((tab, index) => {
-                                    return (
-                                        <TabItemDirective key={index} header={tab.header} content={tab.component}>
-                                            {tab.component()}
-                                        </TabItemDirective>
-                                    );
-                                })
-                                }
-                            </TabItemsDirective>
-                        </TabComponent>
-                        : <MainPage campaign={campaign} campaignAdmins={campaignAdmins}/>
-                    }
+                    {/*{activeTabs.length > 0 ?*/}
+                    {/*    <TabComponent heightAdjustMode="Auto"*/}
+                    {/*        overflowMode="Scrollable"*/}
+                    {/*        enablePersistence={true}*/}
+                    {/*        key={activeTabs.length}*/}
+                    {/*    >*/}
+                    {/*        <TabItemsDirective>*/}
+                    {/*            {activeTabs.map((tab, index) => {*/}
+                    {/*                return (*/}
+                    {/*                    <TabItemDirective key={index} header={tab.header} content={tab.component}>*/}
+                    {/*                        {tab.component()}*/}
+                    {/*                    </TabItemDirective>*/}
+                    {/*                );*/}
+                    {/*            })*/}
+                    {/*            }*/}
+                    {/*        </TabItemsDirective>*/}
+                    {/*    </TabComponent>*/}
+                    {/*    : <CampaignProfilePage campaign={campaign} campaignAdmins={campaignAdmins}/>*/}
+                    {/*}*/}
+                    <Routes>
+                        <Route path={SubScreenRoutes.CampaignBaseRoute}
+                            element={<CampaignProfilePage campaign={campaign} campaignAdmins={campaignAdmins}/>}/>
+                        <Route path={SubScreenRoutes.SchedulerRoute} element={<SchedulePage campaign={campaign}/>}/>
+                        {/*<Route path={SubScreenRoutes.VotersLedgerRoute} element={<VotersLedgerPage permission={{*/}
+                        {/*    permissionTarget: PermissionTargets.VotersLedger,*/}
+                        {/*    permissionType: PermissionTypes.View,*/}
+                        {/*}}/>}/>*/}
+                        {permissions.map((permission) => {
+                            return permissionToRouteMapper(permission);
+                        })}
+                    </Routes>
                 </>
         );
     };
@@ -270,7 +251,7 @@ function CampaignPage(): JSX.Element {
                         return (
                             <ListItem key={index}>
                                 <ListItemButton onClick={() => {
-                                    addTab(item.tab);
+                                    nav(item.navTo);
                                 }}>
                                     <ListItemIcon>
                                         {item.icon}

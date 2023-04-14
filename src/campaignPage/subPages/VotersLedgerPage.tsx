@@ -1,6 +1,5 @@
 import React, {useRef, useState} from "react";
-import CloseTabButton from "../utils/CloseTabButton";
-import TabPageBasePropsWithPermission from "../utils/tab-page-base-props-with-permission";
+import SubPageWithPermissionBaseProps from "../utils/sub-page-with-permission-base-props";
 import VotersLedgerFilter from "../../models/voters-ledger-filter";
 import {Button, CircularProgress, Stack, Typography} from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -30,7 +29,7 @@ import {Inject} from "@syncfusion/ej2-react-schedule";
 import {ClickEventArgs} from "@syncfusion/ej2-react-navigations";
 import {PermissionTypes} from "../../models/permission";
 
-function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
+function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
 
     let gridInstance: GridComponent | null;
 
@@ -74,9 +73,9 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
     };
 
     const mapSupportStatusToString = (supportStatus: boolean | null) => {
-        if (supportStatus){
+        if (supportStatus) {
             return "Supporting";
-        } else if (supportStatus === false){
+        } else if (supportStatus === false) {
             return "Opposing";
         }
         return "Unknown";
@@ -103,8 +102,10 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
     };
 
     const editOptions: EditSettingsModel =
-        { allowEditing: props.permission.permissionType === PermissionTypes.Edit,
-            allowAdding: false, allowDeleting: false};
+        {
+            allowEditing: props.permission.permissionType === PermissionTypes.Edit,
+            allowAdding: false, allowDeleting: false,
+        };
 
     const toolbarClick = (args: ClickEventArgs) => {
         // eslint-disable-next-line default-case
@@ -128,7 +129,7 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
         if (args.requestType === "save" && props.permission.permissionType === PermissionTypes.Edit) {
             if (args.primaryKeyValue && args.data && args.primaryKeyValue.length > 0) {
                 const idNum = args.primaryKeyValue[0];
-                const row = args.data as {supportStatusString: string};
+                const row = args.data as { supportStatusString: string };
                 const newSupportStatus = mapToBool(row.supportStatusString);
                 ServerRequestMaker.MakePutRequest(
                     config.ControllerUrls.VotersLedger.Base + config.ControllerUrls.VotersLedger.UpdateSupportStatus
@@ -136,7 +137,7 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
                     {
                         idNum: idNum,
                         supportStatus: newSupportStatus,
-                    }
+                    },
                 );
             }
         }
@@ -144,84 +145,82 @@ function VotersLedgerTab(props: TabPageBasePropsWithPermission): JSX.Element {
 
 
     return (
-        <>
-            <CloseTabButton tabName={props.name} closeFunction={props.closeFunction}/>
-            <Stack direction={"column"} spacing={2} sx={{padding: 2, width: "100%"}}>
-                <Typography variant={"h5"}>Search</Typography>
-                <Grid2 container component={"form"} sx={{
-                    marginRight: `${Constants.rightDrawerWidth}px`,
-                    border: "1px solid blue",
-                    borderRadius: "5px",
-                }} spacing={2} onSubmit={handleSearch}>
-                    {renderFields()}
-                    <Grid2 xs={12} display={"flex"} justifyContent={"end"}>
-                        <Button variant={"contained"}
-                            type={"submit"} endIcon={<SearchIcon/>} disabled={loading}>
-                            Search
-                        </Button>
-                    </Grid2>
+
+        <Stack direction={"column"} spacing={2} sx={{padding: 2, width: "100%"}}>
+            <Typography variant={"h5"}>Search</Typography>
+            <Grid2 container component={"form"} sx={{
+                marginRight: `${Constants.rightDrawerWidth}px`,
+                border: "1px solid blue",
+                borderRadius: "5px",
+            }} spacing={2} onSubmit={handleSearch}>
+                {renderFields()}
+                <Grid2 xs={12} display={"flex"} justifyContent={"end"}>
+                    <Button variant={"contained"}
+                        type={"submit"} endIcon={<SearchIcon/>} disabled={loading}>
+                        Search
+                    </Button>
                 </Grid2>
-                <GridComponent
-                    dataSource={searchResults}
-                    allowPaging={true}
-                    allowSorting={true}
-                    allowResizing={true}
-                    toolbar={toolbarOptions}
-                    editSettings={editOptions}
-                    ref={(g) => gridInstance = g}
-                    toolbarClick={toolbarClick}
-                    allowExcelExport={true}
-                    allowReordering={true}
-                    actionComplete={onActionComplete}
-                >
-                    <Inject services={injectedServices}/>
-                    <ColumnsDirective>
-                        <ColumnDirective field="idNum" isPrimaryKey={true}
-                            headerText="Id Number" width="150" textAlign="Right"/>
-                        <ColumnDirective field="firstName" allowEditing={false}
-                            headerText={"First Name"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="lastName" allowEditing={false}
-                            headerText={"Last Name"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="email1" allowEditing={false}
-                            headerText={"Email 1"} width="250" textAlign="Right"/>
-                        <ColumnDirective field="email2" allowEditing={false}
-                            headerText={"Email 2"} width="250" textAlign="Right"/>
-                        <ColumnDirective field="phone1" allowEditing={false}
-                            headerText={"Phone 1"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="phone2" allowEditing={false}
-                            headerText={"Phone 2"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="residenceName" allowEditing={false}
-                            headerText={"City"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="streetName" allowEditing={false}
-                            headerText={"Street"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="houseNumber" allowEditing={false}
-                            headerText={"House Number"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="zipCode" allowEditing={false}
-                            headerText={"Zip Code"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="innerCityBallotId" allowEditing={false}
-                            headerText={"Ballot Number"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="ballotLocation" allowEditing={false}
-                            headerText={"Ballot Location"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="ballotAddress" allowEditing={false}
-                            headerText={"Ballot Address"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="supportStatusString" editType="dropdownedit"
-                            headerText={"Support status"} width="150" textAlign="Right"/>
-                    </ColumnsDirective>
-                </GridComponent>
-                {loading && firstSearchDone && <Stack sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100%",
-                    width: "100%",
-                }} direction={"column"} spacing={3}>
-                    <Typography variant={"h5"}>Loading search results...</Typography>
-                    <CircularProgress/>
-                </Stack>}
-                {!loading && firstSearchDone && !errorLoadingData}
-            </Stack>
-        </>
+            </Grid2>
+            <GridComponent
+                dataSource={searchResults}
+                allowPaging={true}
+                allowSorting={true}
+                allowResizing={true}
+                toolbar={toolbarOptions}
+                editSettings={editOptions}
+                ref={(g) => gridInstance = g}
+                toolbarClick={toolbarClick}
+                allowExcelExport={true}
+                allowReordering={true}
+                actionComplete={onActionComplete}
+            >
+                <Inject services={injectedServices}/>
+                <ColumnsDirective>
+                    <ColumnDirective field="idNum" isPrimaryKey={true}
+                        headerText="Id Number" width="150" textAlign="Right"/>
+                    <ColumnDirective field="firstName" allowEditing={false}
+                        headerText={"First Name"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="lastName" allowEditing={false}
+                        headerText={"Last Name"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="email1" allowEditing={false}
+                        headerText={"Email 1"} width="250" textAlign="Right"/>
+                    <ColumnDirective field="email2" allowEditing={false}
+                        headerText={"Email 2"} width="250" textAlign="Right"/>
+                    <ColumnDirective field="phone1" allowEditing={false}
+                        headerText={"Phone 1"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="phone2" allowEditing={false}
+                        headerText={"Phone 2"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="residenceName" allowEditing={false}
+                        headerText={"City"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="streetName" allowEditing={false}
+                        headerText={"Street"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="houseNumber" allowEditing={false}
+                        headerText={"House Number"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="zipCode" allowEditing={false}
+                        headerText={"Zip Code"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="innerCityBallotId" allowEditing={false}
+                        headerText={"Ballot Number"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="ballotLocation" allowEditing={false}
+                        headerText={"Ballot Location"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="ballotAddress" allowEditing={false}
+                        headerText={"Ballot Address"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="supportStatusString" editType="dropdownedit"
+                        headerText={"Support status"} width="150" textAlign="Right"/>
+                </ColumnsDirective>
+            </GridComponent>
+            {loading && firstSearchDone && <Stack sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+                width: "100%",
+            }} direction={"column"} spacing={3}>
+                <Typography variant={"h5"}>Loading search results...</Typography>
+                <CircularProgress/>
+            </Stack>}
+            {!loading && firstSearchDone && !errorLoadingData}
+        </Stack>
     );
 }
 
-export default VotersLedgerTab;
+export default VotersLedgerPage;
