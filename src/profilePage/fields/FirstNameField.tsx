@@ -13,6 +13,7 @@ function FirstNameField(props: FirstNameFieldProps): JSX.Element {
         lastNameHeb: "",
         idNumber: 0,
         cityName: "",
+        phoneNum: "",
     });
 // Define a function to handle changes in the input fields
 const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

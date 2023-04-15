@@ -4,7 +4,10 @@ import config from "../app-config.json";
 import { AxiosResponse, HttpStatusCode } from "axios";
 import ErrorCodeExtractor from "../utils/error-code-extractor";
 import {
-    Alert, AlertTitle, Button, FormControl, InputLabel,
+    Alert, AlertTitle, Button, Dialog, DialogActions, DialogContent, DialogContentText, 
+    List, DialogTitle, Divider, FormControl, InputLabel,
+    ListItem,
+    ListItemText,
     MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography, makeStyles
 } from "@mui/material";
 import ServerRequestMaker from "../utils/server-request-maker";
@@ -17,6 +20,7 @@ function ProfilePage(): JSX.Element {
         lastNameHeb: "",
         idNumber: 0,
         cityName: "",
+        phoneNum: "",
     });
 
     const [isVerified, setIsVerified] = useState(false);
@@ -46,6 +50,7 @@ function ProfilePage(): JSX.Element {
                 lastNameHeb: res.data.lastNameHeb,
                 idNumber: 0,
                 cityName: res.data.cityName,
+                phoneNum: res.data.phoneNumber
             };
             if (isVerified) {
                 setUserDetails(updatedUserDetails);
@@ -142,9 +147,32 @@ function ProfilePage(): JSX.Element {
         }));
     };
 
+    const handleUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
+        return;
+    };
+
+    //handling phone number change pop-up
+    const [open, setOpen] = useState(false);
+
+    const [inputValue, setInputValue] = useState("");
+
+    const handleDialog = () => {
+        setOpen(!open);
+    };
+
+    const handleDialogChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(event.target.value);
+    };
+
     const styles = {
-        formControl: {
+        halfWidth: {
             width: "50%",
+        },
+        listItem: {
+            backgroundColor: "white",
+            "&:hover": {
+                backgroundColor: "lightgray",
+            },
         },
     };
 
@@ -154,10 +182,48 @@ function ProfilePage(): JSX.Element {
                 Profile Page
             </Typography>
             {isVerified ? (
-                // If the form has been submitted and verified, display the user's personal details in read-only format
                 <div>
-                    <p>Name: {userDetails.firstNameHeb}</p>
-                    <p>Surname: {userDetails.lastNameHeb}</p>
+                    <Stack onSubmit={handleUpdate}>
+                        <List component="nav" aria-label="mailbox folders">
+                            <ListItem sx={styles.listItem} style={styles.halfWidth}>
+                                <ListItemText primary="Name:"/> {userDetails.firstNameHeb}
+                            </ListItem>
+                            <Divider />
+                            <ListItem sx={styles.listItem} divider style={styles.halfWidth}>
+                                <ListItemText primary="Surname:" /> {userDetails.lastNameHeb}
+                            </ListItem>
+                            <ListItem sx={styles.listItem} style={styles.halfWidth}>
+                                <ListItemText primary="Phone Number:" /> {userDetails.phoneNum}
+                            </ListItem>
+                            <Divider light />
+                            <ListItem>
+                                <Button onClick={handleDialog} style={styles.halfWidth} 
+                                    type="submit" id="outlined-basic"
+                                    variant="contained" color="inherit">Update Number</Button>
+                            </ListItem>
+                        </List>
+                    </Stack>
+                    <Dialog open={open} onClose={handleDialog}>
+                        <DialogTitle>Update phone number</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    label="New Number"
+                                    type="text"
+                                    value={inputValue}
+                                    onChange={handleDialogChange}
+                                    fullWidth
+                                />
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleDialog}>Close</Button>
+                            <Button onClick={handleDialog}>Update</Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
             ) : (
                 // If the form hasn't been submitted yet, display the form for the user to enter their personal details
@@ -191,7 +257,7 @@ function ProfilePage(): JSX.Element {
                                 />
                             </label>
                             <label>
-                                <p><FormControl style={styles.formControl}>
+                                <p><FormControl style={styles.halfWidth}>
                                     <InputLabel id="demo-simple-select-label" variant="outlined">City</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
@@ -210,8 +276,8 @@ function ProfilePage(): JSX.Element {
                                 </FormControl>
                                 </p>
                             </label>
-                            <Button style={styles.formControl} type="submit" id="outlined-basic"
-                                variant="outlined" color="inherit">Submit</Button>
+                            <Button style={styles.halfWidth} type="submit" id="outlined-basic"
+                                variant="contained" color="inherit">Submit</Button>
                         </Stack>
                     </form>
                 </>
