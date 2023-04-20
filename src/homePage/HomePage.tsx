@@ -30,6 +30,11 @@ const instanceOfPublishedEventWithPublisher =
         return "eventGuid" in object;
     };
 
+/**
+ * Converts the array from the server response to a dictionary, where the key is the announcement/event guid,
+ * so that the announcements and events can be sorted into a single array while maintaining their intended order.
+ * @param arr
+ */
 const toDict = (arr: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[]) => {
     const dict: { [key: string]: (AnnouncementWithPublisherDetails | PublishedEventWithPublisher)[] } = {};
     arr.forEach((item) => {
@@ -52,6 +57,9 @@ interface HomePageProps {
     setHomePageControl: (homePageControl: HomePageControl) => void;
 }
 
+/**
+ * The application's home page. Displays announcements and events to the user.
+ */
 function HomePage(props: HomePageProps): JSX.Element {
 
     const [loading, setLoading] = React.useState(false);
@@ -75,7 +83,7 @@ function HomePage(props: HomePageProps): JSX.Element {
                     combined = combined.concat(announcements);
                     combined = combined.concat(events);
 
-                    // Convert to dictionary
+                    // Convert the combined array to a dictionary, where the key is the announcement/event guid.
                     const combinedDict = toDict(combined);
                     combined = [];
                     const dictKeys = Object.keys(combinedDict);
@@ -94,6 +102,7 @@ function HomePage(props: HomePageProps): JSX.Element {
                 } else if (events !== null && events.length > 0) {
                     combined = events;
                 } else {
+                    // If there are no announcements or events, then there is no more data to retrieve.
                     hasMore = false;
                 }
 
@@ -137,6 +146,9 @@ function HomePage(props: HomePageProps): JSX.Element {
         };
     }, []);
 
+    /**
+     * Renders the list of announcements and events on the home page.
+     */
     const renderHomePageList = () => {
         return (
             <List>

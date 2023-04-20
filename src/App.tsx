@@ -9,6 +9,7 @@ import DrawerPageFlow from "./utils/DrawerPageFlow";
 import ServerRequestMaker from "./utils/server-request-maker";
 import config from "./app-config.json";
 import {HttpStatusCode} from "axios";
+import "./App.css";
 
 const UserLoggedInContext = createContext(false);
 

@@ -10,7 +10,7 @@
 const ScreenRoutes = {
     HomePage: "/",
     ProfilePage: "/profile",
-    CampaignRoute: "/campaign/:campaignGuid",
+    CampaignRoute: "/campaign/:campaignGuid/*",
     CampaignPage: "/campaign/",
     PublicCampaignPage: "/public-campaign/",
     PublicCampaignRoute: "/public-campaign/*",

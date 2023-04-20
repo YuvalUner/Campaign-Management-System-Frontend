@@ -4,6 +4,10 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import {GoogleOAuthProvider} from "@react-oauth/google";
 import App from "./App";
+import { registerLicense } from "@syncfusion/ej2-base";
+import config from "./app-config.json";
+
+registerLicense(config.SyncfusionLicenseKey);
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement

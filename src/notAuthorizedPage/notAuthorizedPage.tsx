@@ -5,16 +5,15 @@ import {useNavigate} from "react-router-dom";
 import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
 import Constants from "../utils/constantsAndStaticObjects/constants";
 
-interface ErrorPageProps {
+interface NotAuthorizedProps {
     errorMessage?: string;
-    linkTo?: string;
-    buttonText?: string;
 }
 
 /**
- * Our 404 not found page, stolen directly from https://frontendshape.com/post/react-mui-5-404-page-example
+ * Our 401 not found page, stolen from https://frontendshape.com/post/react-mui-5-404-page-example
+ * and modified slightly to become a 401 page.
  */
-export default function NotFoundPage(props: ErrorPageProps) {
+export default function NotAuthorizedPage(props: NotAuthorizedProps) {
 
     const nav = useNavigate();
 
@@ -29,22 +28,22 @@ export default function NotFoundPage(props: ErrorPageProps) {
         >
             <Container maxWidth="md">
                 <Grid container spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid xs={6}>
                         <Typography variant="h1">
-                            404
+                            401
                         </Typography>
                         <Typography variant="h6" sx={{
                             marginBottom: `${Constants.muiBoxDefaultPadding}px`,
                         }}>
-                            {props.errorMessage ?? "The page you are looking for does not exist"}
+                            {props.errorMessage ?? "You do not have permission to view this page "}
                         </Typography>
                         <Button variant="contained" onClick={() => {
-                            nav(props.linkTo ?? ScreenRoutes.HomePage);
-                        }}>{props.buttonText ?? "Back Home"}</Button>
+                            nav(ScreenRoutes.HomePage);
+                        }}>Back Home</Button>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid xs={6}>
                         <img
-                            src="https://cdn.pixabay.com/photo/2017/03/09/12/31/error-2129569__340.jpg"
+                            src={"https://phabcart.imgix.net/cdn/scdn/images/uploads/52024AN_WEB_600.png?auto=compress"}
                             alt=""
                             width={500} height={250}
                         />
