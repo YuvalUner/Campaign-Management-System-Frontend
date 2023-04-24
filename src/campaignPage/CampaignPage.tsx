@@ -27,6 +27,7 @@ import PermissionToTabMapper from "./utils/permission-to-tab-mapper";
 import SubScreenRoutes from "./utils/sub-screen-routes";
 import VotersLedgerPage from "./subPages/VotersLedgerPage";
 import NotFoundPage from "../notFoundPage/NotFoundPage";
+import UploadCustomLedgerPage from "./subPages/UploadCustomLedgerPage";
 
 /**
  * If the user has both edit and view permissions, remove the view permissions - as it is implicit that the user has
@@ -182,11 +183,19 @@ function CampaignPage(): JSX.Element {
         });
     }, [campaignGuid, loggedInStatus]);
 
+    /**
+     * This function handles the logic of mapping a permission to a tab.
+     * Needs to have a switch statement for each permission target.
+     * @param permission
+     */
     const permissionToRouteMapper = (permission: Permission): JSX.Element => {
         switch (permission.permissionTarget) {
         case PermissionTargets.VotersLedger:
             return <Route path={SubScreenRoutes.VotersLedgerRoute} key={permission.permissionTarget}
                 element={<VotersLedgerPage permission={permission}/>}/>;
+        case PermissionTargets.CustomLedger:
+            return <Route path={SubScreenRoutes.UploadCustomLedgerRoute} key={permission.permissionTarget}
+                element={<UploadCustomLedgerPage permission={permission}/>}/>;
         default:
             return <Route path={"Error"} key={permission.permissionTarget}
                 element={<NotFoundPage

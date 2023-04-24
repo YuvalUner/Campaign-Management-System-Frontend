@@ -6,6 +6,7 @@ const SubPageNames = {
     Scheduler: "Schedule",
     MainPage: "Campaign Profile",
     VotersLedger: "Voters Ledger",
+    UploadCustomLedger: "Upload Custom Ledger",
 };
 
 export default SubPageNames;
