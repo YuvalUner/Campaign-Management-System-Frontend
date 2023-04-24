@@ -16,7 +16,9 @@
     "Users": {
       "Base": "api/Users/",
       "HomePageInfo": "HomePageInfo",
-      "GetVerifiedStatus": "get-verified-status"
+      "GetVerifiedStatus": "get-verified-status",
+      "GetProfilePageInfo": "get-profile-page-info",
+      "UserPrivateInfo": "UserPrivateInfo"
     },
     "PublicBoard": {
       "Base": "api/PublicBoard/",
@@ -50,6 +52,11 @@
       "Base": "api/VotersLedger/",
       "Filter": "filter/",
       "UpdateSupportStatus": "updateSupportStatus/"
+    },
+    "VerificationCode": {
+      "Base": "api/VerificationCode/",
+      "SendVerificationCode": "send",
+      "VerifyVerificationCode": "verify"
     }
   }
 }
