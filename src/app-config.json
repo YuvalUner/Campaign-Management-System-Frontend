@@ -52,6 +52,11 @@
       "Base": "api/VotersLedger/",
       "Filter": "filter/",
       "UpdateSupportStatus": "updateSupportStatus/"
+    },
+    "VerificationCode": {
+      "Base": "api/VerificationCode/",
+      "SendVerificationCode": "send",
+      "VerifyVerificationCode": "verify"
     }
   }
 }
