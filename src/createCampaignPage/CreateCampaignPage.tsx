@@ -14,7 +14,7 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 import Events from "../utils/events";
 import {HttpStatusCode} from "axios";
 import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
-import ImageBbApiRequestMaker from "../utils/ImageBbApiRequestMaker";
+import ImageBbApiRequestMaker from "../utils/image-bb-api-request-maker";
 import {FileObject} from "mui-file-dropzone";
 
 /**

@@ -24,6 +24,7 @@ class ServerRequestMaker {
         return await this.instance.post(config.ServerBaseUrl + url, JSON.stringify(body), {
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json",
                 additionalHeaders
             }
         });

@@ -18,7 +18,7 @@ import config from "../../app-config.json";
 import {
     ActionEventArgs,
     ColumnDirective,
-    ColumnsDirective, Edit, EditSettingsModel, ExcelExport,
+    ColumnsDirective, Edit, EditSettingsModel, ExcelExport, Filter,
     GridComponent,
     Page,
     Resize,
@@ -51,8 +51,8 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
     ];
 
     const injectedServices = props.permission.permissionType === PermissionTypes.Edit ?
-        [Page, Sort, Resize, Edit, Toolbar, ExcelExport]
-        : [Page, Sort, Resize, Toolbar, ExcelExport];
+        [Page, Sort, Resize, Edit, Toolbar, ExcelExport, Filter]
+        : [Page, Sort, Resize, Toolbar, ExcelExport, Filter];
 
     const toolbarOptions = props.permission.permissionType === PermissionTypes.Edit ?
         ["Edit", "ExcelExport"]
@@ -173,6 +173,7 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
                 allowExcelExport={true}
                 allowReordering={true}
                 actionComplete={onActionComplete}
+                allowFiltering={true}
             >
                 <Inject services={injectedServices}/>
                 <ColumnsDirective>
@@ -196,6 +197,10 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
                         headerText={"Street"} width="150" textAlign="Right"/>
                     <ColumnDirective field="houseNumber" allowEditing={false}
                         headerText={"House Number"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="appartment" allowEditing={false}
+                        headerText={"Apartment"} width="150" textAlign="Right"/>
+                    <ColumnDirective field="houseLetter" allowEditing={false}
+                        headerText={"House Letter"} width="150" textAlign="Right"/>
                     <ColumnDirective field="zipCode" allowEditing={false}
                         headerText={"Zip Code"} width="150" textAlign="Right"/>
                     <ColumnDirective field="innerCityBallotId" allowEditing={false}
