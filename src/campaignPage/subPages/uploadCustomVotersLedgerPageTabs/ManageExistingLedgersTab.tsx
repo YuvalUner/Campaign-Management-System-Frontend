@@ -16,7 +16,7 @@ function ManageExistingLedgersTab(props: TabCommonProps): JSX.Element {
         ).then((response) => {
             setCustomLedgers(response.data);
         });
-    });
+    }, []);
 
     return (
         <List>
