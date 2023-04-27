@@ -2,13 +2,14 @@ import React, {useEffect, useState} from "react";
 import SubPageWithPermissionBaseProps from "../../utils/sub-page-with-permission-base-props";
 import {useParams} from "react-router-dom";
 import ManageExistingLedgersTab from "./customLedgerManagementPageTabs/ManageExistingLedgersTab";
-import UploadNewLedgerTab from "./customLedgerManagementPageTabs/UploadNewLedgerTab";
+import CreateNewLedgerTab from "./customLedgerManagementPageTabs/CreateNewLedgerTab";
 import {Box, Tab, Tabs} from "@mui/material";
 import CustomVotersLedger from "../../../models/custom-voters-ledger";
 import ServerRequestMaker from "../../../utils/helperMethods/server-request-maker";
 import config from "../../../app-config.json";
 import TabPanel from "../../utils/TabPanel";
 import Events from "../../../utils/helperMethods/events";
+import Constants from "../../../utils/constantsAndStaticObjects/constants";
 
 function CustomLedgerManagementPage(props: SubPageWithPermissionBaseProps): JSX.Element {
 
@@ -45,7 +46,7 @@ function CustomLedgerManagementPage(props: SubPageWithPermissionBaseProps): JSX.
 
 
     return (
-        <Box sx={{width: "100%"}}>
+        <Box sx={{width: "100%", height: `calc(100% - ${Constants.topMenuHeight}px)`}}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <Tabs value={activeTab} onChange={handleTabChange} aria-label="basic tabs example">
                     <Tab label="Manage existing ledgers" />
@@ -56,7 +57,7 @@ function CustomLedgerManagementPage(props: SubPageWithPermissionBaseProps): JSX.
                 <ManageExistingLedgersTab campaignGuid={campaignGuid as string} customLedgers={customLedgers}/>
             </TabPanel>
             <TabPanel value={activeTab} index={1}>
-                <UploadNewLedgerTab campaignGuid={campaignGuid as string} customLedgers={customLedgers}/>
+                <CreateNewLedgerTab campaignGuid={campaignGuid as string} customLedgers={customLedgers}/>
             </TabPanel>
         </Box>
     );
