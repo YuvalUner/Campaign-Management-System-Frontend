@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import TabCommonProps from "./tab-common-props";
 import {Alert, Box, Divider, List} from "@mui/material";
 import Events from "../../../../utils/helperMethods/events";
-import LedgerListItem from "./manageExistingLedgersTabComponents/ledgerListItem";
+import LedgerListItem from "./manageExistingLedgersTabComponents/LedgerListItem";
 
 function ManageExistingLedgersTab(props: TabCommonProps): JSX.Element {
 

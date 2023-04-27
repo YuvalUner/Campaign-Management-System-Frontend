@@ -4,6 +4,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CustomVotersLedger from "../../../../../models/custom-voters-ledger";
 import UpdateNameDialog from "./UpdateNameDialog";
+import DeleteLedgerDialog from "./DeleteLedgerDialog";
 
 interface LedgerListItemProps {
     ledger: CustomVotersLedger;
@@ -13,6 +14,7 @@ interface LedgerListItemProps {
 function LedgerListItem(props: LedgerListItemProps): JSX.Element {
 
     const [updateDialogOpen, setUpdateDialogOpen] = useState<boolean>(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
     const onUpdateDialogClose = () => {
         setUpdateDialogOpen(false);
@@ -20,6 +22,14 @@ function LedgerListItem(props: LedgerListItemProps): JSX.Element {
 
     const openUpdateDialog = () => {
         setUpdateDialogOpen(true);
+    };
+
+    const onDeleteDialogClose = () => {
+        setDeleteDialogOpen(false);
+    };
+
+    const openDeleteDialog = () => {
+        setDeleteDialogOpen(true);
     };
 
     return (
@@ -34,7 +44,7 @@ function LedgerListItem(props: LedgerListItemProps): JSX.Element {
                         </IconButton>
                     </Tooltip>
                     <Tooltip title={"Delete ledger"}>
-                        <IconButton edge={"end"} color={"error"}>
+                        <IconButton edge={"end"} color={"error"} onClick={openDeleteDialog}>
                             <DeleteIcon/>
                         </IconButton>
                     </Tooltip>
@@ -43,6 +53,8 @@ function LedgerListItem(props: LedgerListItemProps): JSX.Element {
                 <ListItemText primary={props.ledger.ledgerName}/>
             </ListItem>
             <UpdateNameDialog open={updateDialogOpen} onClose={onUpdateDialogClose}
+                customLedger={props.ledger} campaignGuid={props.campaignGuid}/>
+            <DeleteLedgerDialog open={deleteDialogOpen} onClose={onDeleteDialogClose}
                 customLedger={props.ledger} campaignGuid={props.campaignGuid}/>
         </>
     );

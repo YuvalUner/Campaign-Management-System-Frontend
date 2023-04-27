@@ -4,17 +4,10 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextFi
 import ServerRequestMaker from "../../../../../utils/helperMethods/server-request-maker";
 import config from "../../../../../app-config.json";
 import Events from "../../../../../utils/helperMethods/events";
-import ErrorCodeExtractor from "../../../../../utils/helperMethods/error-code-extractor";
-import CustomStatusCode from "../../../../../utils/constantsAndStaticObjects/custom-status-code";
+import DialogProps from "./dialog-props";
+import handleServerErrorForDialog from "./handle-server-error-for-dialog";
 
-interface UpdateNameDialogProps {
-    open: boolean;
-    onClose: () => void;
-    customLedger: CustomVotersLedger;
-    campaignGuid: string;
-}
-
-function UpdateNameDialog(props: UpdateNameDialogProps): JSX.Element {
+function UpdateNameDialog(props: DialogProps): JSX.Element {
 
     let newName = "";
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,17 +25,11 @@ function UpdateNameDialog(props: UpdateNameDialogProps): JSX.Element {
             updatedLedger
         ).then(() => {
             Events.dispatch(Events.EventNames.RefreshCustomLedgers);
-            props.onClose();
         }).catch((error) => {
-            const errorCode = ErrorCodeExtractor(error.response.data);
-            if (errorCode === CustomStatusCode.LedgerNotFound){
-                Events.dispatch(Events.EventNames.BubbleErrorUpwards, "Ledger not found" +
-                    " - it may have been deleted by another user. Please try refreshing the page.");
-            } else if (errorCode === CustomStatusCode.CampaignNotFound){
-                Events.dispatch(Events.EventNames.BubbleErrorUpwards, "Campaign not found" +
-                    " - it may have been deleted by another user. Please try refreshing the page.");
-            }
+            handleServerErrorForDialog(error);
+        }).finally(() => {
             props.onClose();
+            newName = "";
         });
     };
 

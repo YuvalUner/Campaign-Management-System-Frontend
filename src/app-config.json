@@ -56,7 +56,8 @@
       "Import": "import/",
       "Create": "create/",
       "GetForCampaign": "get-for-campaign/",
-      "UpdateLedgerName": "update/"
+      "UpdateLedgerName": "update/",
+      "DeleteLedger": "delete/"
     }
   }
 }
