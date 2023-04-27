@@ -1,20 +1,20 @@
 import React, {useRef, useState} from "react";
-import SubPageWithPermissionBaseProps from "../utils/sub-page-with-permission-base-props";
-import VotersLedgerFilter from "../../models/voters-ledger-filter";
+import SubPageWithPermissionBaseProps from "../../utils/sub-page-with-permission-base-props";
+import VotersLedgerFilter from "../../../models/voters-ledger-filter";
 import {Button, CircularProgress, Stack, Typography} from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import IdNumberField from "./votersLedgerTabFields/IdNumberField";
-import FieldKeys from "./votersLedgerTabFields/utils/field-keys";
-import FirstNameField from "./votersLedgerTabFields/FirstNameField";
-import LastNameField from "./votersLedgerTabFields/LastNameField";
-import Constants from "../../utils/constantsAndStaticObjects/constants";
-import StreetNameField from "./votersLedgerTabFields/StreetNameField";
-import BallotNumberField from "./votersLedgerTabFields/BallotNumberField";
-import SupportStatusField from "./votersLedgerTabFields/SupportStatusField";
+import IdNumberField from "./votersLedgerPageFields/IdNumberField";
+import FieldKeys from "./votersLedgerPageFields/utils/field-keys";
+import FirstNameField from "./votersLedgerPageFields/FirstNameField";
+import LastNameField from "./votersLedgerPageFields/LastNameField";
+import Constants from "../../../utils/constantsAndStaticObjects/constants";
+import StreetNameField from "./votersLedgerPageFields/StreetNameField";
+import BallotNumberField from "./votersLedgerPageFields/BallotNumberField";
+import SupportStatusField from "./votersLedgerPageFields/SupportStatusField";
 import SearchIcon from "@mui/icons-material/Search";
-import VotersLedgerFilterRecord from "../../models/voters-ledger-filter-record";
-import ServerRequestMaker from "../../utils/server-request-maker";
-import config from "../../app-config.json";
+import VotersLedgerFilterRecord from "../../../models/voters-ledger-filter-record";
+import ServerRequestMaker from "../../../utils/server-request-maker";
+import config from "../../../app-config.json";
 import {
     ActionEventArgs,
     ColumnDirective,
@@ -27,7 +27,7 @@ import {
 import {useParams} from "react-router-dom";
 import {Inject} from "@syncfusion/ej2-react-schedule";
 import {ClickEventArgs} from "@syncfusion/ej2-react-navigations";
-import {PermissionTypes} from "../../models/permission";
+import {PermissionTypes} from "../../../models/permission";
 
 function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
 

@@ -1,11 +1,11 @@
 import React from "react";
 import {Box} from "@mui/material";
-import Campaign from "../../models/campaign";
+import Campaign from "../../../models/campaign";
 import {
     ScheduleComponent, ViewsDirective, ViewDirective, Day, Week, WorkWeek, Month,
     Inject, Resize, DragAndDrop,
 } from "@syncfusion/ej2-react-schedule";
-import Constants from "../../utils/constantsAndStaticObjects/constants";
+import Constants from "../../../utils/constantsAndStaticObjects/constants";
 
 interface SchedulePageProps {
     campaign: Campaign | null;

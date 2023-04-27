@@ -15,19 +15,19 @@ import NotAuthorizedPage from "../notAuthorizedPage/notAuthorizedPage";
 import {UserLoggedInContext} from "../App";
 import Campaign from "../models/campaign";
 import Constants from "../utils/constantsAndStaticObjects/constants";
-import SchedulePage from "./subPages/SchedulePage";
+import SchedulePage from "./subPages/schedulePage/SchedulePage";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SubPageNames from "./utils/sub-page-names";
-import CampaignProfilePage from "./subPages/CampaignProfilePage";
+import CampaignProfilePage from "./subPages/campaignProfilePage/CampaignProfilePage";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import UserWithRole from "../models/user-with-role";
 import Permission, {PermissionTargets, PermissionTypes} from "../models/permission";
 import MenuListItem from "./utils/menu-list-item";
 import PermissionToTabMapper from "./utils/permission-to-tab-mapper";
 import SubScreenRoutes from "./utils/sub-screen-routes";
-import VotersLedgerPage from "./subPages/VotersLedgerPage";
+import VotersLedgerPage from "./subPages/VotersLedgerPage/VotersLedgerPage";
 import NotFoundPage from "../notFoundPage/NotFoundPage";
-import UploadCustomLedgerPage from "./subPages/UploadCustomLedgerPage";
+import CustomLedgerManagementPage from "./subPages/customLedgerManagementPage/CustomLedgerManagementPage";
 
 /**
  * If the user has both edit and view permissions, remove the view permissions - as it is implicit that the user has
@@ -195,7 +195,7 @@ function CampaignPage(): JSX.Element {
                 element={<VotersLedgerPage permission={permission}/>}/>;
         case PermissionTargets.CustomLedger:
             return <Route path={SubScreenRoutes.UploadCustomLedgerRoute} key={permission.permissionTarget}
-                element={<UploadCustomLedgerPage permission={permission}/>}/>;
+                element={<CustomLedgerManagementPage permission={permission}/>}/>;
         default:
             return <Route path={"Error"} key={permission.permissionTarget}
                 element={<NotFoundPage

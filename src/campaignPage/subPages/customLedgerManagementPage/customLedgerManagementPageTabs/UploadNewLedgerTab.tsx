@@ -1,10 +1,10 @@
 import React from "react";
 import TabCommonProps from "./tab-common-props";
 import axios from "axios";
-import config from "../../../app-config.json";
-import ColumnMapping, {PropertyNames} from "../../../models/column-mapping";
-import CustomVotersLedger from "../../../models/custom-voters-ledger";
-import ServerRequestMaker from "../../../utils/server-request-maker";
+import config from "../../../../app-config.json";
+import ColumnMapping, {PropertyNames} from "../../../../models/column-mapping";
+import CustomVotersLedger from "../../../../models/custom-voters-ledger";
+import ServerRequestMaker from "../../../../utils/server-request-maker";
 
 function UploadNewLedgerTab(props: TabCommonProps): JSX.Element {
 

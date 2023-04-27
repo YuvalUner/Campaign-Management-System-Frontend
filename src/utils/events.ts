@@ -19,6 +19,7 @@ class Events{
         CampaignCityInvalid: "CampaignCityInvalid",
         RefreshCampaignsList: "RefreshCampaignsList",
         ShouldHideEffects: "ShouldHideEffects",
+        RefreshCustomLedgers: "RefreshCustomLedgers",
     };
 
     /**
