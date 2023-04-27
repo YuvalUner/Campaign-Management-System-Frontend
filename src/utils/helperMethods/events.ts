@@ -20,6 +20,7 @@ class Events{
         RefreshCampaignsList: "RefreshCampaignsList",
         ShouldHideEffects: "ShouldHideEffects",
         RefreshCustomLedgers: "RefreshCustomLedgers",
+        BubbleErrorUpwards: "BubbleErrorUpwards",
     };
 
     /**

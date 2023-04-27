@@ -3,18 +3,18 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {Alert, Avatar, Box, CircularProgress, Stack, Typography} from "@mui/material";
 import {UserLoggedInContext} from "../App";
 import Campaign from "../models/campaign";
-import ServerRequestMaker from "../utils/server-request-maker";
+import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
 import config from "../app-config.json";
 import {HttpStatusCode} from "axios";
 import NotFoundPage from "../notFoundPage/NotFoundPage";
 import joinStyles from "./joinCampaignPage.module.css";
-import Events from "../utils/events";
+import Events from "../utils/helperMethods/events";
 import {Button} from "react-bootstrap";
 import {CredentialResponse, GoogleLogin} from "@react-oauth/google";
 import ExternalAuthDto from "../models/external-auth-dto";
 import {StatusCodes} from "http-status-codes";
 import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
-import errorCodeExtractor from "../utils/error-code-extractor";
+import errorCodeExtractor from "../utils/helperMethods/error-code-extractor";
 import CustomStatusCode from "../utils/constantsAndStaticObjects/custom-status-code";
 
 

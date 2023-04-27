@@ -55,7 +55,8 @@
       "Base": "api/CustomVotersLedger/",
       "Import": "import/",
       "Create": "create/",
-      "GetForCampaign": "get-for-campaign/"
+      "GetForCampaign": "get-for-campaign/",
+      "UpdateLedgerName": "update/"
     }
   }
 }

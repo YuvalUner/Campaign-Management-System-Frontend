@@ -4,7 +4,7 @@ import axios from "axios";
 import config from "../../../../app-config.json";
 import ColumnMapping, {PropertyNames} from "../../../../models/column-mapping";
 import CustomVotersLedger from "../../../../models/custom-voters-ledger";
-import ServerRequestMaker from "../../../../utils/server-request-maker";
+import ServerRequestMaker from "../../../../utils/helperMethods/server-request-maker";
 
 function UploadNewLedgerTab(props: TabCommonProps): JSX.Element {
 

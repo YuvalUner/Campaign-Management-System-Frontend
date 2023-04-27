@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Route, Routes, useNavigate, useParams} from "react-router-dom";
-import ServerRequestMaker from "../utils/server-request-maker";
+import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
 import config from "../app-config.json";
 import {HttpStatusCode} from "axios";
 import {

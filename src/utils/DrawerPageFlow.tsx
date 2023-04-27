@@ -1,7 +1,7 @@
 import React, {useEffect, memo, useContext} from "react";
 import Constants from "./constantsAndStaticObjects/constants";
 import {Box, IconButton, Tooltip} from "@mui/material";
-import Events from "./events";
+import Events from "./helperMethods/events";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
 import componentIds from "./constantsAndStaticObjects/component-ids";
 import {UserLoggedInContext} from "../App";

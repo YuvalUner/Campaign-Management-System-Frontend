@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
-import config from "../app-config.json";
+import config from "../../app-config.json";
 
 /***
  * ServerRequestMaker is a class that contains all the methods to make requests to the server.

@@ -13,7 +13,7 @@ import BallotNumberField from "./votersLedgerPageFields/BallotNumberField";
 import SupportStatusField from "./votersLedgerPageFields/SupportStatusField";
 import SearchIcon from "@mui/icons-material/Search";
 import VotersLedgerFilterRecord from "../../../models/voters-ledger-filter-record";
-import ServerRequestMaker from "../../../utils/server-request-maker";
+import ServerRequestMaker from "../../../utils/helperMethods/server-request-maker";
 import config from "../../../app-config.json";
 import {
     ActionEventArgs,

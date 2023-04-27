@@ -5,10 +5,10 @@ import ManageExistingLedgersTab from "./customLedgerManagementPageTabs/ManageExi
 import UploadNewLedgerTab from "./customLedgerManagementPageTabs/UploadNewLedgerTab";
 import {Box, Tab, Tabs} from "@mui/material";
 import CustomVotersLedger from "../../../models/custom-voters-ledger";
-import ServerRequestMaker from "../../../utils/server-request-maker";
+import ServerRequestMaker from "../../../utils/helperMethods/server-request-maker";
 import config from "../../../app-config.json";
 import TabPanel from "../../utils/TabPanel";
-import Events from "../../../utils/events";
+import Events from "../../../utils/helperMethods/events";
 
 function CustomLedgerManagementPage(props: SubPageWithPermissionBaseProps): JSX.Element {
 

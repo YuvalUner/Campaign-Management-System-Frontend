@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {Box, Button, CircularProgress, Stack, Typography} from "@mui/material";
-import ServerRequestMaker from "../utils/server-request-maker";
+import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
 import config from "../app-config.json";
 import {Link, useNavigate} from "react-router-dom";
 import Constants from "../utils/constantsAndStaticObjects/constants";
@@ -11,10 +11,10 @@ import CampaignDescriptionField from "./formFields/CampaignDescriptionField";
 import IsMunicipalChoiceField from "./formFields/IsMunicipalChoiceField";
 import CampaignLogoUploadField from "./formFields/CampaignLogoUploadField";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import Events from "../utils/events";
+import Events from "../utils/helperMethods/events";
 import {HttpStatusCode} from "axios";
 import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
-import ImageBbApiRequestMaker from "../utils/image-bb-api-request-maker";
+import ImageBbApiRequestMaker from "../utils/helperMethods/image-bb-api-request-maker";
 import {FileObject} from "mui-file-dropzone";
 
 /**
