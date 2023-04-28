@@ -1,11 +1,32 @@
+/*
+eslint no-shadow: "off",
+no-unused-vars: "off",
+ */
+
 import React from "react";
 import {FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography} from "@mui/material";
 
-function FirstStepChooseAction(): JSX.Element {
+export enum FirstStepChooseActionEnum {
+    CreateAndImport = "create+import",
+    Existing = "existing",
+    Create = "create",
+}
+
+interface FirstStepChooseActionProps {
+    chosenAction: FirstStepChooseActionEnum;
+    setChosenAction: (action: FirstStepChooseActionEnum) => void;
+}
+
+function FirstStepChooseAction(props: FirstStepChooseActionProps): JSX.Element {
+
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        props.setChosenAction(event.target.value as FirstStepChooseActionEnum);
+    };
+
     return (
         <>
             <Typography variant={"h6"}>
-                Welcome to the custom voters ledger creation menu.
+                Welcome to the custom voters ledger creation page.
             </Typography>
             <Typography variant={"body1"} sx={{
                 marginTop: "1rem",
@@ -19,12 +40,15 @@ function FirstStepChooseAction(): JSX.Element {
             }}>
                 <FormLabel>Choose action</FormLabel>
                 <RadioGroup
-                    defaultValue={"create+import"}
+                    value={props.chosenAction}
+                    onChange={onChange}
+                    name={"choose-action"}
                 >
-                    <FormControlLabel value={"create+import"}
+                    <FormControlLabel value={FirstStepChooseActionEnum.CreateAndImport}
                         control={<Radio/>} label={"Create and import new ledger from file"}/>
-                    <FormControlLabel value={"existing"} control={<Radio/>} label={"Import file into existing ledger"}/>
-                    <FormControlLabel value={"create"}
+                    <FormControlLabel value={FirstStepChooseActionEnum.Existing}
+                        control={<Radio/>} label={"Import file into existing ledger"}/>
+                    <FormControlLabel value={FirstStepChooseActionEnum.Create}
                         control={<Radio/>} label={"Create new ledger without importing"}/>
                 </RadioGroup>
             </FormControl>

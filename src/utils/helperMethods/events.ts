@@ -21,6 +21,10 @@ class Events{
         ShouldHideEffects: "ShouldHideEffects",
         RefreshCustomLedgers: "RefreshCustomLedgers",
         BubbleErrorUpwards: "BubbleErrorUpwards",
+        ShouldRaisePrompt: "ShouldRaisePrompt",
+        ShouldStopRaisingPrompt: "ShouldStopRaisingPrompt",
+        RaisePrompt: "RaisePrompt",
+        GoForward: "GoForward",
     };
 
     /**
