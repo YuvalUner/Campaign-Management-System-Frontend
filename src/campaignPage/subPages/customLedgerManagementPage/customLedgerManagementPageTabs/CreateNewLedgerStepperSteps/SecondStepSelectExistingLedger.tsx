@@ -1,14 +1,12 @@
 import React, {useEffect} from "react";
 import CustomVotersLedger from "../../../../../models/custom-voters-ledger";
 import {
-    Alert,
     FormControl,
     FormHelperText,
     InputLabel,
     MenuItem,
     Select,
     Stack,
-    TextField,
     Typography,
 } from "@mui/material";
 import {SelectChangeEvent} from "@mui/material/Select";
@@ -38,8 +36,10 @@ function SecondStepSelectExistingLedger(props: SecondStepSelectExistingLedgerPro
 
     useEffect(() => {
         props.shouldCheckForError.current = true;
+        props.setLedger({} as CustomVotersLedger);
         return () => {
             props.shouldCheckForError.current = false;
+            props.setShouldDisplayError(false);
         };
     }, []);
 

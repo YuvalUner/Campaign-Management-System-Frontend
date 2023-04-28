@@ -5,7 +5,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    FormControl,
+    FormControl, FormHelperText,
     Stack,
     TextField,
     Typography,
@@ -18,6 +18,9 @@ interface SecondStepSelectNewNameProps {
     ledger: CustomVotersLedger;
     setLedger: (ledger: CustomVotersLedger) => void;
     setShouldRaisePrompt: (shouldRaisePrompt: boolean) => void;
+    shouldCheckForError: React.MutableRefObject<boolean>;
+    shouldDisplayError: boolean;
+    setShouldDisplayError: (shouldDisplayError: boolean) => void;
 }
 
 function SecondStepSelectNewName(props: SecondStepSelectNewNameProps): JSX.Element {
@@ -26,6 +29,7 @@ function SecondStepSelectNewName(props: SecondStepSelectNewNameProps): JSX.Eleme
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        props.setShouldDisplayError(false);
         const ledger = props.ledger;
         ledger.ledgerName = event.target.value;
         props.setLedger(ledger);
@@ -48,8 +52,12 @@ function SecondStepSelectNewName(props: SecondStepSelectNewNameProps): JSX.Eleme
     };
 
     useEffect(() => {
+        props.shouldCheckForError.current = true;
+        props.setLedger({} as CustomVotersLedger);
         Events.subscribe(Events.EventNames.RaisePrompt, openDialog);
         return () => {
+            props.shouldCheckForError.current = false;
+            props.setShouldDisplayError(false);
             Events.unsubscribe(Events.EventNames.RaisePrompt, openDialog);
         };
     }, []);
@@ -72,8 +80,10 @@ function SecondStepSelectNewName(props: SecondStepSelectNewNameProps): JSX.Eleme
                 <FormControl sx={{
                     width: "40%"
                 }}>
-                    <TextField label={"Ledger name"} variant={"outlined"} onChange={onChange}/>
+                    <TextField label={"Ledger name"} variant={"outlined"} onChange={onChange}
+                        error={props.shouldDisplayError}/>
                     {displayWarning && <Alert severity={"warning"}>You already have a ledger with this name.</Alert>}
+                    {props.shouldDisplayError && <FormHelperText>This field is required</FormHelperText>}
                 </FormControl>
             </Stack>
             <Dialog open={dialogOpen} onClose={closeDialog}>

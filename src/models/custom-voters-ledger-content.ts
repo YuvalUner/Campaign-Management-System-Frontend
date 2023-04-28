@@ -16,5 +16,6 @@ interface CustomVotersLedgerContent
     phone1: string | null;
     phone2: string | null;
     supportStatus: boolean | null;
+    supportStatusString: string | null;
 }
 export default CustomVotersLedgerContent;
