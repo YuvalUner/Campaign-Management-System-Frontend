@@ -9,6 +9,7 @@ import {Box, Button, Stack, Step, StepLabel, Stepper} from "@mui/material";
 import FirstStepChooseAction, {FirstStepChooseActionEnum} from "./CreateNewLedgerStepperSteps/FirstStepChooseAction";
 import Events from "../../../../utils/helperMethods/events";
 import SecondStepSelectNewName from "./CreateNewLedgerStepperSteps/SecondStepSelectNewName";
+import SecondStepSelectExistingLedger from "./CreateNewLedgerStepperSteps/SecondStepSelectExistingLedger";
 
 function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
 
@@ -18,8 +19,9 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
     const [ledger, setLedger] = useState<CustomVotersLedger>({} as CustomVotersLedger);
     const [chosenAction, setChosenAction] =
         useState<FirstStepChooseActionEnum>(FirstStepChooseActionEnum.CreateAndImport);
-    let shouldRaisePrompt = false;
-
+    const [shouldRaisePrompt, setShouldRaisePrompt] = useState(false);
+    const [shouldDisplayError, setShouldDisplayError] = useState(false);
+    const shouldCheckForError = useRef(false);
     /**
      * Creates the labels for the steps in the stepper, based on the chosen action.
      */
@@ -45,48 +47,27 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
             return [
                 <FirstStepChooseAction key={"firstStep"}
                     chosenAction={chosenAction} setChosenAction={setChosenAction}/>,
-                <SecondStepSelectNewName key={"secondStep"}
+                <SecondStepSelectNewName key={"secondStep"} setShouldRaisePrompt={setShouldRaisePrompt}
                     customLedgers={props.customLedgers} setLedger={setLedger} ledger={ledger}/>,
             ];
         case FirstStepChooseActionEnum.Existing:
             return [
                 <FirstStepChooseAction key={"firstStep"}
                     chosenAction={chosenAction} setChosenAction={setChosenAction}/>,
-                <div key={"test"}>Hello World 2</div>,
+                <SecondStepSelectExistingLedger key={"secondStep"} customLedgers={props.customLedgers}
+                    setLedger={setLedger} ledger={ledger} shouldDisplayError={shouldDisplayError}
+                    setShouldDisplayError={setShouldDisplayError} shouldCheckForError={shouldCheckForError}
+                />,
             ];
         case FirstStepChooseActionEnum.Create:
             return [
                 <FirstStepChooseAction key={"firstStep"}
                     chosenAction={chosenAction} setChosenAction={setChosenAction}/>,
-                <SecondStepSelectNewName key={"secondStep"}
+                <SecondStepSelectNewName key={"secondStep"} setShouldRaisePrompt={setShouldRaisePrompt}
                     customLedgers={props.customLedgers} setLedger={setLedger} ledger={ledger}/>,
             ];
         }
     };
-
-    /**
-     * Two functions that are used to subscribe and unsubscribe to the ShouldRaisePrompt event.
-     * These exist solely to because I am really not sure if the event is being unsubscribed properly
-     * when using lambda functions as event handlers, due to lambda functions not necessarily being
-     * equal to each other (address wise).
-     */
-    const setRaisePromptToTrue = () => {
-        shouldRaisePrompt = true;
-    };
-
-    const setRaisePromptToFalse = () => {
-        shouldRaisePrompt = false;
-    };
-
-    useEffect(() => {
-        Events.subscribe(Events.EventNames.ShouldRaisePrompt, setRaisePromptToTrue);
-        Events.subscribe(Events.EventNames.ShouldStopRaisingPrompt, setRaisePromptToFalse);
-
-        return () => {
-            Events.unsubscribe(Events.EventNames.ShouldRaisePrompt, setRaisePromptToTrue);
-            Events.unsubscribe(Events.EventNames.ShouldStopRaisingPrompt, setRaisePromptToFalse);
-        };
-    }, []);
 
     const testMappings: ColumnMapping[] = [
         {
@@ -106,10 +87,16 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
             Events.dispatch(Events.EventNames.RaisePrompt);
             return;
         }
-        const numSteps: number = stepsDecider().length;
+        if (shouldCheckForError.current &&
+            ledger.ledgerName === undefined && ledger.ledgerGuid === undefined && adjustBy > 0) {
+            setShouldDisplayError(true);
+            return;
+        }
+        const finalItemIndex: number = stepsDecider().length - 1;
         const newActiveStep: number = activeStep + adjustBy;
-        if (newActiveStep >= 0 && newActiveStep < numSteps) {
+        if (newActiveStep >= 0 && newActiveStep <= finalItemIndex) {
             setActiveStep(activeStep + adjustBy);
+            setShouldRaisePrompt(false);
         }
     };
 
@@ -189,8 +176,14 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                 justifyContent: "space-between",
                 bottom: "1rem",
             }}>
+
                 <Button variant={"contained"} onClick={() => adjustActiveStep(-1)}>Back</Button>
-                <Button variant={"contained"} onClick={() => adjustActiveStep(1)}>Next</Button>
+                {activeStep < (stepsLabelsDecider().length - 2) &&
+                    <Button variant={"contained"} onClick={() => adjustActiveStep(1)}>Next</Button>
+                }
+                {activeStep === (stepsLabelsDecider().length - 2) &&
+                    <Button variant={"contained"} onClick={() => adjustActiveStep(1)}>Confirm and finish</Button>
+                }
             </Stack>
         </Box>
     );
