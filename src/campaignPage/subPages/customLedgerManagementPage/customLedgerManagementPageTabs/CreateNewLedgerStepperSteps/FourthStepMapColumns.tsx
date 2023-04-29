@@ -1,6 +1,6 @@
-import React from "react";
-import {Stack, Typography} from "@mui/material";
-import ColumnMapping from "../../../../../../models/column-mapping";
+import React, {useEffect} from "react";
+import {Alert, Stack, Typography} from "@mui/material";
+import ColumnMapping, {PropertyNames} from "../../../../../models/column-mapping";
 import {FileObject} from "mui-file-dropzone";
 import {
     ActionEventArgs,
@@ -40,9 +40,20 @@ function FourthStepMapColumns(props: FourthStepMapColumnsProps): JSX.Element {
                 }
                 columnMapping.columnName = row.columnName;
                 props.setColumnMappings([...props.columnMappings]);
+                if (propName === PropertyNames.identifier) {
+                    props.setShouldDisplayError(row.columnName === "");
+                }
             }
         }
     };
+
+    useEffect(() => {
+        props.shouldCheckForError.current = true;
+        return () => {
+            props.shouldCheckForError.current = false;
+            props.setShouldDisplayError(false);
+        };
+    }, []);
 
     return (
         <Stack spacing={2} direction={"column"}>
@@ -65,6 +76,7 @@ function FourthStepMapColumns(props: FourthStepMapColumnsProps): JSX.Element {
                         headerText={"Column Name"} width="200" textAlign="Center"/>
                 </ColumnsDirective>
             </GridComponent>
+            {props.shouldDisplayError && <Alert severity={"error"}>Identifier field must be mapped to a column.</Alert>}
         </Stack>
     );
 }

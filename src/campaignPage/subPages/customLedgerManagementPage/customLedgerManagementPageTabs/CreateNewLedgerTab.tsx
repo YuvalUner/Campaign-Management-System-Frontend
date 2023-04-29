@@ -12,7 +12,8 @@ import SecondStepSelectNewName from "./CreateNewLedgerStepperSteps/SecondStepSel
 import SecondStepSelectExistingLedger from "./CreateNewLedgerStepperSteps/SecondStepSelectExistingLedger";
 import ThirdStepSelectFile from "./CreateNewLedgerStepperSteps/thirdStepSelectFile/ThirdStepSelectFile";
 import {FileObject} from "mui-file-dropzone";
-import FourthStepMapColumns from "./CreateNewLedgerStepperSteps/fourthStepMapColumns/FourthStepMapColumns";
+import FourthStepMapColumns from "./CreateNewLedgerStepperSteps/FourthStepMapColumns";
+import FifthStepConfirmAndUpload from "./CreateNewLedgerStepperSteps/fifthStepConfirm/FifthStepConfirm";
 
 function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
 
@@ -34,9 +35,9 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
         // eslint-disable-next-line default-case
         switch (chosenAction) {
         case FirstStepChooseActionEnum.CreateAndImport:
-            return ["Choose action", "Name ledger", "Select file", "Map columns", "Upload", "Done"];
+            return ["Choose action", "Name ledger", "Select file", "Map columns", "Confirm", "Done"];
         case FirstStepChooseActionEnum.Existing:
-            return ["Choose action", "Select ledger", "Select file", "Map columns", "Upload", "Done"];
+            return ["Choose action", "Select ledger", "Select file", "Map columns", "Confirm", "Done"];
         case FirstStepChooseActionEnum.Create:
             return ["Choose action", "Name ledger", "Done"];
         }
@@ -61,7 +62,9 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                     setShouldDisplayError={setShouldDisplayError}/>,
                 <FourthStepMapColumns key={"fourthStep"} columnMappings={columnMappings}
                     setColumnMappings={setColumnMappings} file={file} shouldCheckForError={stepFourShouldCheckForError}
-                    shouldDisplayError={shouldDisplayError} setShouldDisplayError={setShouldDisplayError}/>
+                    shouldDisplayError={shouldDisplayError} setShouldDisplayError={setShouldDisplayError}/>,
+                <FifthStepConfirmAndUpload key={"fifthStep"} file={file}
+                    columnMappings={columnMappings} ledgerName={ledger.ledgerName as string}/>
             ];
         case FirstStepChooseActionEnum.Existing:
             return [
@@ -76,7 +79,9 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                     setShouldDisplayError={setShouldDisplayError}/>,
                 <FourthStepMapColumns key={"fourthStep"} columnMappings={columnMappings}
                     setColumnMappings={setColumnMappings} file={file} shouldCheckForError={stepFourShouldCheckForError}
-                    shouldDisplayError={shouldDisplayError} setShouldDisplayError={setShouldDisplayError}/>
+                    shouldDisplayError={shouldDisplayError} setShouldDisplayError={setShouldDisplayError}/>,
+                <FifthStepConfirmAndUpload key={"fifthStep"} file={file}
+                    columnMappings={columnMappings} ledgerName={ledger.ledgerName as string}/>
             ];
         case FirstStepChooseActionEnum.Create:
             return [
@@ -120,6 +125,19 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
         if (stepThreeShouldCheckForError.current && (file === null || file === undefined) && adjustBy > 0) {
             setShouldDisplayError(true);
             return;
+        }
+        // Error condition of the 4th step - not mapping the identifier column.
+        if (stepFourShouldCheckForError.current && adjustBy > 0) {
+            const identifierColumnMapping: ColumnMapping | undefined = columnMappings.find((mapping) => {
+                return mapping.propertyName === PropertyNames.identifier;
+            });
+            if (identifierColumnMapping === undefined ||
+                (identifierColumnMapping.columnName === ""
+                    || identifierColumnMapping.columnName === undefined
+                    || identifierColumnMapping.columnName === null)) {
+                setShouldDisplayError(true);
+                return;
+            }
         }
         const finalItemIndex: number = stepsDecider().length - 1;
         const newActiveStep: number = activeStep + adjustBy;

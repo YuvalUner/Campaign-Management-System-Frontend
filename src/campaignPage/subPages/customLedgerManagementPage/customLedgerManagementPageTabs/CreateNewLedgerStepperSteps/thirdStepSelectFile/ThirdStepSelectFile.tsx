@@ -21,6 +21,7 @@ function ThirdStepSelectFile(props: ThirdStepSelectFileProps): JSX.Element {
         props.shouldCheckForError.current = true;
         return () => {
             props.shouldCheckForError.current = false;
+            props.setShouldDisplayError(false);
         };
     }, []);
 
