@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import TabCommonProps from "./tab-common-props";
 import axios from "axios";
 import config from "../../../../app-config.json";
-import ColumnMapping, {PropertyNames} from "../../../../models/column-mapping";
+import ColumnMapping, {EmptyMapping, PropertyNames} from "../../../../models/column-mapping";
 import CustomVotersLedger from "../../../../models/custom-voters-ledger";
 import ServerRequestMaker from "../../../../utils/helperMethods/server-request-maker";
 import {Box, Button, Stack, Step, StepLabel, Stepper} from "@mui/material";
@@ -12,18 +12,21 @@ import SecondStepSelectNewName from "./CreateNewLedgerStepperSteps/SecondStepSel
 import SecondStepSelectExistingLedger from "./CreateNewLedgerStepperSteps/SecondStepSelectExistingLedger";
 import ThirdStepSelectFile from "./CreateNewLedgerStepperSteps/thirdStepSelectFile/ThirdStepSelectFile";
 import {FileObject} from "mui-file-dropzone";
+import FourthStepMapColumns from "./CreateNewLedgerStepperSteps/fourthStepMapColumns/FourthStepMapColumns";
 
 function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
 
     const [activeStep, setActiveStep] = useState(0);
-    const columnMappings = useRef<ColumnMapping[]>([]);
+    const [columnMappings, setColumnMappings] = useState<ColumnMapping[]>([...EmptyMapping]);
     const [file, setFile] = useState<File | null | FileObject>(null);
     const [ledger, setLedger] = useState<CustomVotersLedger>({} as CustomVotersLedger);
     const [chosenAction, setChosenAction] =
         useState<FirstStepChooseActionEnum>(FirstStepChooseActionEnum.CreateAndImport);
     const [shouldRaisePrompt, setShouldRaisePrompt] = useState(false);
     const [shouldDisplayError, setShouldDisplayError] = useState(false);
-    const shouldCheckForError = useRef(false);
+    const stepTwoShouldCheckForError = useRef(false);
+    const stepThreeShouldCheckForError = useRef(false);
+    const stepFourShouldCheckForError = useRef(false);
     /**
      * Creates the labels for the steps in the stepper, based on the chosen action.
      */
@@ -51,9 +54,14 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                     chosenAction={chosenAction} setChosenAction={setChosenAction}/>,
                 <SecondStepSelectNewName key={"secondStep"} setShouldRaisePrompt={setShouldRaisePrompt}
                     customLedgers={props.customLedgers} setLedger={setLedger} ledger={ledger}
-                    shouldCheckForError={shouldCheckForError} shouldDisplayError={shouldDisplayError}
+                    shouldCheckForError={stepTwoShouldCheckForError} shouldDisplayError={shouldDisplayError}
                     setShouldDisplayError={setShouldDisplayError}/>,
-                <ThirdStepSelectFile key={"thirdStep"} uploadedFile={file} setUploadedFile={setFile}/>,
+                <ThirdStepSelectFile key={"thirdStep"} uploadedFile={file} setUploadedFile={setFile}
+                    shouldCheckForError={stepThreeShouldCheckForError} shouldDisplayError={shouldDisplayError}
+                    setShouldDisplayError={setShouldDisplayError}/>,
+                <FourthStepMapColumns key={"fourthStep"} columnMappings={columnMappings}
+                    setColumnMappings={setColumnMappings} file={file} shouldCheckForError={stepFourShouldCheckForError}
+                    shouldDisplayError={shouldDisplayError} setShouldDisplayError={setShouldDisplayError}/>
             ];
         case FirstStepChooseActionEnum.Existing:
             return [
@@ -61,9 +69,14 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                     chosenAction={chosenAction} setChosenAction={setChosenAction}/>,
                 <SecondStepSelectExistingLedger key={"secondStep"} customLedgers={props.customLedgers}
                     setLedger={setLedger} ledger={ledger} shouldDisplayError={shouldDisplayError}
-                    setShouldDisplayError={setShouldDisplayError} shouldCheckForError={shouldCheckForError}
+                    setShouldDisplayError={setShouldDisplayError} shouldCheckForError={stepTwoShouldCheckForError}
                 />,
-                <ThirdStepSelectFile key={"thirdStep"} uploadedFile={file} setUploadedFile={setFile}/>,
+                <ThirdStepSelectFile key={"thirdStep"} uploadedFile={file} setUploadedFile={setFile}
+                    shouldCheckForError={stepThreeShouldCheckForError} shouldDisplayError={shouldDisplayError}
+                    setShouldDisplayError={setShouldDisplayError}/>,
+                <FourthStepMapColumns key={"fourthStep"} columnMappings={columnMappings}
+                    setColumnMappings={setColumnMappings} file={file} shouldCheckForError={stepFourShouldCheckForError}
+                    shouldDisplayError={shouldDisplayError} setShouldDisplayError={setShouldDisplayError}/>
             ];
         case FirstStepChooseActionEnum.Create:
             return [
@@ -71,7 +84,7 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                     chosenAction={chosenAction} setChosenAction={setChosenAction}/>,
                 <SecondStepSelectNewName key={"secondStep"} setShouldRaisePrompt={setShouldRaisePrompt}
                     customLedgers={props.customLedgers} setLedger={setLedger} ledger={ledger}
-                    shouldCheckForError={shouldCheckForError} shouldDisplayError={shouldDisplayError}
+                    shouldCheckForError={stepTwoShouldCheckForError} shouldDisplayError={shouldDisplayError}
                     setShouldDisplayError={setShouldDisplayError}/>,
             ];
         }
@@ -95,10 +108,16 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
             Events.dispatch(Events.EventNames.RaisePrompt);
             return;
         }
-        if (shouldCheckForError.current
+        // Error condition of 2nd step - trying to create a ledger without a name, or not selecting an existing ledger.
+        if (stepTwoShouldCheckForError.current
             && (ledger.ledgerName === undefined || ledger.ledgerName === "")
             && (ledger.ledgerGuid === undefined || ledger.ledgerGuid === "")
             && adjustBy > 0) {
+            setShouldDisplayError(true);
+            return;
+        }
+        // Error condition of the 3rd step - not uploading a file.
+        if (stepThreeShouldCheckForError.current && (file === null || file === undefined) && adjustBy > 0) {
             setShouldDisplayError(true);
             return;
         }
@@ -142,8 +161,10 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
             // const propertyNames: string[] = [];
             // const columnNames: string[] = [];
             testMappings.forEach((mapping) => {
-                data.append("propertyNames", mapping.propertyName);
-                data.append("columnNames", mapping.columnName);
+                if (mapping.columnName !== null && mapping.columnName !== undefined) {
+                    data.append("propertyNames", mapping.propertyName);
+                    data.append("columnNames", mapping.columnName);
+                }
             });
             // Making the request directly via axios and not via ServerRequestMaker as usual, because for some reason
             // passing the FormData object as a parameter doesn't work.
@@ -184,7 +205,6 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                 width: "100%",
                 marginTop: "1rem",
                 justifyContent: "space-between",
-                bottom: "1rem",
             }}>
 
                 <Button variant={"contained"} onClick={() => adjustActiveStep(-1)}>Back</Button>

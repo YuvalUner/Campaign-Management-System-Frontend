@@ -1,5 +1,5 @@
 interface ColumnMapping {
-    columnName: string;
+    columnName: string | null;
     propertyName: string;
 }
 
@@ -22,5 +22,24 @@ const PropertyNames = {
     supportStatus: "SupportStatus",
 };
 
+const EmptyMapping: ColumnMapping[] = [
+    { columnName: null, propertyName: PropertyNames.identifier },
+    { columnName: null, propertyName: PropertyNames.lastName },
+    { columnName: null, propertyName: PropertyNames.firstName },
+    { columnName: null, propertyName: PropertyNames.cityName },
+    { columnName: null, propertyName: PropertyNames.ballotId },
+    { columnName: null, propertyName: PropertyNames.streetName },
+    { columnName: null, propertyName: PropertyNames.houseNumber },
+    { columnName: null, propertyName: PropertyNames.entrance },
+    { columnName: null, propertyName: PropertyNames.appartment },
+    { columnName: null, propertyName: PropertyNames.houseLetter },
+    { columnName: null, propertyName: PropertyNames.zipCode },
+    { columnName: null, propertyName: PropertyNames.email1 },
+    { columnName: null, propertyName: PropertyNames.email2 },
+    { columnName: null, propertyName: PropertyNames.phone1 },
+    { columnName: null, propertyName: PropertyNames.phone2 },
+    { columnName: null, propertyName: PropertyNames.supportStatus },
+];
+
 export default ColumnMapping;
-export { PropertyNames };
+export { PropertyNames, EmptyMapping };
