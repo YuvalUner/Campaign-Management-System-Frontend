@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import TabCommonProps from "./tab-common-props";
-import {Alert, Box, Divider, List} from "@mui/material";
+import {Alert, Box, Divider, IconButton, List, Tooltip} from "@mui/material";
 import Events from "../../../../utils/helperMethods/events";
 import LedgerListItem from "./manageExistingLedgersTabComponents/LedgerListItem";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 function ManageExistingLedgersTab(props: TabCommonProps): JSX.Element {
 
@@ -24,7 +25,20 @@ function ManageExistingLedgersTab(props: TabCommonProps): JSX.Element {
     });
 
     return (
-        <Box>
+        <Box sx={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+        }}>
+            <Tooltip title={"Refresh"}>
+                <IconButton color={"primary"} onClick={() => Events.dispatch(Events.EventNames.RefreshCustomLedgers)}
+                    sx={{
+                        alignSelf: "flex-end",
+                    }}>
+                    <RefreshIcon/>
+                </IconButton>
+            </Tooltip>
             <List>
                 <Divider sx={{
                     border: "1px solid black",

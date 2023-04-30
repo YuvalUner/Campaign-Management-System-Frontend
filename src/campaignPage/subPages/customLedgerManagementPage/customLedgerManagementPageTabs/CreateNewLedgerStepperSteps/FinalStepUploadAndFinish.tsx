@@ -1,5 +1,4 @@
 import React, {useEffect} from "react";
-import Events from "../../../../../utils/helperMethods/events";
 import {Alert, Box, LinearProgress, Stack, Typography} from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";

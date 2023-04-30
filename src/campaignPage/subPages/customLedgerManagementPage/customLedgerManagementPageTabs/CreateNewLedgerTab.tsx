@@ -16,6 +16,8 @@ import FourthStepMapColumns from "./CreateNewLedgerStepperSteps/FourthStepMapCol
 import FifthStepConfirmAndUpload from "./CreateNewLedgerStepperSteps/fifthStepConfirm/FifthStepConfirm";
 import FinalStepUploadAndFinish from "./CreateNewLedgerStepperSteps/FinalStepUploadAndFinish";
 import Constants from "../../../../utils/constantsAndStaticObjects/constants";
+import AdditionalStepSelectBehaviorForImportIntoExisting
+    from "./CreateNewLedgerStepperSteps/AdditionalStepSelectBehaviorForImportIntoExisting";
 
 function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
 
@@ -31,7 +33,7 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
     const stepThreeShouldCheckForError = useRef(false);
     const stepFourShouldCheckForError = useRef(false);
     const [uploading, setUploading] = useState(false);
-    const shouldDeleteOnUnmatch = useRef(false);
+    const [shouldDeleteOnUnmatch, setShouldDeleteOnUnmatch] = useState(false);
     /**
      * Creates the labels for the steps in the stepper, based on the chosen action.
      */
@@ -41,7 +43,8 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
         case FirstStepChooseActionEnum.CreateAndImport:
             return ["Choose action", "Name ledger", "Select file", "Map columns", "Confirm", "Done"];
         case FirstStepChooseActionEnum.Existing:
-            return ["Choose action", "Select ledger", "Select file", "Map columns", "Confirm", "Done"];
+            return ["Choose action", "Select ledger", "Select file", "Map columns", "Determine behavior",
+                "Confirm", "Done"];
         case FirstStepChooseActionEnum.Create:
             return ["Choose action", "Name ledger", "Done"];
         }
@@ -68,7 +71,7 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                 url: config.ServerBaseUrl + config.ControllerUrls.CustomVotersLedger.Base
                     + config.ControllerUrls.CustomVotersLedger.Import
                     + props.campaignGuid + "/" + ledgerGuid
-                    + `?shouldDeleteOnUnmatch=${chosenAction === FirstStepChooseActionEnum.Existing}`,
+                    + `?shouldDeleteOnUnmatch=${shouldDeleteOnUnmatch}`,
                 data: data,
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -86,7 +89,6 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
     };
 
     const createLedger = () => {
-        console.log(ledger);
         setUploading(true);
         ServerRequestMaker.MakePostRequest(
             config.ControllerUrls.CustomVotersLedger.Base +
@@ -108,7 +110,6 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
     };
 
     const handleFinalStepLogic = () => {
-        console.log(chosenAction);
         if (chosenAction !== FirstStepChooseActionEnum.Existing) {
             createLedger();
             Events.dispatch(Events.EventNames.RefreshCustomLedgers);
@@ -157,8 +158,12 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                 <FourthStepMapColumns key={"fourthStep"} columnMappings={columnMappings}
                     setColumnMappings={setColumnMappings} file={file} shouldCheckForError={stepFourShouldCheckForError}
                     shouldDisplayError={shouldDisplayError} setShouldDisplayError={setShouldDisplayError}/>,
+                <AdditionalStepSelectBehaviorForImportIntoExisting key={"additionalStep"}
+                    shouldDeleteOnUnmatch={shouldDeleteOnUnmatch} setShouldDeleteOnUnmatch={setShouldDeleteOnUnmatch}/>,
                 <FifthStepConfirmAndUpload key={"fifthStep"} file={file}
-                    columnMappings={columnMappings} ledgerName={ledger.ledgerName as string}/>,
+                    columnMappings={columnMappings} ledgerName={ledger.ledgerName as string}
+                    shouldDeleteOnUnmatch={shouldDeleteOnUnmatch} selectedAction={chosenAction}
+                />,
                 <FinalStepUploadAndFinish key={"finalStep"} ledgerName={ledger.ledgerName as string}
                     handleLogic={handleFinalStepLogic} uploading={uploading} error={shouldDisplayError}
                 />
@@ -179,7 +184,6 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
     };
 
     const adjustActiveStep = (adjustBy: number) => {
-        console.log(ledger);
         // If the user is trying to go forward when the child component is saying to display a prompt first,
         // then stop the user from going forward and let the child component display the prompt.
         if (shouldRaisePrompt && adjustBy > 0) {
@@ -226,7 +230,7 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
         setShouldRaisePrompt(false);
         setShouldDisplayError(false);
         setFile(null);
-        //setColumnMappings([]);
+        setColumnMappings([]);
         setColumnMappings([...EmptyMapping]);
         setLedger({ledgerGuid: "", ledgerName: ""} as CustomVotersLedger);
     };

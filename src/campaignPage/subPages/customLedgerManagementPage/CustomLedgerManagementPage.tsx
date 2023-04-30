@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import SubPageWithPermissionBaseProps from "../../utils/sub-page-with-permission-base-props";
 import {useParams} from "react-router-dom";
 import ManageExistingLedgersTab from "./customLedgerManagementPageTabs/ManageExistingLedgersTab";
 import CreateNewLedgerTab from "./customLedgerManagementPageTabs/CreateNewLedgerTab";
@@ -11,7 +10,7 @@ import TabPanel from "../../utils/TabPanel";
 import Events from "../../../utils/helperMethods/events";
 import Constants from "../../../utils/constantsAndStaticObjects/constants";
 
-function CustomLedgerManagementPage(props: SubPageWithPermissionBaseProps): JSX.Element {
+function CustomLedgerManagementPage(): JSX.Element {
 
     const params = useParams();
     const campaignGuid = params.campaignGuid;

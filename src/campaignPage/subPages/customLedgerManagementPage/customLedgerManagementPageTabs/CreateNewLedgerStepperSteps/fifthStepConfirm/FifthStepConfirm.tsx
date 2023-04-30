@@ -3,11 +3,14 @@ import {Button, Stack, Table, TableBody, TableCell, TableRow, Typography} from "
 import {FileObject} from "mui-file-dropzone";
 import ColumnMapping from "../../../../../../models/column-mapping";
 import ShowColumnMappingsDialog from "./ShowColumnMappingsDialog";
+import {FirstStepChooseActionEnum} from "../FirstStepChooseAction";
 
 interface FifthStepConfirmAndUploadProps {
     file: File | null | FileObject;
     ledgerName: string;
     columnMappings: ColumnMapping[];
+    selectedAction?: FirstStepChooseActionEnum;
+    shouldDeleteOnUnmatch?: boolean;
 }
 
 function FifthStepConfirmAndUpload(props: FifthStepConfirmAndUploadProps): JSX.Element {
@@ -49,6 +52,12 @@ function FifthStepConfirmAndUpload(props: FifthStepConfirmAndUploadProps): JSX.E
                                 </Button>
                             </TableCell>
                         </TableRow>
+                        {props.selectedAction === FirstStepChooseActionEnum.Existing
+                            && <TableRow>
+                                <TableCell>Delete un-matched rows:</TableCell>
+                                <TableCell>{props.shouldDeleteOnUnmatch? "Yes" : "No"}</TableCell>
+                            </TableRow>
+                        }
                     </TableBody>
                 </Table>
             </Stack>

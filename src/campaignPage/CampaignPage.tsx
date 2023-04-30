@@ -195,7 +195,7 @@ function CampaignPage(): JSX.Element {
                 element={<VotersLedgerPage permission={permission}/>}/>;
         case PermissionTargets.CustomLedger:
             return <Route path={SubScreenRoutes.UploadCustomLedgerRoute} key={permission.permissionTarget}
-                element={<CustomLedgerManagementPage permission={permission}/>}/>;
+                element={<CustomLedgerManagementPage/>}/>;
         default:
             return <Route path={"Error"} key={permission.permissionTarget}
                 element={<NotFoundPage
