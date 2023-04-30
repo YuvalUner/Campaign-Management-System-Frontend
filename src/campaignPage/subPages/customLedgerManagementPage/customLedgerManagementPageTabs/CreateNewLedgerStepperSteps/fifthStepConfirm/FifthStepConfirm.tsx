@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Stack, Table, TableCell, TableRow, Typography} from "@mui/material";
+import {Button, Stack, Table, TableBody, TableCell, TableRow, Typography} from "@mui/material";
 import {FileObject} from "mui-file-dropzone";
 import ColumnMapping from "../../../../../../models/column-mapping";
 import ShowColumnMappingsDialog from "./ShowColumnMappingsDialog";
@@ -12,7 +12,8 @@ interface FifthStepConfirmAndUploadProps {
 
 function FifthStepConfirmAndUpload(props: FifthStepConfirmAndUploadProps): JSX.Element {
 
-    const [openDialog, setOpenDialog] = React.useState<boolean>(false);
+    const [openMappingPreviewDialog, setOpenMappingPreviewDialog] = React.useState<boolean>(false);
+
     const getFileName = (): string => {
         if (props.file === null) {
             return "";
@@ -28,28 +29,30 @@ function FifthStepConfirmAndUpload(props: FifthStepConfirmAndUploadProps): JSX.E
             <Stack direction={"column"} spacing={2}>
                 <Typography variant={"body1"}>Please confirm that the following information is correct:</Typography>
                 <Table>
-                    <TableRow>
-                        <TableCell>Ledger name:</TableCell>
-                        <TableCell>{props.ledgerName}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>File:</TableCell>
-                        <TableCell>{getFileName()}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>Column mappings:</TableCell>
-                        <TableCell>
-                            <Button variant={"text"} onClick={() => setOpenDialog(true)} sx={{
-                                textTransform: "none",
-                                paddingLeft: "0px",
-                            }}>
-                                Click here to view
-                            </Button>
-                        </TableCell>
-                    </TableRow>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>Ledger name:</TableCell>
+                            <TableCell>{props.ledgerName}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>File:</TableCell>
+                            <TableCell>{getFileName()}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Column mappings:</TableCell>
+                            <TableCell>
+                                <Button variant={"text"} onClick={() => setOpenMappingPreviewDialog(true)} sx={{
+                                    textTransform: "none",
+                                    paddingLeft: "0px",
+                                }}>
+                                    Click here to view
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
                 </Table>
             </Stack>
-            <ShowColumnMappingsDialog openDialog={openDialog} setOpenDialog={setOpenDialog}
+            <ShowColumnMappingsDialog openDialog={openMappingPreviewDialog} setOpenDialog={setOpenMappingPreviewDialog}
                 columnMappings={props.columnMappings}/>
         </>
     );

@@ -31,6 +31,8 @@ function SecondStepSelectNewName(props: SecondStepSelectNewNameProps): JSX.Eleme
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         props.setShouldDisplayError(false);
         const ledger = props.ledger;
+        console.log(event.target.value);
+        console.log(ledger);
         ledger.ledgerName = event.target.value;
         props.setLedger(ledger);
         if (props.customLedgers.some((lgr) => lgr.ledgerName?.toLowerCase()

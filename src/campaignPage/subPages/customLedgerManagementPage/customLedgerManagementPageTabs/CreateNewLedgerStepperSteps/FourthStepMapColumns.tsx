@@ -56,7 +56,10 @@ function FourthStepMapColumns(props: FourthStepMapColumnsProps): JSX.Element {
     }, []);
 
     return (
-        <Stack spacing={2} direction={"column"}>
+        <Stack spacing={2} direction={"column"} sx={{
+            width: "100%",
+            height: "100%",
+        }}>
             <Typography variant={"body1"}>
               In this page, you can map the columns of your file to our specifications.<br/>
               Please note that any column that is not mapped will be ignored.<br/>
@@ -67,6 +70,8 @@ function FourthStepMapColumns(props: FourthStepMapColumnsProps): JSX.Element {
                 allowResizing={true}
                 editSettings={editOptions}
                 actionComplete={onActionComplete}
+                height={350}
+                width={"100%"}
             >
                 <Inject services={[Edit]}/>
                 <ColumnsDirective>

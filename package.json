@@ -18,6 +18,7 @@
     "@syncfusion/ej2-react-layouts": "21.1.35",
     "@syncfusion/ej2-react-navigations": "21.1.35",
     "@syncfusion/ej2-react-schedule": "21.1.35",
+    "@syncfusion/ej2-react-spreadsheet": "^21.1.41",
     "@syncfusion/ej2-schedule": "21.1.35",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

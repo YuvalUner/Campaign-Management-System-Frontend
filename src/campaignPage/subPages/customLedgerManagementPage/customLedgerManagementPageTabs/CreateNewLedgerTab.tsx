@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import TabCommonProps from "./tab-common-props";
-import axios from "axios";
+import axios, {HttpStatusCode} from "axios";
 import config from "../../../../app-config.json";
 import ColumnMapping, {EmptyMapping, PropertyNames} from "../../../../models/column-mapping";
 import CustomVotersLedger from "../../../../models/custom-voters-ledger";
@@ -14,6 +14,8 @@ import ThirdStepSelectFile from "./CreateNewLedgerStepperSteps/thirdStepSelectFi
 import {FileObject} from "mui-file-dropzone";
 import FourthStepMapColumns from "./CreateNewLedgerStepperSteps/FourthStepMapColumns";
 import FifthStepConfirmAndUpload from "./CreateNewLedgerStepperSteps/fifthStepConfirm/FifthStepConfirm";
+import FinalStepUploadAndFinish from "./CreateNewLedgerStepperSteps/FinalStepUploadAndFinish";
+import Constants from "../../../../utils/constantsAndStaticObjects/constants";
 
 function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
 
@@ -28,6 +30,8 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
     const stepTwoShouldCheckForError = useRef(false);
     const stepThreeShouldCheckForError = useRef(false);
     const stepFourShouldCheckForError = useRef(false);
+    const [uploading, setUploading] = useState(false);
+    const shouldDeleteOnUnmatch = useRef(false);
     /**
      * Creates the labels for the steps in the stepper, based on the chosen action.
      */
@@ -40,6 +44,76 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
             return ["Choose action", "Select ledger", "Select file", "Map columns", "Confirm", "Done"];
         case FirstStepChooseActionEnum.Create:
             return ["Choose action", "Name ledger", "Done"];
+        }
+    };
+
+    const uploadFile = (ledgerGuid: string) => {
+        if (file !== null && file !== undefined) {
+            const data = new FormData();
+            if (file instanceof File){
+                data.append("file", file);
+            } else{
+                data.append("file", file.file);
+            }
+            columnMappings.forEach((mapping) => {
+                if (mapping.columnName !== null && mapping.columnName !== undefined) {
+                    data.append("propertyNames", mapping.propertyName);
+                    data.append("columnNames", mapping.columnName);
+                }
+            });
+            // Making the request directly via axios and not via ServerRequestMaker as usual, because for some reason
+            // passing the FormData object as a parameter doesn't work.
+            axios({
+                method: "post",
+                url: config.ServerBaseUrl + config.ControllerUrls.CustomVotersLedger.Base
+                    + config.ControllerUrls.CustomVotersLedger.Import
+                    + props.campaignGuid + "/" + ledgerGuid
+                    + `?shouldDeleteOnUnmatch=${chosenAction === FirstStepChooseActionEnum.Existing}`,
+                data: data,
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Accept": "application/json"
+                },
+                withCredentials: true
+            }).then((response) => {
+                if (response.status === HttpStatusCode.Ok){
+                    setShouldDisplayError(false);
+                }
+            }).catch(() => {
+                setShouldDisplayError(true);
+            });
+        }
+    };
+
+    const createLedger = () => {
+        console.log(ledger);
+        setUploading(true);
+        ServerRequestMaker.MakePostRequest(
+            config.ControllerUrls.CustomVotersLedger.Base +
+            config.ControllerUrls.CustomVotersLedger.Create + props.campaignGuid,
+            ledger
+        ).then((response) => {
+            if (response.status === HttpStatusCode.Ok) {
+                if (chosenAction !== FirstStepChooseActionEnum.Create) {
+                    uploadFile(response.data.ledgerGuid);
+                } else {
+                    setShouldDisplayError(false);
+                }
+            }
+        }).catch(() => {
+            setShouldDisplayError(true);
+        }).finally(() => {
+            setUploading(false);
+        });
+    };
+
+    const handleFinalStepLogic = () => {
+        console.log(chosenAction);
+        if (chosenAction !== FirstStepChooseActionEnum.Existing) {
+            createLedger();
+            Events.dispatch(Events.EventNames.RefreshCustomLedgers);
+        } else {
+            uploadFile(ledger.ledgerGuid as string);
         }
     };
 
@@ -64,7 +138,10 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                     setColumnMappings={setColumnMappings} file={file} shouldCheckForError={stepFourShouldCheckForError}
                     shouldDisplayError={shouldDisplayError} setShouldDisplayError={setShouldDisplayError}/>,
                 <FifthStepConfirmAndUpload key={"fifthStep"} file={file}
-                    columnMappings={columnMappings} ledgerName={ledger.ledgerName as string}/>
+                    columnMappings={columnMappings} ledgerName={ledger.ledgerName as string}/>,
+                <FinalStepUploadAndFinish key={"finalStep"} ledgerName={ledger.ledgerName as string}
+                    handleLogic={handleFinalStepLogic} uploading={uploading} error={shouldDisplayError}
+                />
             ];
         case FirstStepChooseActionEnum.Existing:
             return [
@@ -81,7 +158,10 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                     setColumnMappings={setColumnMappings} file={file} shouldCheckForError={stepFourShouldCheckForError}
                     shouldDisplayError={shouldDisplayError} setShouldDisplayError={setShouldDisplayError}/>,
                 <FifthStepConfirmAndUpload key={"fifthStep"} file={file}
-                    columnMappings={columnMappings} ledgerName={ledger.ledgerName as string}/>
+                    columnMappings={columnMappings} ledgerName={ledger.ledgerName as string}/>,
+                <FinalStepUploadAndFinish key={"finalStep"} ledgerName={ledger.ledgerName as string}
+                    handleLogic={handleFinalStepLogic} uploading={uploading} error={shouldDisplayError}
+                />
             ];
         case FirstStepChooseActionEnum.Create:
             return [
@@ -91,22 +171,15 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                     customLedgers={props.customLedgers} setLedger={setLedger} ledger={ledger}
                     shouldCheckForError={stepTwoShouldCheckForError} shouldDisplayError={shouldDisplayError}
                     setShouldDisplayError={setShouldDisplayError}/>,
+                <FinalStepUploadAndFinish key={"finalStep"} ledgerName={ledger.ledgerName as string}
+                    handleLogic={handleFinalStepLogic} uploading={uploading} error={shouldDisplayError}
+                />
             ];
         }
     };
 
-    const testMappings: ColumnMapping[] = [
-        {
-            columnName: "Id Number",
-            propertyName: PropertyNames.identifier
-        },
-        {
-            columnName: "First Name",
-            propertyName: PropertyNames.firstName
-        }
-    ];
-
     const adjustActiveStep = (adjustBy: number) => {
+        console.log(ledger);
         // If the user is trying to go forward when the child component is saying to display a prompt first,
         // then stop the user from going forward and let the child component display the prompt.
         if (shouldRaisePrompt && adjustBy > 0) {
@@ -147,6 +220,17 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
         }
     };
 
+    const backToStart = () => {
+        setActiveStep(0);
+        setChosenAction(FirstStepChooseActionEnum.CreateAndImport);
+        setShouldRaisePrompt(false);
+        setShouldDisplayError(false);
+        setFile(null);
+        //setColumnMappings([]);
+        setColumnMappings([...EmptyMapping]);
+        setLedger({ledgerGuid: "", ledgerName: ""} as CustomVotersLedger);
+    };
+
     const goForward = () => {
         adjustActiveStep(1);
     };
@@ -157,49 +241,6 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
             Events.unsubscribe(Events.EventNames.GoForward, goForward);
         };
     });
-
-    const createLedger = () => {
-        const ledger: CustomVotersLedger = {
-            ledgerName: "Test Ledger",
-        } as CustomVotersLedger;
-        ServerRequestMaker.MakePostRequest(
-            config.ControllerUrls.CustomVotersLedger.Base +
-            config.ControllerUrls.CustomVotersLedger.Create + props.campaignGuid,
-            ledger
-        );
-    };
-
-    const ledgerGuid = "75de4573-4d35-404e-899d-3ba78f163288";
-
-    const testSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files !== null) {
-            const file: File = event.target.files[0];
-            const data = new FormData();
-            data.append("file", file);
-            // const propertyNames: string[] = [];
-            // const columnNames: string[] = [];
-            testMappings.forEach((mapping) => {
-                if (mapping.columnName !== null && mapping.columnName !== undefined) {
-                    data.append("propertyNames", mapping.propertyName);
-                    data.append("columnNames", mapping.columnName);
-                }
-            });
-            // Making the request directly via axios and not via ServerRequestMaker as usual, because for some reason
-            // passing the FormData object as a parameter doesn't work.
-            axios({
-                method: "post",
-                url: config.ServerBaseUrl + config.ControllerUrls.CustomVotersLedger.Base
-                    + config.ControllerUrls.CustomVotersLedger.Import
-                    + props.campaignGuid + "/" + ledgerGuid,
-                data: data,
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    "Accept": "application/json"
-                },
-                withCredentials: true
-            });
-        }
-    };
 
     return (
         <Box sx={{
@@ -216,6 +257,8 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
             </Stepper>
             <Box sx={{
                 marginTop: "1rem",
+                width: "100%",
+                height: `calc(100% - ${Constants.topMenuHeight}px)`,
             }}>
                 {stepsDecider()[activeStep]}
             </Box>
@@ -223,9 +266,16 @@ function CreateNewLedgerTab(props: TabCommonProps): JSX.Element {
                 width: "100%",
                 marginTop: "1rem",
                 justifyContent: "space-between",
+                bottom: "-1rem"
             }}>
 
-                <Button variant={"contained"} onClick={() => adjustActiveStep(-1)}>Back</Button>
+                {activeStep < stepsLabelsDecider().length - 1
+                    && !uploading
+                    && <Button variant={"contained"} onClick={() => adjustActiveStep(-1)}>Back</Button>}
+                {activeStep === stepsLabelsDecider().length - 1
+                    && !uploading
+                    && <Button variant={"contained"}
+                        onClick={backToStart}>Back to start</Button>}
                 {activeStep < (stepsLabelsDecider().length - 2) &&
                     <Button variant={"contained"} onClick={() => adjustActiveStep(1)}>Next</Button>
                 }

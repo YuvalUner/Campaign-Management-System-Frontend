@@ -25,6 +25,8 @@ class Events{
         ShouldStopRaisingPrompt: "ShouldStopRaisingPrompt",
         RaisePrompt: "RaisePrompt",
         GoForward: "GoForward",
+        StartUpload: "StartUpload",
+        UploadFinished: "UploadFinished",
     };
 
     /**
