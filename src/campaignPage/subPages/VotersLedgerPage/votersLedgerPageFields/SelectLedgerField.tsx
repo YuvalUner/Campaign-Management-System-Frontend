@@ -4,6 +4,7 @@ import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import {SelectChangeEvent} from "@mui/material/Select";
 import VotersLedgerFilterRecord from "../../../../models/voters-ledger-filter-record";
 import CustomVotersLedgerContent from "../../../../models/custom-voters-ledger-content";
+import Constants from "../../../../utils/constantsAndStaticObjects/constants";
 
 interface SelectLedgerFieldProps {
     customLedgers: CustomVotersLedger[];
@@ -24,7 +25,7 @@ function SelectLedgerField(props: SelectLedgerFieldProps): JSX.Element {
 
     useEffect(() => {
         if (props.isCustomCampaign) {
-            props.setSelectedLedgerGuid("Official");
+            props.setSelectedLedgerGuid(Constants.OfficialLedgerGuid);
         } else if (props.customLedgers.length > 0) {
             props.setSelectedLedgerGuid(props.customLedgers[0].ledgerGuid ?? "");
         } else {
@@ -44,7 +45,7 @@ function SelectLedgerField(props: SelectLedgerFieldProps): JSX.Element {
                 // undefined. The ledgerGuid is a string, so it must be converted to unknown, then to undefined.
                 value={props.selectedLedgerGuid as unknown as undefined}
             >
-                {!props.isCustomCampaign && <MenuItem value={"Official"}>Official ledger</MenuItem>}
+                {!props.isCustomCampaign && <MenuItem value={Constants.OfficialLedgerGuid}>Official ledger</MenuItem>}
                 {props.isCustomCampaign && props.customLedgers.length === 0
                     && <MenuItem value={""}><em>No ledgers found</em></MenuItem>}
                 {props.customLedgers.map((ledger, index) => {

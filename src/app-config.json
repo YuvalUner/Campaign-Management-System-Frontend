@@ -59,7 +59,10 @@
       "GetForCampaign": "get-for-campaign/",
       "UpdateLedgerName": "update/",
       "DeleteLedger": "delete/",
-      "Filter": "filter/"
+      "Filter": "filter/",
+      "AddRow": "add-row/",
+      "UpdateRow": "update-row/",
+      "DeleteRow": "delete-row/"
     }
   }
 }

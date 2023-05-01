@@ -61,7 +61,7 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
         : [Page, Sort, Resize, Toolbar, ExcelExport, Filter];
 
     const toolbarOptions = props.permission.permissionType === PermissionTypes.Edit ?
-        ["Edit", "ExcelExport"]
+        ["Edit", "Add", "Delete", "ExcelExport"]
         : ["ExcelExport"];
 
     useEffect(() => {
@@ -77,7 +77,7 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
         ).then((res) => {
             const isCustomCampaign = res.data.isCustomCampaign;
             setCampaignIsCustomCampaign(isCustomCampaign);
-            setSelectedLedgerGuid(isCustomCampaign ? "" : "Official");
+            setSelectedLedgerGuid(isCustomCampaign ? "" : Constants.OfficialLedgerGuid);
         });
     }, []);
 
@@ -112,7 +112,7 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
         // Choosing which API endpoint to call, based on whether the ledger is custom or not
         // If the ledger is custom, we need to pass the ledger guid as well
         // The overall operation is the same for both.
-        if (selectedLedgerGuid === "Official") {
+        if (selectedLedgerGuid === Constants.OfficialLedgerGuid) {
             ServerRequestMaker.MakePostRequest(
                 config.ControllerUrls.VotersLedger.Base + config.ControllerUrls.VotersLedger.Filter + campaignGuid,
                 filterParams.current,
@@ -147,7 +147,7 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
     const editOptions: EditSettingsModel =
         {
             allowEditing: props.permission.permissionType === PermissionTypes.Edit,
-            allowAdding: false, allowDeleting: false,
+            allowAdding: campaignIsCustomCampaign, allowDeleting: campaignIsCustomCampaign,
         };
 
     const toolbarClick = (args: ClickEventArgs) => {
@@ -159,10 +159,13 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
         }
     };
 
-    const mapToBool = (value: string) => {
-        if (value === "Supporting") {
+    const mapToBool = (value: string | null) => {
+        if (!value) {
+            return null;
+        }
+        if (value.toLowerCase() === "supporting") {
             return true;
-        } else if (value === "Opposing") {
+        } else if (value.toLowerCase() === "opposing") {
             return false;
         }
         return null;
@@ -172,16 +175,26 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
         if (args.requestType === "save" && props.permission.permissionType === PermissionTypes.Edit) {
             if (args.primaryKeyValue && args.data && args.primaryKeyValue.length > 0) {
                 const idNum = args.primaryKeyValue[0];
-                const row = args.data as { supportStatusString: string };
-                const newSupportStatus = mapToBool(row.supportStatusString);
-                ServerRequestMaker.MakePutRequest(
-                    config.ControllerUrls.VotersLedger.Base + config.ControllerUrls.VotersLedger.UpdateSupportStatus
-                    + campaignGuid,
-                    {
-                        idNum: idNum,
-                        supportStatus: newSupportStatus,
-                    },
-                );
+                if (selectedLedgerGuid === Constants.OfficialLedgerGuid) {
+                    const row = args.data as { supportStatusString: string };
+                    const newSupportStatus = mapToBool(row.supportStatusString);
+                    ServerRequestMaker.MakePutRequest(
+                        config.ControllerUrls.VotersLedger.Base + config.ControllerUrls.VotersLedger.UpdateSupportStatus
+                        + campaignGuid,
+                        {
+                            idNum: idNum,
+                            supportStatus: newSupportStatus,
+                        },
+                    );
+                } else{
+                    const row = args.data as CustomVotersLedgerContent;
+                    row.supportStatus = mapToBool(row.supportStatusString);
+                    ServerRequestMaker.MakePutRequest(
+                        config.ControllerUrls.CustomVotersLedger.Base
+                        + config.ControllerUrls.CustomVotersLedger.UpdateRow + campaignGuid + "/" + selectedLedgerGuid,
+                        row,
+                    );
+                }
             }
         }
     };
@@ -225,7 +238,7 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
                 allowFiltering={true}
             >
                 <Inject services={injectedServices}/>
-                {selectedLedgerGuid === "Official"
+                {selectedLedgerGuid === Constants.OfficialLedgerGuid
                     && <ColumnsDirective>
                         <ColumnDirective field="idNum" isPrimaryKey={true}
                             headerText="Id Number" width="150" textAlign="Right"/>
@@ -259,11 +272,11 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
                             headerText={"Ballot Location"} width="150" textAlign="Right"/>
                         <ColumnDirective field="ballotAddress" allowEditing={false}
                             headerText={"Ballot Address"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="supportStatusString" editType="dropdownedit"
+                        <ColumnDirective field="supportStatusString" allowEditing={true}
                             headerText={"Support status"} width="150" textAlign="Right"/>
                     </ColumnsDirective>
                 }
-                {selectedLedgerGuid !== "Official" &&
+                {selectedLedgerGuid !== Constants.OfficialLedgerGuid &&
                     <ColumnsDirective>
                         <ColumnDirective field="identifier" isPrimaryKey={true}
                             headerText="Identifier" width="150" textAlign="Right"/>
@@ -291,7 +304,7 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
                             headerText={"House Letter"} width="150" textAlign="Right"/>
                         <ColumnDirective field="zipCode" allowEditing={true}
                             headerText={"Zip Code"} width="150" textAlign="Right"/>
-                        <ColumnDirective field="supportStatusString" editType="dropdownedit" allowEditing={true}
+                        <ColumnDirective field="supportStatusString"
                             headerText={"Support status"} width="150" textAlign="Right"/>
                     </ColumnsDirective>
                 }
