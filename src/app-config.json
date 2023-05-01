@@ -42,6 +42,9 @@
     },
     "Invites": {
       "Base": "api/Invites/",
+      "GetInvite": "GetInvite/",
+      "UpdateInvite": "UpdateInvite/",
+      "RevokeInvite": "RevokeInvite/",
       "AcceptInvite": "AcceptInvite/"
     },
     "Permissions": {
