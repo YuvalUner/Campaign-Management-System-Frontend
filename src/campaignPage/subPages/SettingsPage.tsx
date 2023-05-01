@@ -12,7 +12,6 @@ import {HttpStatusCode} from "axios";
 import ServerRequestMaker from "../../utils/server-request-maker";
 import config from "../../app-config.json";
 import Events from "../../utils/events";
-import {isAxiosError} from "axios";
 
 interface SettingsPageProps {
     campaign: Campaign | null;
@@ -24,13 +23,16 @@ function SettingsPage(props: SettingsPageProps): JSX.Element {
     const [inviteLink, setInviteLink] = useState<string | null>(null);
     const campaignRef = useRef<Campaign>({...(props.campaign)});
 
+    const createLinkFromInviteGuid = (inviteGuid:string) => {
+        return `${window.location.origin}/accept-invite/${inviteGuid}`;
+    };
+
     const getInviteLink = async () => {
         const res = await ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.Invites.Base + config.ControllerUrls.Invites.GetInvite + props.campaign?.campaignGuid,
         );
         if (res.status === HttpStatusCode.Ok) {
-            console.dir(res.data.inviteGuid);
-            setInviteLink(res.data.inviteGuid);
+            setInviteLink(createLinkFromInviteGuid(res.data.inviteGuid));
         }
     };
 
@@ -110,21 +112,21 @@ function SettingsPage(props: SettingsPageProps): JSX.Element {
                     <Grid2 xs={12} md={6}>
                         <Stack direction={"column"} spacing={6}>
                             <CampaignNameField campaign={campaignRef} defaultValue={props.campaign?.campaignName}
-                                               InputProps={{
-                                                   readOnly: true,
-                                               }}/>
+                                InputProps={{
+                                    readOnly: true,
+                                }}/>
                             <CampaignDescriptionField campaign={campaignRef}
-                                                      defaultValue={props.campaign?.campaignDescription}/>
+                                defaultValue={props.campaign?.campaignDescription}/>
                         </Stack>
                     </Grid2>
                     <Grid2 xs={12} md={6}>
                         <CampaignLogoUploadField campaign={campaignRef}
-                                                 uploadedFile={uploadedFile}
-                                                 setUploadedFile={setUploadedFile}
-                                                 dimensions={{
-                                                     width: "500px",
-                                                     height: "250px",
-                                                 }}
+                            uploadedFile={uploadedFile}
+                            setUploadedFile={setUploadedFile}
+                            dimensions={{
+                                width: "500px",
+                                height: "250px",
+                            }}
                         />
                     </Grid2>
                 </Grid2>
@@ -143,7 +145,7 @@ function SettingsPage(props: SettingsPageProps): JSX.Element {
                     </Grid2>
                     <Grid2 xs={12} md>
                         <Button variant={"contained"}
-                                onClick={onResetClick}>{inviteLink === null ? "Create Link" : "Reset Link"}</Button>
+                            onClick={onResetClick}>{inviteLink === null ? "Create Link" : "Reset Link"}</Button>
                     </Grid2>
                     <Grid2 xs={12} md>
                         <Button variant={"contained"} onClick={onRevokeClick} disabled={inviteLink === null}>Remove
