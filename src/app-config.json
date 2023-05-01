@@ -38,7 +38,8 @@
       "GetInfoByInviteGuid": "info-by-invite-guid/",
       "Enter": "enter/",
       "GetBasicInfo": "get-basic-info/",
-      "GetCampaignAdmins": "get-campaign-admins/"
+      "GetCampaignAdmins": "get-campaign-admins/",
+      "UpdateCampaign": "update/"
     },
     "Invites": {
       "Base": "api/Invites/",

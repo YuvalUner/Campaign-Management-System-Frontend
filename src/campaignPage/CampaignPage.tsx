@@ -27,6 +27,7 @@ import PermissionToTabMapper from "./utils/permission-to-tab-mapper";
 import SubScreenRoutes from "./utils/sub-screen-routes";
 import VotersLedgerPage from "./subPages/VotersLedgerPage";
 import NotFoundPage from "../notFoundPage/NotFoundPage";
+import SettingsPage from "./subPages/SettingsPage";
 
 /**
  * If the user has both edit and view permissions, remove the view permissions - as it is implicit that the user has
@@ -116,10 +117,10 @@ function CampaignPage(): JSX.Element {
     /**
      * Gets the campaign admins from the server.
      */
-    const getCampaignAdmins = ():void => {
+    const getCampaignAdmins = (): void => {
         ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.Campaigns.Base
-            + config.ControllerUrls.Campaigns.GetCampaignAdmins + campaignGuid
+            + config.ControllerUrls.Campaigns.GetCampaignAdmins + campaignGuid,
         ).then((response) => {
             if (response.status === HttpStatusCode.Ok) {
                 setCampaignAdmins(response.data);
@@ -135,7 +136,7 @@ function CampaignPage(): JSX.Element {
     const getPermissions = (): void => {
         ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.Permissions.Base
-            + config.ControllerUrls.Permissions.GetSelfPermissions + campaignGuid
+            + config.ControllerUrls.Permissions.GetSelfPermissions + campaignGuid,
         ).then((response) => {
             if (response.status === HttpStatusCode.Ok) {
                 const fullPermissionsList = response.data;
@@ -187,12 +188,15 @@ function CampaignPage(): JSX.Element {
         case PermissionTargets.VotersLedger:
             return <Route path={SubScreenRoutes.VotersLedgerRoute} key={permission.permissionTarget}
                 element={<VotersLedgerPage permission={permission}/>}/>;
+        case PermissionTargets.CampaignSettings:
+            return <Route path={SubScreenRoutes.SettingsComponent} key={permission.permissionTarget}
+                element={<SettingsPage campaign={campaign} setCampaign={setCampaign}/>}/>;
         default:
             return <Route path={"Error"} key={permission.permissionTarget}
                 element={<NotFoundPage
                     linkTo={SubScreenRoutes.CampaignBaseComponent + campaignGuid}
                     errorMessage={"The page you are looking for does not exist or" +
-                        " you do not have permission to view it"}
+                                  " you do not have permission to view it"}
                     buttonText={"Back to campaign page"}
                 />}/>;
         }

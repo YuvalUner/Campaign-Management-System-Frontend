@@ -2,6 +2,7 @@ import React from "react";
 import Permission, {PermissionTargets} from "../../models/permission";
 import MenuListItem from "./menu-list-item";
 import BallotIcon from "@mui/icons-material/Ballot";
+import SettingsIcon from "@mui/icons-material/SettingsApplications";
 import SubPageNames from "./sub-page-names";
 import ErrorIcon from "@mui/icons-material/Error";
 import SubScreenRoutes from "./sub-screen-routes";
@@ -18,6 +19,12 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             name: SubPageNames.VotersLedger,
             icon: <BallotIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.VotersLedgerComponent,
+        };
+        case PermissionTargets.CampaignSettings:
+        return {
+            name: SubPageNames.Settings,
+            icon: <SettingsIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.SettingsComponent,
         };
     default:
         return {

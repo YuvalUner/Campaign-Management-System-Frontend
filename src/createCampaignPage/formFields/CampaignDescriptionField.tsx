@@ -5,6 +5,7 @@ import fieldStyles from "./fields.module.css";
 
 interface CampaignDescriptionFieldProps {
     campaign: React.MutableRefObject<Campaign>;
+    defaultValue?: string;
 }
 
 function CampaignDescriptionField(props: CampaignDescriptionFieldProps): JSX.Element {
@@ -19,6 +20,7 @@ function CampaignDescriptionField(props: CampaignDescriptionFieldProps): JSX.Ele
                 label={"Campaign Description"}
                 variant={"outlined"}
                 onChange={handleChange}
+                defaultValue={props.defaultValue}
             />
         </FormControl>
     );

@@ -56,7 +56,7 @@ function CreateCampaignPage(): JSX.Element {
             // authStatus may not be updated by the time this code is executed.
             if (res.data.isVerified === true) {
                 ServerRequestMaker.MakeGetRequest(
-                    config.ControllerUrls.Cities.Base + config.ControllerUrls.Cities.GetAllCities
+                    config.ControllerUrls.Cities.Base + config.ControllerUrls.Cities.GetAllCities,
                 ).then((cities) => {
                     const citiesList = cities.data;
                     citiesList.sort((a: City, b: City) => {
@@ -77,12 +77,12 @@ function CreateCampaignPage(): JSX.Element {
      * Uploads the campaign logo to imgbb.com and sets the campaign logo url to the url returned by the API.
      */
     const uploadToImgBb = async (): Promise<void> => {
-        if (uploadedFile){
+        if (uploadedFile) {
             const response = await ImageBbApiRequestMaker.uploadImage(uploadedFile as File);
             if (response.status === HttpStatusCode.Ok) {
                 campaign.current.campaignLogoUrl = response.data.data.url;
             }
-        } else{
+        } else {
             campaign.current.campaignLogoUrl = null;
         }
     };
@@ -96,22 +96,22 @@ function CreateCampaignPage(): JSX.Element {
         event.preventDefault();
         let isAllValid = true;
         // Check if all fields are valid.
-        if (!campaign.current.campaignName || campaign.current.campaignName.length < 1){
+        if (!campaign.current.campaignName || campaign.current.campaignName.length < 1) {
             isAllValid = false;
             Events.dispatch(Events.EventNames.CampaignNameInvalid);
         }
-        if (campaign.current.isMunicipal && (!campaign.current.cityName || campaign.current.cityName.length < 1)){
+        if (campaign.current.isMunicipal && (!campaign.current.cityName || campaign.current.cityName.length < 1)) {
             isAllValid = false;
             Events.dispatch(Events.EventNames.CampaignCityInvalid);
         }
         // If all fields are valid, upload the campaign logo to imgbb.com and send the request to the server.
-        if (isAllValid){
+        if (isAllValid) {
             await uploadToImgBb();
             ServerRequestMaker.MakePostRequest(
                 config.ControllerUrls.Campaigns.Base + config.ControllerUrls.Campaigns.CreateCampaign,
-                campaign.current
+                campaign.current,
             ).then((res) => {
-                if (res.status === HttpStatusCode.Ok){
+                if (res.status === HttpStatusCode.Ok) {
                     Events.dispatch(Events.EventNames.RefreshCampaignsList);
                     nav(ScreenRoutes.CampaignPage + res.data.newCampaignGuid);
                 }
@@ -119,7 +119,7 @@ function CreateCampaignPage(): JSX.Element {
                 // The only fail condition covered by the server but not the client, is if the city name is not
                 // one of the cities in the database.
                 // All others are impossible to reach, as the client checks for them before sending the request.
-                if (res.status === HttpStatusCode.BadRequest){
+                if (res.status === HttpStatusCode.BadRequest) {
                     Events.dispatch(Events.EventNames.CampaignCityInvalid);
                 }
             });
@@ -132,7 +132,7 @@ function CreateCampaignPage(): JSX.Element {
      */
     const renderPage = (): JSX.Element => {
         // Handling for the case where the user's verification status is either unknown or false - render a message.
-        if (!authStatus){
+        if (!authStatus) {
             if (!serverError) {
                 return (
                     <Typography variant={"h5"}>
@@ -142,7 +142,7 @@ function CreateCampaignPage(): JSX.Element {
             }
             return (
                 <Typography variant={"h5"}>
-                        Server error. Please try again later.
+                    Server error. Please try again later.
                 </Typography>
             );
         }

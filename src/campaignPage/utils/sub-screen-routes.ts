@@ -5,6 +5,7 @@ const SubScreenRoutes = {
     CampaignBaseComponent: "/campaign/",
     SchedulerComponent: "/scheduler",
     VotersLedgerComponent: "/voters-ledger",
+    SettingsComponent: "/settings",
 };
 
 export default SubScreenRoutes;
