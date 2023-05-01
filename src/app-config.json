@@ -36,7 +36,8 @@
       "GetInfoByInviteGuid": "info-by-invite-guid/",
       "Enter": "enter/",
       "GetBasicInfo": "get-basic-info/",
-      "GetCampaignAdmins": "get-campaign-admins/"
+      "GetCampaignAdmins": "get-campaign-admins/",
+      "IsCampaignCustomCampaign": "get-is-custom-campaign/"
     },
     "Invites": {
       "Base": "api/Invites/",
@@ -57,7 +58,8 @@
       "Create": "create/",
       "GetForCampaign": "get-for-campaign/",
       "UpdateLedgerName": "update/",
-      "DeleteLedger": "delete/"
+      "DeleteLedger": "delete/",
+      "Filter": "filter/"
     }
   }
 }

@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import SubPageWithPermissionBaseProps from "../../utils/sub-page-with-permission-base-props";
 import VotersLedgerFilter from "../../../models/voters-ledger-filter";
 import {Button, CircularProgress, Stack, Typography} from "@mui/material";
@@ -28,6 +28,9 @@ import {useParams} from "react-router-dom";
 import {Inject} from "@syncfusion/ej2-react-schedule";
 import {ClickEventArgs} from "@syncfusion/ej2-react-navigations";
 import {PermissionTypes} from "../../../models/permission";
+import CustomVotersLedger from "../../../models/custom-voters-ledger";
+import CustomVotersLedgerContent from "../../../models/custom-voters-ledger-content";
+import SelectLedgerField from "./votersLedgerPageFields/SelectLedgerField";
 
 function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
 
@@ -36,10 +39,13 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
     const params = useParams();
     const campaignGuid = params.campaignGuid;
     const filterParams = useRef<VotersLedgerFilter>({} as VotersLedgerFilter);
-    const [searchResults, setSearchResults] = useState<VotersLedgerFilterRecord[]>([]);
+    const [searchResults, setSearchResults] = useState<VotersLedgerFilterRecord[] | CustomVotersLedgerContent[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [firstSearchDone, setFirstSearchDone] = useState<boolean>(false);
     const [errorLoadingData, setErrorLoadingData] = useState<boolean>(false);
+    const [customLedgers, setCustomLedgers] = useState<CustomVotersLedger[]>([]);
+    const [selectedLedgerGuid, setSelectedLedgerGuid] = useState<string>("");
+    const [campaignIsCustomCampaign, setCampaignIsCustomCampaign] = useState<boolean>(false);
 
     const fields = [
         <IdNumberField key={FieldKeys.IdField} filterParams={filterParams}/>,
@@ -57,6 +63,23 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
     const toolbarOptions = props.permission.permissionType === PermissionTypes.Edit ?
         ["Edit", "ExcelExport"]
         : ["ExcelExport"];
+
+    useEffect(() => {
+        ServerRequestMaker.MakeGetRequest(
+            config.ControllerUrls.CustomVotersLedger.Base + config.ControllerUrls.CustomVotersLedger.GetForCampaign
+            + campaignGuid,
+        ).then((res) => {
+            setCustomLedgers(res.data);
+        });
+        ServerRequestMaker.MakeGetRequest(
+            config.ControllerUrls.Campaigns.Base + config.ControllerUrls.Campaigns.IsCampaignCustomCampaign
+            + campaignGuid,
+        ).then((res) => {
+            const isCustomCampaign = res.data.isCustomCampaign;
+            setCampaignIsCustomCampaign(isCustomCampaign);
+            setSelectedLedgerGuid(isCustomCampaign ? "" : "Official");
+        });
+    }, []);
 
     const renderFields = () => {
         return (
@@ -86,19 +109,39 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
         setLoading(true);
         setFirstSearchDone(true);
         setErrorLoadingData(false);
-        ServerRequestMaker.MakePostRequest(
-            config.ControllerUrls.VotersLedger.Base + config.ControllerUrls.VotersLedger.Filter + campaignGuid,
-            filterParams.current,
-        ).then((res) => {
-            res.data.forEach((record: VotersLedgerFilterRecord) => {
-                record.supportStatusString = mapSupportStatusToString(record.supportStatus);
+        // Choosing which API endpoint to call, based on whether the ledger is custom or not
+        // If the ledger is custom, we need to pass the ledger guid as well
+        // The overall operation is the same for both.
+        if (selectedLedgerGuid === "Official") {
+            ServerRequestMaker.MakePostRequest(
+                config.ControllerUrls.VotersLedger.Base + config.ControllerUrls.VotersLedger.Filter + campaignGuid,
+                filterParams.current,
+            ).then((res) => {
+                res.data.forEach((record: VotersLedgerFilterRecord) => {
+                    record.supportStatusString = mapSupportStatusToString(record.supportStatus);
+                });
+                setSearchResults(res.data);
+                setLoading(false);
+            }).catch(() => {
+                setLoading(false);
+                setErrorLoadingData(true);
             });
-            setSearchResults(res.data);
-            setLoading(false);
-        }).catch(() => {
-            setLoading(false);
-            setErrorLoadingData(true);
-        });
+        } else {
+            ServerRequestMaker.MakePostRequest(
+                config.ControllerUrls.CustomVotersLedger.Base + config.ControllerUrls.CustomVotersLedger.Filter
+                + campaignGuid + "/" + selectedLedgerGuid,
+                filterParams.current,
+            ).then((res) => {
+                res.data.forEach((record: VotersLedgerFilterRecord) => {
+                    record.supportStatusString = mapSupportStatusToString(record.supportStatus);
+                });
+                setSearchResults(res.data);
+                setLoading(false);
+            }).catch(() => {
+                setLoading(false);
+                setErrorLoadingData(true);
+            });
+        }
     };
 
     const editOptions: EditSettingsModel =
@@ -154,7 +197,13 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
                 borderRadius: "5px",
             }} spacing={2} onSubmit={handleSearch}>
                 {renderFields()}
-                <Grid2 xs={12} display={"flex"} justifyContent={"end"}>
+                <Grid2 xs={12} md={4}>
+                    <SelectLedgerField customLedgers={customLedgers} isCustomCampaign={campaignIsCustomCampaign}
+                        selectedLedgerGuid={selectedLedgerGuid} setSelectedLedgerGuid={setSelectedLedgerGuid}
+                        setSearchResults={setSearchResults}
+                    />
+                </Grid2>
+                <Grid2 xs={8} display={"flex"} justifyContent={"end"}>
                     <Button variant={"contained"}
                         type={"submit"} endIcon={<SearchIcon/>} disabled={loading}>
                         Search
@@ -176,42 +225,76 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
                 allowFiltering={true}
             >
                 <Inject services={injectedServices}/>
-                <ColumnsDirective>
-                    <ColumnDirective field="idNum" isPrimaryKey={true}
-                        headerText="Id Number" width="150" textAlign="Right"/>
-                    <ColumnDirective field="firstName" allowEditing={false}
-                        headerText={"First Name"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="lastName" allowEditing={false}
-                        headerText={"Last Name"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="email1" allowEditing={false}
-                        headerText={"Email 1"} width="250" textAlign="Right"/>
-                    <ColumnDirective field="email2" allowEditing={false}
-                        headerText={"Email 2"} width="250" textAlign="Right"/>
-                    <ColumnDirective field="phone1" allowEditing={false}
-                        headerText={"Phone 1"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="phone2" allowEditing={false}
-                        headerText={"Phone 2"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="residenceName" allowEditing={false}
-                        headerText={"City"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="streetName" allowEditing={false}
-                        headerText={"Street"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="houseNumber" allowEditing={false}
-                        headerText={"House Number"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="appartment" allowEditing={false}
-                        headerText={"Apartment"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="houseLetter" allowEditing={false}
-                        headerText={"House Letter"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="zipCode" allowEditing={false}
-                        headerText={"Zip Code"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="innerCityBallotId" allowEditing={false}
-                        headerText={"Ballot Number"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="ballotLocation" allowEditing={false}
-                        headerText={"Ballot Location"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="ballotAddress" allowEditing={false}
-                        headerText={"Ballot Address"} width="150" textAlign="Right"/>
-                    <ColumnDirective field="supportStatusString" editType="dropdownedit"
-                        headerText={"Support status"} width="150" textAlign="Right"/>
-                </ColumnsDirective>
+                {selectedLedgerGuid === "Official"
+                    && <ColumnsDirective>
+                        <ColumnDirective field="idNum" isPrimaryKey={true}
+                            headerText="Id Number" width="150" textAlign="Right"/>
+                        <ColumnDirective field="firstName" allowEditing={false}
+                            headerText={"First Name"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="lastName" allowEditing={false}
+                            headerText={"Last Name"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="email1" allowEditing={false}
+                            headerText={"Email 1"} width="250" textAlign="Right"/>
+                        <ColumnDirective field="email2" allowEditing={false}
+                            headerText={"Email 2"} width="250" textAlign="Right"/>
+                        <ColumnDirective field="phone1" allowEditing={false}
+                            headerText={"Phone 1"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="phone2" allowEditing={false}
+                            headerText={"Phone 2"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="residenceName" allowEditing={false}
+                            headerText={"City"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="streetName" allowEditing={false}
+                            headerText={"Street"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="houseNumber" allowEditing={false}
+                            headerText={"House Number"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="appartment" allowEditing={false}
+                            headerText={"Apartment"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="houseLetter" allowEditing={false}
+                            headerText={"House Letter"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="zipCode" allowEditing={false}
+                            headerText={"Zip Code"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="innerCityBallotId" allowEditing={false}
+                            headerText={"Ballot Number"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="ballotLocation" allowEditing={false}
+                            headerText={"Ballot Location"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="ballotAddress" allowEditing={false}
+                            headerText={"Ballot Address"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="supportStatusString" editType="dropdownedit"
+                            headerText={"Support status"} width="150" textAlign="Right"/>
+                    </ColumnsDirective>
+                }
+                {selectedLedgerGuid !== "Official" &&
+                    <ColumnsDirective>
+                        <ColumnDirective field="identifier" isPrimaryKey={true}
+                            headerText="Identifier" width="150" textAlign="Right"/>
+                        <ColumnDirective field="firstName" allowEditing={true}
+                            headerText={"First Name"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="lastName" allowEditing={true}
+                            headerText={"Last Name"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="email1" allowEditing={true}
+                            headerText={"Email 1"} width="250" textAlign="Right"/>
+                        <ColumnDirective field="email2" allowEditing={true}
+                            headerText={"Email 2"} width="250" textAlign="Right"/>
+                        <ColumnDirective field="phone1" allowEditing={true}
+                            headerText={"Phone 1"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="phone2" allowEditing={true}
+                            headerText={"Phone 2"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="cityName" allowEditing={true}
+                            headerText={"City"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="streetName" allowEditing={true}
+                            headerText={"Street"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="houseNumber" allowEditing={true}
+                            headerText={"House Number"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="appartment" allowEditing={true}
+                            headerText={"Apartment"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="houseLetter" allowEditing={true}
+                            headerText={"House Letter"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="zipCode" allowEditing={true}
+                            headerText={"Zip Code"} width="150" textAlign="Right"/>
+                        <ColumnDirective field="supportStatusString" editType="dropdownedit" allowEditing={true}
+                            headerText={"Support status"} width="150" textAlign="Right"/>
+                    </ColumnsDirective>
+                }
             </GridComponent>
             {loading && firstSearchDone && <Stack sx={{
                 display: "flex",
