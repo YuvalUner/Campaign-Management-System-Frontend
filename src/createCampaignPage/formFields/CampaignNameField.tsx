@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import Campaign from "../../models/campaign";
 import {Alert, FormControl, TextField} from "@mui/material";
 import fieldStyles from "./fields.module.css";
-import Events from "../../utils/events";
+import Events from "../../utils/helperMethods/events";
 
 interface CampaignNameFieldProps {
     campaign: React.MutableRefObject<Campaign>;

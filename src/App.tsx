@@ -6,7 +6,7 @@ import UserWithCampaigns from "./models/user-with-campaigns";
 import SideMenu from "./sideMenu/SideMenu";
 import {Box, CircularProgress} from "@mui/material";
 import DrawerPageFlow from "./utils/DrawerPageFlow";
-import ServerRequestMaker from "./utils/server-request-maker";
+import ServerRequestMaker from "./utils/helperMethods/server-request-maker";
 import config from "./app-config.json";
 import {HttpStatusCode} from "axios";
 import "./App.css";

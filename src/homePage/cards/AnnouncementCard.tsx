@@ -1,7 +1,7 @@
 import React from "react";
 import {Avatar, Box, Card, CardActions, CardHeader, Collapse, ListItem, Typography} from "@mui/material";
 import Constants from "../../utils/constantsAndStaticObjects/constants";
-import {toDdMmYyyyHhMm} from "../../utils/date-converter";
+import {toDdMmYyyyHhMm} from "../../utils/helperMethods/date-converter";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandMoreButton from "./ExpandMoreButton";

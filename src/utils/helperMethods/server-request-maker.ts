@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
-import config from "../app-config.json";
+import config from "../../app-config.json";
 
 /***
  * ServerRequestMaker is a class that contains all the methods to make requests to the server.
@@ -24,6 +24,7 @@ class ServerRequestMaker {
         return await this.instance.post(config.ServerBaseUrl + url, JSON.stringify(body), {
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json",
                 additionalHeaders
             }
         });
