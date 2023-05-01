@@ -123,6 +123,7 @@ function HomePage(props: HomePageProps): JSX.Element {
         retrieveHomePage();
     }, []);
 
+
     const emptyAndRetrieveHomePage = async (): Promise<void> => {
         props.setHomePageControl({
             announcementsAndEvents: null,
