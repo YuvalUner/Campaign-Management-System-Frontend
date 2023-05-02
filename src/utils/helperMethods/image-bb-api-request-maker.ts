@@ -1,4 +1,4 @@
-import config from "../app-config.json";
+import config from "../../app-config.json";
 import axios, {AxiosResponse} from "axios";
 
 /**

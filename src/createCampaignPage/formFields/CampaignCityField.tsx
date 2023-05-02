@@ -5,7 +5,7 @@ import {Alert, FormControl, InputLabel, Select} from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import ComponentIds from "../../utils/constantsAndStaticObjects/component-ids";
 import fieldStyles from "./fields.module.css";
-import Events from "../../utils/events";
+import Events from "../../utils/helperMethods/events";
 
 interface CampaignCityFieldProps {
     campaign: React.MutableRefObject<Campaign>;

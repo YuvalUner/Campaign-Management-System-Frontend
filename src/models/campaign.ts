@@ -10,6 +10,7 @@ interface Campaign {
     cityName?: string;
     campaignLogoUrl?: string | null;
     isMunicipal?: boolean;
+    isCustomCampaign?: boolean;
 }
 
 export default Campaign;

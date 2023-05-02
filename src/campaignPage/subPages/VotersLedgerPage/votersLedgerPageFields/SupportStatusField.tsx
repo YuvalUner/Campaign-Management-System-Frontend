@@ -42,7 +42,9 @@ function SupportStatusField(props: VotersLedgerFieldProps): JSX.Element {
                 Support Status
                 <Tooltip sx={{
                     marginLeft: "0.5rem",
-                }} title={"Uncheck the boxes to remove the search criteria"}>
+                }} title={"Uncheck the boxes to remove the search criteria. Also, please note that when editing these" +
+                    "fields, the values allowed are only Supporting, Opposing, or Unknown (anything else will become " +
+                    "Unknown as well)"}>
                     <ErrorOutlineIcon color={"primary"}/>
                 </Tooltip>
             </Typography>

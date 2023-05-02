@@ -8,6 +8,7 @@ const constants = {
     defaultLimit: 20,
     defaultOffset: 0,
     rightDrawerWidth: 240,
+    OfficialLedgerGuid: "Official",
 };
 
 export default constants;

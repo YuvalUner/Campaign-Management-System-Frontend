@@ -8,12 +8,12 @@ import {
     ListItemText,
     Typography,
 } from "@mui/material";
-import Events from "../utils/events";
+import Events from "../utils/helperMethods/events";
 import Constants from "../utils/constantsAndStaticObjects/constants";
 import {useNavigate} from "react-router-dom";
 import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
 import CampaignWithRole from "../models/campaign-with-role";
-import ServerRequestMaker from "../utils/server-request-maker";
+import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
 import UserWithCampaigns from "../models/user-with-campaigns";
 import config from "../app-config.json";
 

@@ -15,6 +15,7 @@ const PermissionTargets = {
     Events: "Events",
     Publishing: "Publishing",
     Financial: "Financial",
+    CustomLedger: "Custom Voters Ledger",
 };
 
 const PermissionTypes = {

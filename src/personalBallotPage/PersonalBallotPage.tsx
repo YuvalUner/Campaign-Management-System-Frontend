@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {Box, CircularProgress, Typography} from "@mui/material";
 import Ballot from "../models/ballot";
-import ServerRequestMaker from "../utils/server-request-maker";
+import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
 import config from "../app-config.json";
 import {HttpStatusCode} from "axios";
 import {Link} from "react-router-dom";

@@ -19,6 +19,14 @@ class Events{
         CampaignCityInvalid: "CampaignCityInvalid",
         RefreshCampaignsList: "RefreshCampaignsList",
         ShouldHideEffects: "ShouldHideEffects",
+        RefreshCustomLedgers: "RefreshCustomLedgers",
+        BubbleErrorUpwards: "BubbleErrorUpwards",
+        ShouldRaisePrompt: "ShouldRaisePrompt",
+        ShouldStopRaisingPrompt: "ShouldStopRaisingPrompt",
+        RaisePrompt: "RaisePrompt",
+        GoForward: "GoForward",
+        StartUpload: "StartUpload",
+        UploadFinished: "UploadFinished",
     };
 
     /**

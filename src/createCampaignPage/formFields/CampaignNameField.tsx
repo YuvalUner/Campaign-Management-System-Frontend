@@ -4,6 +4,7 @@ import {Alert, FormControl, TextField} from "@mui/material";
 import fieldStyles from "./fields.module.css";
 import Events from "../../utils/events";
 import {InputProps as StandardInputProps} from "@mui/material/Input/Input";
+import Events from "../../utils/helperMethods/events";
 
 interface CampaignNameFieldProps {
     campaign: React.MutableRefObject<Campaign>;

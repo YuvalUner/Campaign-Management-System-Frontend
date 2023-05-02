@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import Ballot from "../models/ballot";
-import AddressFormatter from "../utils/address-formatter";
+import AddressFormatter from "../utils/helperMethods/address-formatter";
 import ComponentIds from "../utils/constantsAndStaticObjects/component-ids";
 
 interface MapProps {

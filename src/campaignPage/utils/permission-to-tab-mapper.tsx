@@ -6,6 +6,7 @@ import SettingsIcon from "@mui/icons-material/SettingsApplications";
 import SubPageNames from "./sub-page-names";
 import ErrorIcon from "@mui/icons-material/Error";
 import SubScreenRoutes from "./sub-screen-routes";
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 
 /**
  * A function for mapping between permissions and the tabs they grant access to.
@@ -20,11 +21,17 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             icon: <BallotIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.VotersLedgerComponent,
         };
-        case PermissionTargets.CampaignSettings:
+    case PermissionTargets.CampaignSettings:
         return {
             name: SubPageNames.Settings,
             icon: <SettingsIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.SettingsComponent,
+        };
+    case PermissionTargets.CustomLedger:
+        return {
+            name: SubPageNames.UploadCustomLedger,
+            icon: <BookmarkAddIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.UploadCustomLedgerComponent,
         };
     default:
         return {

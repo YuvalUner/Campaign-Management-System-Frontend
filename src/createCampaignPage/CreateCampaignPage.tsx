@@ -1,20 +1,20 @@
 import React, {useEffect} from "react";
 import {Box, Button, CircularProgress, Stack, Typography} from "@mui/material";
-import ServerRequestMaker from "../utils/server-request-maker";
+import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
 import config from "../app-config.json";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Constants from "../utils/constantsAndStaticObjects/constants";
 import Campaign from "../models/campaign";
 import City from "../models/city";
 import CampaignNameField from "./formFields/CampaignNameField";
 import CampaignDescriptionField from "./formFields/CampaignDescriptionField";
-import IsMunicipalChoiceField from "./formFields/IsMunicipalChoiceField";
+import CampaignTypeMultipleChoiceField from "./formFields/CampaignTypeMultipleChoiceField";
 import CampaignLogoUploadField from "./formFields/CampaignLogoUploadField";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import Events from "../utils/events";
+import Events from "../utils/helperMethods/events";
 import {HttpStatusCode} from "axios";
 import ScreenRoutes from "../utils/constantsAndStaticObjects/screen-routes";
-import ImageBbApiRequestMaker from "../utils/ImageBbApiRequestMaker";
+import ImageBbApiRequestMaker from "../utils/helperMethods/image-bb-api-request-maker";
 import {FileObject} from "mui-file-dropzone";
 
 /**
@@ -131,15 +131,7 @@ function CreateCampaignPage(): JSX.Element {
      * Will render a form if the user is verified, or a message if the user is not verified.
      */
     const renderPage = (): JSX.Element => {
-        // Handling for the case where the user's verification status is either unknown or false - render a message.
-        if (!authStatus) {
-            if (!serverError) {
-                return (
-                    <Typography variant={"h5"}>
-                        You must be verified to create a campaign. Please verify <Link to={"/profile"}>here</Link>.
-                    </Typography>
-                );
-            }
+        if (serverError){
             return (
                 <Typography variant={"h5"}>
                     Server error. Please try again later.
@@ -161,7 +153,8 @@ function CreateCampaignPage(): JSX.Element {
                             <Stack direction={"column"} spacing={6}>
                                 <CampaignNameField campaign={campaign}/>
                                 <CampaignDescriptionField campaign={campaign}/>
-                                <IsMunicipalChoiceField campaign={campaign} cities={cityList}/>
+                                <CampaignTypeMultipleChoiceField campaign={campaign} cities={cityList}
+                                    authStatus={authStatus}/>
                             </Stack>
                         </Grid2>
                         <Grid2 xs={12} md={6}>

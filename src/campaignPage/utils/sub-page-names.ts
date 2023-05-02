@@ -7,6 +7,7 @@ const SubPageNames = {
     MainPage: "Campaign Profile",
     VotersLedger: "Voters Ledger",
     Settings: "Settings",
+    UploadCustomLedger: "Custom Ledgers",
 };
 
 export default SubPageNames;

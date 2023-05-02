@@ -6,7 +6,7 @@
     "UploadUrl": "https://api.imgbb.com/1/upload?key=",
     "ApiKey": "f62f9f34ecef275cf31a659b34210726"
   },
-  "SyncfusionLicenseKey": "Mgo+DSMBaFt+QHFqVk9rXVNbdV5dVGpAd0N3RGlcdlR1fUUmHVdTRHRcQlliTX5VdUZhXnhWcn0=;Mgo+DSMBPh8sVXJ1S0d+X1hPd11dXmJWd1p/THNYflR1fV9DaUwxOX1dQl9gSXpSckVlWnxcd3NcT2k=;ORg4AjUWIQA/Gnt2VFhhQlJNfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hSn5Xd0FjX3xdcnNdR2lV;MTcyMzU0MUAzMjMxMmUzMTJlMzMzOUR2NWlOK1J0WUYzTXVyYUlCL0Z0K3k0Z0hnWWNXWHdKL0pIQ2JBUTlwQTg9;MTcyMzU0MkAzMjMxMmUzMTJlMzMzOW5IS244MVllbmZHdUhhRzRLU0x0bmJMS1pQY0dyM1d4SEo3Sys3WUJjdWc9;NRAiBiAaIQQuGjN/V0d+XU9Hf1RDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS31TckRnWXldc3ZSTmlaWA==;MTcyMzU0NEAzMjMxMmUzMTJlMzMzOUdvWHpuNTIwcFNhT3VQZENjVVZ4eC9QeTE4Qi9VUWJrb1hURXNxeTBrTE09;MTcyMzU0NUAzMjMxMmUzMTJlMzMzOU82ZzRyc0lISFE0SXBTejBYaXBxOEJic3dxa3VVMU9UTlVvVG1Vd215WWs9;Mgo+DSMBMAY9C3t2VFhhQlJNfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hSn5Xd0FjX3xdcnNcQWNV;MTcyMzU0N0AzMjMxMmUzMTJlMzMzOW02ZHVFQTF6U05tYzB3NXVSVDA3WEdsRWduaDRwVmxFcUhiUTJPSUthUWc9;MTcyMzU0OEAzMjMxMmUzMTJlMzMzOWVzY2tXRW5RbEFrSlNjbjdBM0g3M2FTRHNtYlN5SGlmRytmZ3BYSnF6T1k9;MTcyMzU0OUAzMjMxMmUzMTJlMzMzOUdvWHpuNTIwcFNhT3VQZENjVVZ4eC9QeTE4Qi9VUWJrb1hURXNxeTBrTE09",
+  "SyncfusionLicenseKey": "Mgo+DSMBaFt+QHFqVkNrXVNbdV5dVGpAd0N3RGlcdlR1fUUmHVdTRHRcQllhQX9TdEBiXHhYc3Y=;Mgo+DSMBPh8sVXJ1S0d+X1RPd11dXmJWd1p/THNYflR1fV9DaUwxOX1dQl9gSXpRfkRjW3pfdXNST2I=;ORg4AjUWIQA/Gnt2VFhhQlJBfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hSn5XdE1iWX1bcXFST2Ze;MTg3MDI1MEAzMjMxMmUzMTJlMzMzNUVlYWQvNXlubXNJSTJ5K1JkclhURnd0Rkl2Y0JMd2J3ZHVLTVlXWnQ0V0U9;MTg3MDI1MUAzMjMxMmUzMTJlMzMzNUtQSGRLeThrNFlRaG1kR2dIT05zL1Q5M3ErQjRCMFhiS2ZFa05DVk9sdzQ9;NRAiBiAaIQQuGjN/V0d+XU9Hc1RDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS31TckdrWH9cdXVQTmleUw==;MTg3MDI1M0AzMjMxMmUzMTJlMzMzNVl5VmlpVUZqVnN1R1YzK2NLSlh3WVBya3F4YzZYajluODRuUzYzcEZ1V289;MTg3MDI1NEAzMjMxMmUzMTJlMzMzNUoxQWxkTmNiWWw5aXpOSnM1bEV2VDJKTWJpNGxoZEY3dS96L0dGMnA1bmc9;Mgo+DSMBMAY9C3t2VFhhQlJBfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hSn5XdE1iWX1bcXFcQGhe;MTg3MDI1NkAzMjMxMmUzMTJlMzMzNWNYVTdBUldFdTZKMXg2dkdManl1THlFSzlVRk93MmZmNXpDdEJEQ1lDMVU9;MTg3MDI1N0AzMjMxMmUzMTJlMzMzNVlXRjBEVmtWdXBVanh0L3VMRzdwU0lhZnFqYyt0WDRsVk0vbm5jVGxSYUk9;MTg3MDI1OEAzMjMxMmUzMTJlMzMzNVl5VmlpVUZqVnN1R1YzK2NLSlh3WVBya3F4YzZYajluODRuUzYzcEZ1V289",
   "ControllerUrls" : {
     "Tokens": {
       "Base": "api/Token/",
@@ -39,7 +39,8 @@
       "Enter": "enter/",
       "GetBasicInfo": "get-basic-info/",
       "GetCampaignAdmins": "get-campaign-admins/",
-      "UpdateCampaign": "update/"
+      "UpdateCampaign": "update/",
+      "IsCampaignCustomCampaign": "get-is-custom-campaign/"
     },
     "Invites": {
       "Base": "api/Invites/",
@@ -56,6 +57,18 @@
       "Base": "api/VotersLedger/",
       "Filter": "filter/",
       "UpdateSupportStatus": "updateSupportStatus/"
+    },
+    "CustomVotersLedger": {
+      "Base": "api/CustomVotersLedger/",
+      "Import": "import/",
+      "Create": "create/",
+      "GetForCampaign": "get-for-campaign/",
+      "UpdateLedgerName": "update/",
+      "DeleteLedger": "delete/",
+      "Filter": "filter/",
+      "AddRow": "add-row/",
+      "UpdateRow": "update-row/",
+      "DeleteRow": "delete-row/"
     },
     "VerificationCode": {
       "Base": "api/VerificationCode/",

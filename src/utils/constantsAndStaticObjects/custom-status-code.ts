@@ -257,6 +257,17 @@ enum CustomStatusCode {
      *  - a case of bad input.<br/>
      */
     FinancialDataNotFound = 50026,
+
+    /**
+    /* A status code for when the user attempts to access a non-existent ledger.
+    */
+    LedgerNotFound = 50027,
+
+    /**
+    * A status code for when the user attempts to access a non-existent ledger row,
+    * via a ledger row id that does not exist.
+    */
+    LedgerRowNotFound = 50028,
 }
 
 export default CustomStatusCode;
