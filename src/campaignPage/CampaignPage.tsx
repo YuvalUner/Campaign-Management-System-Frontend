@@ -27,6 +27,7 @@ import PermissionToTabMapper from "./utils/permission-to-tab-mapper";
 import SubScreenRoutes from "./utils/sub-screen-routes";
 import VotersLedgerPage from "./subPages/VotersLedgerPage/VotersLedgerPage";
 import NotFoundPage from "../notFoundPage/NotFoundPage";
+import SettingsPage from "./subPages/SettingsPage";
 import CustomLedgerManagementPage from "./subPages/customLedgerManagementPage/CustomLedgerManagementPage";
 
 /**
@@ -117,10 +118,10 @@ function CampaignPage(): JSX.Element {
     /**
      * Gets the campaign admins from the server.
      */
-    const getCampaignAdmins = ():void => {
+    const getCampaignAdmins = (): void => {
         ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.Campaigns.Base
-            + config.ControllerUrls.Campaigns.GetCampaignAdmins + campaignGuid
+            + config.ControllerUrls.Campaigns.GetCampaignAdmins + campaignGuid,
         ).then((response) => {
             if (response.status === HttpStatusCode.Ok) {
                 setCampaignAdmins(response.data);
@@ -136,7 +137,7 @@ function CampaignPage(): JSX.Element {
     const getPermissions = (): void => {
         ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.Permissions.Base
-            + config.ControllerUrls.Permissions.GetSelfPermissions + campaignGuid
+            + config.ControllerUrls.Permissions.GetSelfPermissions + campaignGuid,
         ).then((response) => {
             if (response.status === HttpStatusCode.Ok) {
                 const fullPermissionsList = response.data;
@@ -193,6 +194,9 @@ function CampaignPage(): JSX.Element {
         case PermissionTargets.VotersLedger:
             return <Route path={SubScreenRoutes.VotersLedgerRoute} key={permission.permissionTarget}
                 element={<VotersLedgerPage permission={permission}/>}/>;
+        case PermissionTargets.CampaignSettings:
+            return <Route path={SubScreenRoutes.SettingsComponent} key={permission.permissionTarget}
+                element={<SettingsPage campaign={campaign} setCampaign={setCampaign}/>}/>;
         case PermissionTargets.CustomLedger:
             return <Route path={SubScreenRoutes.UploadCustomLedgerRoute} key={permission.permissionTarget}
                 element={<CustomLedgerManagementPage/>}/>;
@@ -201,7 +205,7 @@ function CampaignPage(): JSX.Element {
                 element={<NotFoundPage
                     linkTo={SubScreenRoutes.CampaignBaseComponent + campaignGuid}
                     errorMessage={"The page you are looking for does not exist or" +
-                        " you do not have permission to view it"}
+                                  " you do not have permission to view it"}
                     buttonText={"Back to campaign page"}
                 />}/>;
         }

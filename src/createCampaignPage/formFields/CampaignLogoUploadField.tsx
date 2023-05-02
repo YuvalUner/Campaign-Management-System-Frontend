@@ -4,19 +4,26 @@ import {FormControl, Typography} from "@mui/material";
 import {DropzoneArea, FileObject} from "mui-file-dropzone";
 import fieldsStyle from "./fields.module.css";
 
+type Dimensions = {
+    width: string,
+    height: string,
+}
+
 interface CampaignLogoUploadFieldProps {
     campaign: React.MutableRefObject<Campaign>;
     uploadedFile: FileObject | null | File;
     setUploadedFile: (uploadedFile: FileObject | null | File) => void;
+    dimensions?:Dimensions;
 }
 
 function CampaignLogoUploadField(props: CampaignLogoUploadFieldProps): JSX.Element {
+    const dimensions = props.dimensions ?? {
+        width: "500px",
+        height: "500px",
+    };
 
     return (
-        <FormControl sx={{
-            width: "500px",
-            height: "500px",
-        }}>
+        <FormControl sx={dimensions}>
             <DropzoneArea
                 dropzoneClass={fieldsStyle.dropzone}
                 acceptedFiles={["image/*"]}

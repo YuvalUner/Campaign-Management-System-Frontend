@@ -39,10 +39,14 @@
       "Enter": "enter/",
       "GetBasicInfo": "get-basic-info/",
       "GetCampaignAdmins": "get-campaign-admins/",
+      "UpdateCampaign": "update/",
       "IsCampaignCustomCampaign": "get-is-custom-campaign/"
     },
     "Invites": {
       "Base": "api/Invites/",
+      "GetInvite": "GetInvite/",
+      "UpdateInvite": "UpdateInvite/",
+      "RevokeInvite": "RevokeInvite/",
       "AcceptInvite": "AcceptInvite/"
     },
     "Permissions": {
