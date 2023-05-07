@@ -8,6 +8,7 @@ const SubPageNames = {
     VotersLedger: "Voters Ledger",
     Settings: "Settings",
     UploadCustomLedger: "Custom Ledgers",
+    Financial: "Financial",
 };
 
 export default SubPageNames;
