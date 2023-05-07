@@ -7,11 +7,11 @@ import CampaignNameField from "../../createCampaignPage/formFields/CampaignNameF
 import CampaignDescriptionField from "../../createCampaignPage/formFields/CampaignDescriptionField";
 import CampaignLogoUploadField from "../../createCampaignPage/formFields/CampaignLogoUploadField";
 import {FileObject} from "mui-file-dropzone";
-import ImageBbApiRequestMaker from "../../utils/ImageBbApiRequestMaker";
+import ImageBbApiRequestMaker from "../../utils/helperMethods/image-bb-api-request-maker";
 import {HttpStatusCode} from "axios";
-import ServerRequestMaker from "../../utils/server-request-maker";
+import ServerRequestMaker from "../../utils/helperMethods/server-request-maker";
 import config from "../../app-config.json";
-import Events from "../../utils/events";
+import Events from "../../utils/helperMethods/events";
 
 interface SettingsPageProps {
     campaign: Campaign | null;

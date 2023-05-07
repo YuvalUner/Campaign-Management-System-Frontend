@@ -9,7 +9,7 @@ import {
     TextField,
     TextFieldProps,
 } from "@mui/material";
-import ServerRequestMaker from "../utils/server-request-maker";
+import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
 import config from "../app-config.json";
 import {HttpStatusCode, isAxiosError} from "axios";
 

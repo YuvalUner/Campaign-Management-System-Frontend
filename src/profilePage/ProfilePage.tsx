@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import UserPrivateInfo from "../models/user-private-info";
 import config from "../app-config.json";
 import {AxiosResponse, HttpStatusCode} from "axios";
-import ErrorCodeExtractor from "../utils/error-code-extractor";
+import ErrorCodeExtractor from "../utils/helperMethods/error-code-extractor";
 import {
     Alert, AlertTitle, Button, Dialog, DialogActions, DialogContent, DialogContentText,
     List, DialogTitle, Divider, FormControl, InputLabel,
@@ -10,7 +10,7 @@ import {
     ListItemText,
     MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography, makeStyles,
 } from "@mui/material";
-import ServerRequestMaker from "../utils/server-request-maker";
+import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
 import CustomStatusCode from "../utils/constantsAndStaticObjects/custom-status-code";
 import UpdateNumberDialog from "./UpdateNumberDialog";
 
