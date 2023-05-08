@@ -1,4 +1,4 @@
-interface HasPublishingDate{
+interface HasPublishingDate {
     publishingDate: Date;
 }
 

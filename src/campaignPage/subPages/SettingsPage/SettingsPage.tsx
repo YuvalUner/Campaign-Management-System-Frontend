@@ -38,14 +38,18 @@ function SettingsPage(props: SettingsPageProps): JSX.Element {
 
     const updateInviteLink = async () => {
         const res = await ServerRequestMaker.MakePutRequest(
-            config.ControllerUrls.Invites.Base + config.ControllerUrls.Invites.UpdateInvite + props.campaign?.campaignGuid,
+            config.ControllerUrls.Invites.Base +
+            config.ControllerUrls.Invites.UpdateInvite +
+            props.campaign?.campaignGuid,
             {},
         );
     };
 
     const revokeInviteLink = async () => {
         const res = await ServerRequestMaker.MakeDeleteRequest(
-            config.ControllerUrls.Invites.Base + config.ControllerUrls.Invites.RevokeInvite + props.campaign?.campaignGuid,
+            config.ControllerUrls.Invites.Base +
+            config.ControllerUrls.Invites.RevokeInvite +
+            props.campaign?.campaignGuid,
         );
         if (res.status === HttpStatusCode.Ok) {
             setInviteLink(null);
@@ -65,12 +69,15 @@ function SettingsPage(props: SettingsPageProps): JSX.Element {
         }
     };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>):
+    Promise<void> => {
         event.preventDefault();
 
         await uploadToImgBb();
         const res = await ServerRequestMaker.MakePutRequest(
-            config.ControllerUrls.Campaigns.Base + config.ControllerUrls.Campaigns.UpdateCampaign + props.campaign?.campaignGuid,
+            config.ControllerUrls.Campaigns.Base +
+            config.ControllerUrls.Campaigns.UpdateCampaign +
+            props.campaign?.campaignGuid,
             campaignRef.current,
         );
         if (res.status === HttpStatusCode.Ok) {

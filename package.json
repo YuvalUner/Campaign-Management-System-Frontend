@@ -8,6 +8,8 @@
     "@googlemaps/react-wrapper": "^1.1.35",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.13",
+    "@react-buddy/ide-toolbox": "^2.3.1",
+    "@react-buddy/palette-mui": "^5.0.1",
     "@react-oauth/google": "^0.8.0",
     "@syncfusion/ej2": "21.1.35",
     "@syncfusion/ej2-base": "21.1.35",

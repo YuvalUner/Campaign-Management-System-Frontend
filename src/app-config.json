@@ -74,6 +74,21 @@
       "Base": "api/VerificationCode/",
       "SendVerificationCode": "send",
       "VerifyVerificationCode": "verify"
+    },
+    "FinancialTypes": {
+      "Base": "api/FinancialTypes/",
+      "GetFinancialTypesForCampaign": "get-for-campaign/",
+      "CreateFinancialType": "create/",
+      "UpdateFinancialType": "update/",
+      "DeleteFinancialType": "delete/"
+    },
+    "FinancialData": {
+      "Base": "api/FinancialData/",
+      "GetFinancialDataForCampaign": "get-for-campaign/",
+      "GetFinancialDataSummaryForCampaign": "get-summary-for-campaign/",
+      "CreateFinancialData": "create/",
+      "UpdateFinancialData": "update/",
+      "DeleteFinancialData": "delete/"
     }
   }
 }
