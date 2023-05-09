@@ -8,7 +8,7 @@ import {
     List, Divider,
     ListItem,
     ListItemText,
-    SelectChangeEvent, Stack, Typography,
+    SelectChangeEvent, Stack, Typography, Box,
 } from "@mui/material";
 import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
 import CustomStatusCode from "../utils/constantsAndStaticObjects/custom-status-code";
@@ -17,6 +17,7 @@ import FirstNameField from "./profilePageFields/FirstNameField";
 import LastNameField from "./profilePageFields/LastNameField";
 import IdField from "./profilePageFields/IdField";
 import CityField from "./profilePageFields/CityField";
+import "./ProfilePage.css";
 
 function ProfilePage(): JSX.Element {
     // Define state object to store user's personal details
@@ -230,67 +231,33 @@ function ProfilePage(): JSX.Element {
             ) : (
                 // If the form hasn't been submitted yet, display the form for the user to enter their personal details
                 <>
-                    <form onSubmit={handleSubmit}>
-                        <Stack direction={"column"} spacing={1}>
-                            {alertMessage}
-                            {/*<TextField id="outlined-basic" label="First Name" variant="outlined"
-                                           type="text"
-                                           name="firstNameHeb"
-                                           value={userDetails.firstNameHeb}
-                                           onChange={handleInputChange}
-                                />*/}
-                            <FirstNameField
-                                showAlert={showAlert}
-                                userDetails={userDetails}
-                                handleInputChange={handleInputChange}
-                            />
-                            {/*<TextField id="outlined-basic" label="Last Name" variant="outlined"
-                                           type="text"
-                                           name="lastNameHeb"
-                                           value={userDetails.lastNameHeb}
-                                           onChange={handleInputChange}
-                            />*/}
-                            <LastNameField
-                                showAlert={showAlert}
-                                userDetails={userDetails}
-                                handleInputChange={handleInputChange}
-                            />
-                            {/*<TextField id="outlined-basic" label="ID" variant="outlined"
-                                           type="text"
-                                           name="idNumber"
-                                           value={userDetails.idNumber}
-                                           onChange={handleInputChange}
-                                />*/}
-                            <IdField
-                                showAlert={showAlert}
-                                userDetails={userDetails}
-                                handleInputChange={handleInputChange}
-                            />
-                            <label>
-                                {/*<p><FormControl style={styles.halfWidth}>
-                                    <InputLabel id="demo-simple-select-label" variant="outlined">City</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        label="City"
-                                        onChange={handleCityChange} native>
-                                        <option value=""/>
-                                        {cities.map(city => {
-                                                return <option key={city.cityId} value={city.cityName}>
-                                                    {city.cityName}
-                                                </option>;
-                                            },
-                                        )
-                                        }
-                                    </Select>
-                                </FormControl>
-                                </p>*/}
-                                <CityField handleCityChange={handleCityChange} cities={cities} />
-                            </label>
-                            <Button style={styles.halfWidth} type="submit" id="outlined-basic"
-                                variant="contained" color="inherit">Submit</Button>
-                        </Stack>
-                    </form>
+                    <Box className="container">
+                        <Box className="form-container">
+                            <form onSubmit={handleSubmit}>
+                                <Stack direction={"column"} spacing={1}>
+                                    {alertMessage}
+                                    <FirstNameField
+                                        showAlert={showAlert}
+                                        userDetails={userDetails}
+                                        handleInputChange={handleInputChange}
+                                    />
+                                    <LastNameField
+                                        showAlert={showAlert}
+                                        userDetails={userDetails}
+                                        handleInputChange={handleInputChange}
+                                    />
+                                    <IdField
+                                        showAlert={showAlert}
+                                        userDetails={userDetails}
+                                        handleInputChange={handleInputChange}
+                                    />
+                                    <CityField handleCityChange={handleCityChange} cities={cities} />
+                                    <Button className="submit-button" type="submit" id="outlined-basic"
+                                        variant="contained" color="inherit">Submit</Button>
+                                </Stack>
+                            </form>
+                        </Box>
+                    </Box>
                 </>
             )}
         </div>
