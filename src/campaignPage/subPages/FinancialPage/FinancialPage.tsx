@@ -7,8 +7,10 @@ import ServerRequestMaker from "../../../utils/helperMethods/server-request-make
 import config from "../../../app-config.json";
 import {useParams} from "react-router-dom";
 import FinancialType from "../../../models/financialType";
-import FinancialSummary from "../../../models/financialSummary";
+import {FinancialSummary} from "../../../models/financialSummary";
 import FinancialData from "../../../models/financialData";
+import {TransactionsPage} from "./TransactionsPage";
+
 
 interface FinancialPageProps {
     campaign: Campaign | null;
@@ -76,8 +78,8 @@ const FinancialPage = (props: FinancialPageProps): JSX.Element => {
                                   transactionTypes={transactionsTypes}
                                   fetch={getTransactions}/>
             <Button onClick={switchAddTransactionTypeMode}>Add Type</Button>
-            <Button onClick={switchAddTransactionMode}>Add Type</Button>
-        </>
+            <Button onClick={switchAddTransactionMode}>Add Transaction</Button>
+            <TransactionsPage transactionTypes={transactionsTypes} transactions={transactions} fetchTransaction={getTransactions}/>        </>
     );
 };
 
