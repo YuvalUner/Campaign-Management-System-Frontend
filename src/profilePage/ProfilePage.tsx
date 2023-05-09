@@ -4,15 +4,19 @@ import config from "../app-config.json";
 import {AxiosResponse, HttpStatusCode} from "axios";
 import ErrorCodeExtractor from "../utils/helperMethods/error-code-extractor";
 import {
-    Alert, AlertTitle, Button, Dialog, DialogActions, DialogContent, DialogContentText,
-    List, DialogTitle, Divider, FormControl, InputLabel,
+    Alert, AlertTitle, Button,
+    List, Divider,
     ListItem,
     ListItemText,
-    MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography, makeStyles,
+    SelectChangeEvent, Stack, Typography,
 } from "@mui/material";
 import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
 import CustomStatusCode from "../utils/constantsAndStaticObjects/custom-status-code";
 import UpdateNumberDialog from "./UpdateNumberDialog";
+import FirstNameField from "./profilePageFields/FirstNameField";
+import LastNameField from "./profilePageFields/LastNameField";
+import IdField from "./profilePageFields/IdField";
+import CityField from "./profilePageFields/CityField";
 
 function ProfilePage(): JSX.Element {
     // Define state object to store user's personal details
@@ -215,8 +219,8 @@ function ProfilePage(): JSX.Element {
                             <Divider light/>
                             <ListItem>
                                 <Button onClick={switchDialogMode} style={styles.halfWidth}
-                                        type="submit" id="outlined-basic"
-                                        variant="contained" color="inherit">Update Number</Button>
+                                    type="submit" id="outlined-basic"
+                                    variant="contained" color="inherit">Update Number</Button>
                             </ListItem>
                         </List>
                     </Stack>
@@ -229,33 +233,41 @@ function ProfilePage(): JSX.Element {
                     <form onSubmit={handleSubmit}>
                         <Stack direction={"column"} spacing={1}>
                             {alertMessage}
-                            <label>
-                                {/* <FirstNameField showAlert={showAlert} /> */}
-                                <TextField id="outlined-basic" label="First Name" variant="outlined"
+                            {/*<TextField id="outlined-basic" label="First Name" variant="outlined"
                                            type="text"
                                            name="firstNameHeb"
                                            value={userDetails.firstNameHeb}
                                            onChange={handleInputChange}
-                                />
-                            </label>
-                            <label>
-                                <TextField id="outlined-basic" label="Last Name" variant="outlined"
+                                />*/}
+                            <FirstNameField
+                                showAlert={showAlert}
+                                userDetails={userDetails}
+                                handleInputChange={handleInputChange}
+                            />
+                            {/*<TextField id="outlined-basic" label="Last Name" variant="outlined"
                                            type="text"
                                            name="lastNameHeb"
                                            value={userDetails.lastNameHeb}
                                            onChange={handleInputChange}
-                                />
-                            </label>
-                            <label>
-                                <TextField id="outlined-basic" label="ID" variant="outlined"
+                            />*/}
+                            <LastNameField
+                                showAlert={showAlert}
+                                userDetails={userDetails}
+                                handleInputChange={handleInputChange}
+                            />
+                            {/*<TextField id="outlined-basic" label="ID" variant="outlined"
                                            type="text"
                                            name="idNumber"
                                            value={userDetails.idNumber}
                                            onChange={handleInputChange}
-                                />
-                            </label>
+                                />*/}
+                            <IdField
+                                showAlert={showAlert}
+                                userDetails={userDetails}
+                                handleInputChange={handleInputChange}
+                            />
                             <label>
-                                <p><FormControl style={styles.halfWidth}>
+                                {/*<p><FormControl style={styles.halfWidth}>
                                     <InputLabel id="demo-simple-select-label" variant="outlined">City</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
@@ -272,10 +284,11 @@ function ProfilePage(): JSX.Element {
                                         }
                                     </Select>
                                 </FormControl>
-                                </p>
+                                </p>*/}
+                                <CityField handleCityChange={handleCityChange} cities={cities} />
                             </label>
                             <Button style={styles.halfWidth} type="submit" id="outlined-basic"
-                                    variant="contained" color="inherit">Submit</Button>
+                                variant="contained" color="inherit">Submit</Button>
                         </Stack>
                     </form>
                 </>
