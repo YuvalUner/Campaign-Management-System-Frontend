@@ -43,8 +43,9 @@ export const TransactionsPage = (props: TransactionsPageProps) => {
 
     return (
         <>
-        <UpdateTransactionDialog transaction={updateTransactionDialogData} closeDialog={closeUpdateDialog}
-                                     transactionTypes={props.transactionTypes} fetch={props.fetchTransaction}/>
+        {updateTransactionDialogData !== null &&
+                <UpdateTransactionDialog transaction={updateTransactionDialogData} closeDialog={closeUpdateDialog}
+                                         transactionTypes={props.transactionTypes} fetch={props.fetchTransaction}/>}
             <Typography variant="h5">
                 Transactions
             </Typography>
@@ -69,7 +70,7 @@ export const TransactionsPage = (props: TransactionsPageProps) => {
                         </ListItemIcon>
                         <ListItemText
                             primary={`${transaction.dataTitle} (${transaction.amount}$)`}
-                            secondary={`created on ${transaction.dateCreated} By ${transaction.displayNameEng}`}
+                            secondary={`created on ${new Date(transaction.dateCreated).toLocaleString()} By ${transaction.displayNameEng} of type ${transaction.typeName}`}
                         />
                     </ListItem>,
                 )}

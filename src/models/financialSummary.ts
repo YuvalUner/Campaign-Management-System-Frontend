@@ -4,6 +4,9 @@ export interface Balance {
     incomeTotal: number;
     typeGuid: string;
     typeName: string;
+    
+    // for client only
+    x:number;
 }
 
 export interface FinancialSummary {

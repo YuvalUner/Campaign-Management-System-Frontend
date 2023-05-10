@@ -18,6 +18,7 @@ import LastNameField from "./profilePageFields/LastNameField";
 import IdField from "./profilePageFields/IdField";
 import CityField from "./profilePageFields/CityField";
 import "./ProfilePage.css";
+import "../images/profile.jpg";
 
 function ProfilePage(): JSX.Element {
     // Define state object to store user's personal details

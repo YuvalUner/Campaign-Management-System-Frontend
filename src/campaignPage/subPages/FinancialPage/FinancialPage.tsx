@@ -9,7 +9,7 @@ import {useParams} from "react-router-dom";
 import FinancialType from "../../../models/financialType";
 import {FinancialSummary} from "../../../models/financialSummary";
 import FinancialData from "../../../models/financialData";
-import {TransactionsPage} from "./TransactionsPage";
+import {GraphPage} from "./GraphPage";
 
 
 interface FinancialPageProps {
@@ -59,6 +59,10 @@ const FinancialPage = (props: FinancialPageProps): JSX.Element => {
             config.ControllerUrls.FinancialData.Base + config.ControllerUrls.FinancialData.GetFinancialDataSummaryForCampaign + campaignGuid,
             {},
         );
+        let summary = res.data as FinancialSummary;
+        summary.balances.forEach((value, index) => {
+            value.x = index + 1;
+        });
         setSummary(res.data);
         console.dir("getSummary");
         console.dir(res.data);
@@ -79,7 +83,9 @@ const FinancialPage = (props: FinancialPageProps): JSX.Element => {
                                   fetch={getTransactions}/>
             <Button onClick={switchAddTransactionTypeMode}>Add Type</Button>
             <Button onClick={switchAddTransactionMode}>Add Transaction</Button>
-            <TransactionsPage transactionTypes={transactionsTypes} transactions={transactions} fetchTransaction={getTransactions}/>        </>
+            {/*<TransactionsPage transactionTypes={transactionsTypes} transactions={transactions} fetchTransaction={getTransactions}/>*/}
+            <GraphPage transactionTypes={transactionsTypes} transactions={summary}/>            
+        </>
     );
 };
 

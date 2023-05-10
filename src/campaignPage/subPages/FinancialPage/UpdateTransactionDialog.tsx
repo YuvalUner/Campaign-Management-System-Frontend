@@ -35,14 +35,15 @@ interface UpdateTransactionDialogProps {
 export const UpdateTransactionDialog = (props: UpdateTransactionDialogProps) => {
     const params = useParams();
     const campaignGuid = params.campaignGuid;
+    console.dir(props.transaction);
 
     const titleRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLInputElement>(null);
     const amountRef = useRef<HTMLInputElement>(null);
     const [titleError, setTitleError] = useState(false);
     const [descError, setDescError] = useState(false);
-    const [isExpense, setIsExpense] = useState(false);
-    const [chosenTransactionType, setChosenTransactionType] = useState("");
+    const [isExpense, setIsExpense] = useState(props.transaction?.isExpense);
+    const [chosenTransactionType, setChosenTransactionType] = useState(props.transaction?.typeGuid);
 
     const updateTransaction = async () => {
         if (!titleRef.current || !descriptionRef.current || !amountRef.current) {
@@ -70,7 +71,7 @@ export const UpdateTransactionDialog = (props: UpdateTransactionDialogProps) => 
         }
 
         const res = await ServerRequestMaker.MakePutRequest(
-            config.ControllerUrls.FinancialData.Base + config.ControllerUrls.FinancialData.DeleteFinancialData + `${campaignGuid}/${props.transaction?.dataGuid}`,
+            config.ControllerUrls.FinancialData.Base + config.ControllerUrls.FinancialData.UpdateFinancialData + campaignGuid,
             {
                 IsExpense: isExpense,
                 Amount: amountRef.current.value,
@@ -95,12 +96,12 @@ export const UpdateTransactionDialog = (props: UpdateTransactionDialogProps) => 
 
     return (
         <Dialog open={props.transaction !== null} onClose={props.closeDialog}>
-            <DialogTitle>Add Transaction</DialogTitle>
+            <DialogTitle>Update Transaction</DialogTitle>
             <DialogContent>
                 <TextField fullWidth autoFocus margin="dense" label="Title" inputRef={titleRef} error={titleError}
-                           helperText={""}/>
+                           helperText={""} defaultValue={props.transaction?.dataTitle}/>
                 <TextField fullWidth margin="dense" label="Description" inputRef={descriptionRef} error={descError}
-                           helperText={""}/>
+                           helperText={""} defaultValue={props.transaction?.dataDescription}/>
                 <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group"
                             onChange={onRadioGroupChange} value={isExpense}>
                     <FormControlLabel value={false} control={<Radio/>} label="Income"/>
@@ -113,6 +114,7 @@ export const UpdateTransactionDialog = (props: UpdateTransactionDialogProps) => 
                         label="Amount"
                         type="number"
                         inputRef={amountRef}
+                        defaultValue={props.transaction?.amount}
                     />
                     <FormHelperText>cannot be more then 300 chars</FormHelperText>
                 </FormControl>
