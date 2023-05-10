@@ -17,8 +17,9 @@ import FirstNameField from "./profilePageFields/FirstNameField";
 import LastNameField from "./profilePageFields/LastNameField";
 import IdField from "./profilePageFields/IdField";
 import CityField from "./profilePageFields/CityField";
+import AlertDialogSlide from "./profilePageFields/SlideInDialog";
 import "./ProfilePage.css";
-import "../images/profile.jpg";
+import profile from "../images/profile.jpg";
 
 function ProfilePage(): JSX.Element {
     // Define state object to store user's personal details
@@ -232,33 +233,51 @@ function ProfilePage(): JSX.Element {
             ) : (
                 // If the form hasn't been submitted yet, display the form for the user to enter their personal details
                 <>
-                    <Box className="container">
-                        <Box className="form-container">
+                    <div className="container">
+                        <div className="form-container">
                             <form onSubmit={handleSubmit}>
-                                <Stack direction={"column"} spacing={1}>
-                                    {alertMessage}
+                                <div className="imgs">
+                                    <div className="container-image">
+                                        <img src={profile} alt="profile" className="profile"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Typography variant={"h6"}>Personal details</Typography>
+                                </div>
+                                {alertMessage}
+                                <div className="pad">
                                     <FirstNameField
                                         showAlert={showAlert}
                                         userDetails={userDetails}
                                         handleInputChange={handleInputChange}
                                     />
+                                </div>
+                                <div className="pad">
                                     <LastNameField
                                         showAlert={showAlert}
                                         userDetails={userDetails}
                                         handleInputChange={handleInputChange}
                                     />
+                                </div>
+                                <div className="pad">
                                     <IdField
                                         showAlert={showAlert}
                                         userDetails={userDetails}
                                         handleInputChange={handleInputChange}
                                     />
+                                </div>
+                                <div className="pad">
                                     <CityField handleCityChange={handleCityChange} cities={cities} />
-                                    <Button className="submit-button" type="submit" id="outlined-basic"
-                                        variant="contained" color="inherit">Submit</Button>
-                                </Stack>
+                                </div>
+                                <div>
+                                    <button className="submit-button" type="submit" id="outlined-basic">SUBMIT</button>
+                                </div>
+                                <div className="pad">
+                                    <AlertDialogSlide></AlertDialogSlide>                                
+                                </div>
                             </form>
-                        </Box>
-                    </Box>
+                        </div>
+                    </div>
                 </>
             )}
         </div>
