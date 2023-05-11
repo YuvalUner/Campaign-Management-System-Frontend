@@ -25,8 +25,9 @@ class ServerRequestMaker {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                additionalHeaders
-            }
+                "Access-Control-Allow-Origin": "*",
+                additionalHeaders,
+            },
         });
     }
 
@@ -40,8 +41,11 @@ class ServerRequestMaker {
         additionalHeaders: string | null = null): Promise<AxiosResponse> {
         return await this.instance.get<model>(config.ServerBaseUrl + url, {
             headers: {
-                additionalHeaders
-            }
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+                withCredentials: true,
+                additionalHeaders,
+            },
         });
     }
 
@@ -56,8 +60,9 @@ class ServerRequestMaker {
         return await this.instance.put(config.ServerBaseUrl + url, body, {
             headers: {
                 "Content-Type": "application/json",
-                additionalHeaders
-            }
+                "Access-Control-Allow-Origin": "*",
+                additionalHeaders,
+            },
         });
     }
 
@@ -71,8 +76,9 @@ class ServerRequestMaker {
         return await this.instance.delete(config.ServerBaseUrl + url, {
             headers: {
                 "Content-Type": "application/json",
-                additionalHeaders
-            }
+                "Access-Control-Allow-Origin": "*",
+                additionalHeaders,
+            },
         });
     }
 }

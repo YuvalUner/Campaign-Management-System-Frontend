@@ -1,6 +1,7 @@
 import React, {useRef, useState} from "react";
-import ServerRequestMaker from "../../../utils/helperMethods/server-request-maker";
-import config from "../../../app-config.json";
+import ServerRequestMaker from "../../../../utils/helperMethods/server-request-maker";
+import config from "../../../../app-config.json";
+import {useParams} from "react-router-dom";
 import {
     Button,
     Dialog,
@@ -21,28 +22,29 @@ import {
     TextField,
     Tooltip,
 } from "@mui/material";
-import {useParams} from "react-router-dom";
-import FinancialType from "../../../models/financialType";
+import FinancialData from "../../../../models/financialData";
+import FinancialType from "../../../../models/financialType";
 
-interface AddTransactionDialogProps {
-    isOpen: boolean;
-    switchMode: () => void;
+interface UpdateTransactionDialogProps {
+    transaction:FinancialData | null;
+    closeDialog: () => void;
     transactionTypes: FinancialType[] | null;
     fetch: () => Promise<void>;
 }
 
-const AddTransactionDialog = (props: AddTransactionDialogProps): JSX.Element => {
+export const UpdateTransactionDialog = (props: UpdateTransactionDialogProps) => {
     const params = useParams();
-    const titleRef  = useRef<HTMLInputElement>(null);
+    const campaignGuid = params.campaignGuid;
+
+    const titleRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLInputElement>(null);
     const amountRef = useRef<HTMLInputElement>(null);
     const [titleError, setTitleError] = useState(false);
     const [descError, setDescError] = useState(false);
-    const [isExpense, setIsExpense] = useState(false);
-    const [chosenTransactionType, setChosenTransactionType] = useState("");
+    const [isExpense, setIsExpense] = useState(props.transaction?.isExpense);
+    const [chosenTransactionType, setChosenTransactionType] = useState(props.transaction?.typeGuid);
 
-    const campaignGuid = params.campaignGuid;
-    const addTransaction = async () => {
+    const updateTransaction = async () => {
         if (!titleRef.current || !descriptionRef.current || !amountRef.current) {
             return;
         }
@@ -67,19 +69,19 @@ const AddTransactionDialog = (props: AddTransactionDialogProps): JSX.Element => 
             return;
         }
 
-        const res = await ServerRequestMaker.MakePostRequest(
-            config.ControllerUrls.FinancialData.Base + config.ControllerUrls.FinancialData.CreateFinancialData + campaignGuid,
+        const res = await ServerRequestMaker.MakePutRequest(
+            config.ControllerUrls.FinancialData.Base + config.ControllerUrls.FinancialData.UpdateFinancialData + campaignGuid,
             {
                 IsExpense: isExpense,
                 Amount: amountRef.current.value,
                 DataTitle: titleRef.current.value,
                 DataDescription: descriptionRef.current.value,
-                DateCreated: new Date(),
                 TypeGuid: chosenTransactionType,
+                DataGuid:props.transaction?.dataGuid,
             },
         );
         await props.fetch();
-        props.switchMode();
+        props.closeDialog();
     };
 
     const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,13 +93,13 @@ const AddTransactionDialog = (props: AddTransactionDialogProps): JSX.Element => 
     };
 
     return (
-        <Dialog open={props.isOpen} onClose={props.switchMode}>
-            <DialogTitle>Add Transaction</DialogTitle>
+        <Dialog open={props.transaction !== null} onClose={props.closeDialog}>
+            <DialogTitle>Update Transaction</DialogTitle>
             <DialogContent>
-            <TextField fullWidth autoFocus margin="dense" label="Title" inputRef={titleRef} error={titleError}
-                           helperText={""}/>
+                <TextField fullWidth autoFocus margin="dense" label="Title" inputRef={titleRef} error={titleError}
+                           helperText={""} defaultValue={props.transaction?.dataTitle}/>
                 <TextField fullWidth margin="dense" label="Description" inputRef={descriptionRef} error={descError}
-                           helperText={""}/>
+                           helperText={""} defaultValue={props.transaction?.dataDescription}/>
                 <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group"
                             onChange={onRadioGroupChange} value={isExpense}>
                     <FormControlLabel value={false} control={<Radio/>} label="Income"/>
@@ -110,6 +112,7 @@ const AddTransactionDialog = (props: AddTransactionDialogProps): JSX.Element => 
                         label="Amount"
                         type="number"
                         inputRef={amountRef}
+                        defaultValue={props.transaction?.amount}
                     />
                     <FormHelperText>cannot be more then 300 chars</FormHelperText>
                 </FormControl>
@@ -132,11 +135,9 @@ const AddTransactionDialog = (props: AddTransactionDialogProps): JSX.Element => 
                 </FormControl>
             </DialogContent>
             <DialogActions>
-                <Button fullWidth onClick={props.switchMode}>Cancel</Button>
-                <Button fullWidth onClick={addTransaction}>Subscribe</Button>
+                <Button fullWidth onClick={updateTransaction}>Confirm</Button>
+                <Button fullWidth onClick={props.closeDialog}>Cancel</Button>
             </DialogActions>
         </Dialog>
     );
 };
-
-export default AddTransactionDialog;
