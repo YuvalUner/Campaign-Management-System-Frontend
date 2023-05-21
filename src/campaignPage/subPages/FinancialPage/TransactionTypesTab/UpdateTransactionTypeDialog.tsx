@@ -44,7 +44,9 @@ const UpdateTransactionTypeDialog = (props: UpdateTransactionTypeDialogProps) =>
         }
 
         const res = await ServerRequestMaker.MakePutRequest(
-            config.ControllerUrls.FinancialTypes.Base + config.ControllerUrls.FinancialTypes.UpdateFinancialType + campaignGuid,
+            config.ControllerUrls.FinancialTypes.Base +
+            config.ControllerUrls.FinancialTypes.UpdateFinancialType +
+            campaignGuid,
             {
                 TypeName: nameRef.current?.value,
                 TypeDescription: descriptionRef.current?.value,
@@ -62,11 +64,11 @@ const UpdateTransactionTypeDialog = (props: UpdateTransactionTypeDialogProps) =>
             <DialogTitle>Add Transaction Type</DialogTitle>
             <DialogContent>
                 <TextField fullWidth autoFocus margin="dense" label="type name" inputRef={nameRef} error={nameError}
-                           helperText={"cannot be empty or more then 100 chars"}
-                           defaultValue={props.transactionType?.typeName}/>
+                    helperText={"cannot be empty or more then 100 chars"}
+                    defaultValue={props.transactionType?.typeName}/>
                 <TextField fullWidth margin="dense" label="description" error={descError}
-                           helperText={"cannot be more then 300 chars"} inputRef={descriptionRef}
-                           defaultValue={props.transactionType?.typeDescription}/>
+                    helperText={"cannot be more then 300 chars"} inputRef={descriptionRef}
+                    defaultValue={props.transactionType?.typeDescription}/>
             </DialogContent>
             <DialogActions>
                 <Button fullWidth onClick={addType}>Confirm</Button>

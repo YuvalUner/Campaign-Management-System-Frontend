@@ -60,9 +60,9 @@ const AddTransactionTypeDialog = (props: AddTransactionTypeDialogProps) => {
             <DialogTitle>Add Transaction Type</DialogTitle>
             <DialogContent>
                 <TextField fullWidth autoFocus margin="dense" label="type name" inputRef={nameRef} error={nameError}
-                           helperText={"cannot be empty or more then 100 chars"}/>
+                    helperText={"cannot be empty or more then 100 chars"}/>
                 <TextField fullWidth margin="dense" label="description" error={descError}
-                           helperText={"cannot be more then 300 chars"} inputRef={descriptionRef}/>
+                    helperText={"cannot be more then 300 chars"} inputRef={descriptionRef}/>
             </DialogContent>
             <DialogActions>
                 <Button fullWidth onClick={addType}>Add</Button>

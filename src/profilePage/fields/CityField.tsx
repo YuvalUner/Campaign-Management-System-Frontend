@@ -1,32 +1,27 @@
 import React from "react";
 import {FormControl, InputLabel, Select, SelectChangeEvent} from "@mui/material";
 import "../ProfilePage";
+import City from "../../models/city";
 
 interface Props {
     handleCityChange: (event: SelectChangeEvent<HTMLSelectElement>) => void;
-  cities: {
-    cityId: number;
-    cityName: string;
-  }[];
+    cities: City[];
 }
 
 const CityField = ({handleCityChange, cities}: Props) => {
     return (
-        <label>
-            <p>
-                <FormControl>
+                <FormControl sx={{width:"60%"}}>
                     <InputLabel id="demo-simple-select-label" variant="outlined">
                         City
                     </InputLabel>
                     <Select
-                        className="input-field"
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         label="City"
                         onChange={handleCityChange}
                         native
                     >
-                        <option value="" />
+                        <option value=""/>
                         {cities.map((city) => {
                             return (
                                 <option key={city.cityId} value={city.cityName}>
@@ -36,8 +31,6 @@ const CityField = ({handleCityChange, cities}: Props) => {
                         })}
                     </Select>
                 </FormControl>
-            </p>
-        </label>
     );
 };
 

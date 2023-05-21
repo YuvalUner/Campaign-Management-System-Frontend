@@ -1,4 +1,5 @@
 interface User {
+    idNumber?: string
     email?: string;
     firstNameEng?: string;
     lastNameEng?: string;
@@ -7,6 +8,7 @@ interface User {
     displayNameEng?: string;
     profilePicUrl?: string;
     phoneNumber?: string;
+    cityName?: string,
 }
 
 export default User;

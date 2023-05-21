@@ -53,7 +53,9 @@ export const TransactionTypeTab = (props: TransactionTypeTabProps) => {
 
     const onDeleteIconClick = async (typeGuid: string) => {
         const res = await ServerRequestMaker.MakeDeleteRequest(
-            config.ControllerUrls.FinancialTypes.Base + config.ControllerUrls.FinancialTypes.DeleteFinancialType + `${campaignGuid}/${typeGuid}`,
+            config.ControllerUrls.FinancialTypes.Base +
+            config.ControllerUrls.FinancialTypes.DeleteFinancialType +
+            `${campaignGuid}/${typeGuid}`,
         );
         await updateFetch();
     };
@@ -62,10 +64,10 @@ export const TransactionTypeTab = (props: TransactionTypeTabProps) => {
         <>
             {updateDialogData !== null &&
                 <UpdateTransactionTypeDialog transactionType={updateDialogData} closeDialog={closeUpdateDialog}
-                                             fetch={updateFetch}/>}
+                    fetch={updateFetch}/>}
             <AddTransactionTypeDialog switchMode={switchAddTransactionTypeMode}
-                                      fetch={props.fetchTransactionsTypes}
-                                      isOpen={isAddDialogOpen}/>
+                fetch={props.fetchTransactionsTypes}
+                isOpen={isAddDialogOpen}/>
             <DeleteDialog values={deleteDialogData} switchMode={closeDeleteDialog} action={onDeleteIconClick}/>
 
             <Stack sx={{display: "flex", justifyContent: "space-between"}} direction={"row"} spacing={2}>
@@ -79,11 +81,11 @@ export const TransactionTypeTab = (props: TransactionTypeTabProps) => {
                     <ListItem key={type.typeGuid} secondaryAction={
                         type.typeName !== "Other" ? <Stack direction="row" spacing={2}>
                             <IconButton aria-label="delete"
-                                        onClick={() => openDeleteDialog(type.typeGuid)}>
+                                onClick={() => openDeleteDialog(type.typeGuid)}>
                                 <DeleteIcon/>
                             </IconButton>
                             <IconButton aria-label="update"
-                                        onClick={() => openUpdateDialog(type)}>
+                                onClick={() => openUpdateDialog(type)}>
                                 <UpdateIcon/>
                             </IconButton>
                         </Stack> : null

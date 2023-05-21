@@ -16,4 +16,7 @@ export interface FinancialSummary {
     totalIncome: number;
 }
 
-export default FinancialSummary;
+export interface Balance2 {
+    date:Date;
+    amount:number;
+}

@@ -4,18 +4,17 @@ import ServerRequestMaker from "../../../utils/helperMethods/server-request-make
 import config from "../../../app-config.json";
 import {useParams} from "react-router-dom";
 import FinancialType from "../../../models/financialType";
-import {FinancialSummary} from "../../../models/financialSummary";
+import {Balance2, FinancialSummary} from "../../../models/financialSummary";
 import FinancialData from "../../../models/financialData";
-import {TransactionsTab} from "../FinancialPage/TransactionTab/TransactionTab";
+import {TransactionsTab} from "./TransactionTab/TransactionTab";
 import {Box, Tab, Tabs} from "@mui/material";
 import GraphIcon from "@mui/icons-material/Timeline";
 import ListIcon from "@mui/icons-material/FormatListBulleted";
 import Constants from "../../../utils/constantsAndStaticObjects/constants";
-import AddIcon from "@mui/icons-material/Add";
 import TabPanel from "../../utils/TabPanel";
-import {GraphPage} from "./GraphPage";
-import {TransactionTypeTab} from "../FinancialPage/TransactionTypesTab/TransactionTypesTab";
-import FilterListIcon from '@mui/icons-material/FilterList';
+import {GraphTab} from "./GraphTab/GraphTab";
+import {TransactionTypeTab} from "./TransactionTypesTab/TransactionTypesTab";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
 interface FinancialPageProps {
     campaign: Campaign | null;
@@ -27,50 +26,58 @@ const FinancialPage = (props: FinancialPageProps) => {
 
     const [transactionsTypes, setTransactionsTypes] = useState<FinancialType[] | null>(null);
     const [transactions, setTransactions] = useState<FinancialData[] | null>(null);
-    const [summary, setSummary] = useState<FinancialSummary | null>(null);
+    const [summary, setSummary] = useState<Balance2[] | null>(null);
     const [currentTab, setCurrentTab] = useState(0);
 
 
     const getTransactionsTypes = async () => {
         const res = await ServerRequestMaker.MakeGetRequest(
-            config.ControllerUrls.FinancialTypes.Base + config.ControllerUrls.FinancialTypes.GetFinancialTypesForCampaign + campaignGuid,
+            config.ControllerUrls.FinancialTypes.Base +
+            config.ControllerUrls.FinancialTypes.GetFinancialTypesForCampaign +
+            campaignGuid,
         );
-        let types = res.data as FinancialType[];
+        const types = res.data as FinancialType[];
         const objIndex = types.findIndex((obj) => obj.typeName === "Other");
         types[objIndex].typeDescription = "";
-        types.sort((a, b)=>a.typeName.localeCompare(b.typeName));
+        types.sort((a, b) => a.typeName.localeCompare(b.typeName));
         setTransactionsTypes(res.data);
-        console.dir("getTransactionsTypes");
-        console.dir(res.data);
     };
 
     const getTransactions = async () => {
         const res = await ServerRequestMaker.MakeGetRequest(
-            config.ControllerUrls.FinancialData.Base + config.ControllerUrls.FinancialData.GetFinancialDataForCampaign + campaignGuid,
+            config.ControllerUrls.FinancialData.Base +
+            config.ControllerUrls.FinancialData.GetFinancialDataForCampaign +
+            campaignGuid,
         );
-        setTransactions(res.data);
-        console.dir("getTransactions");
-        console.dir(res.data);
+        const transactions = res.data as FinancialData[];
+        setTransactions(transactions);
+
+        const summary = Array<Balance2>();
+        let balance = 0;
+        transactions.forEach((e) => {
+            balance += e.amount;
+            summary.push({amount: balance, date: new Date(e.dateCreated)});
+        });
+        setSummary(summary);
     };
 
     const getSummary = async () => {
         const res = await ServerRequestMaker.MakePostRequest(
-            config.ControllerUrls.FinancialData.Base + config.ControllerUrls.FinancialData.GetFinancialDataSummaryForCampaign + campaignGuid,
+            config.ControllerUrls.FinancialData.Base +
+            config.ControllerUrls.FinancialData.GetFinancialDataSummaryForCampaign +
+            campaignGuid,
             {},
         );
-        let summary = res.data as FinancialSummary;
+        const summary = res.data as FinancialSummary;
         summary.balances.forEach((value, index) => {
             value.x = index + 1;
         });
         setSummary(res.data);
-        console.dir("getSummary");
-        console.dir(res.data);
     };
 
     useEffect(() => {
         getTransactionsTypes();
         getTransactions();
-        getSummary();
     }, []);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -89,15 +96,15 @@ const FinancialPage = (props: FinancialPageProps) => {
                 </Box>
                 <TabPanel value={currentTab} index={0}>
                     <TransactionsTab transactionTypes={transactionsTypes} transactions={transactions}
-                                     fetchTransaction={getTransactions}/>
+                        fetchTransaction={getTransactions}/>
                 </TabPanel>
                 <TabPanel value={currentTab} index={1}>
-                    <GraphPage transactionTypes={transactionsTypes} transactions={summary}/>
+                    <GraphTab transactionTypes={transactionsTypes} balances={summary}/>
                 </TabPanel>
                 <TabPanel value={currentTab} index={2}>
                     <TransactionTypeTab transactionTypes={transactionsTypes}
-                                        fetchTransactions={getTransactions}
-                                        fetchTransactionsTypes={getTransactionsTypes}/>
+                        fetchTransactions={getTransactions}
+                        fetchTransactionsTypes={getTransactionsTypes}/>
                 </TabPanel>
             </Box>
         </>
