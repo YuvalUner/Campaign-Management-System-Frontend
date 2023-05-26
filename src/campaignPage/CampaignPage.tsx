@@ -9,7 +9,9 @@ import {
     Drawer,
     List,
     ListItem,
-    ListItemButton, ListItemIcon, ListItemText,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
 } from "@mui/material";
 import NotAuthorizedPage from "../notAuthorizedPage/notAuthorizedPage";
 import {UserLoggedInContext} from "../App";
@@ -149,6 +151,9 @@ function CampaignPage(): JSX.Element {
                 });
                 setPermissions(keptPermissions);
                 setSideMenuList([...hardcodedSideMenuList, ...addToSideMenuList]);
+                console.log("list");
+                console.dir(hardcodedSideMenuList);
+                console.dir(addToSideMenuList);
             }
         }).catch(() => {
             setPermissions([]);

@@ -18,5 +18,7 @@ export interface FinancialSummary {
 
 export interface Balance2 {
     date:Date;
-    amount:number;
+    balance:number;
+    expenses:number;
+    income:number;
 }

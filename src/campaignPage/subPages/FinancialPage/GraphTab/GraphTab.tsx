@@ -1,32 +1,63 @@
 import React from "react";
 import FinancialType from "../../../../models/financialType";
-import {Balance2, FinancialSummary} from "../../../../models/financialSummary";
+import {Balance2} from "../../../../models/financialSummary";
+import {
+    Tooltip,
+    AxisModel,
+    Category,
+    ChartComponent,
+    DataLabel,
+    DateTime,
+    Inject,
+    SeriesCollectionDirective,
+    SeriesDirective,
+    StepLineSeries,
+} from "@syncfusion/ej2-react-charts";
+
+
 // import {AxisModel, ChartComponent, SeriesCollectionDirective, SeriesDirective} from "@syncfusion/ej2-react-charts";
-import {Inject} from "@syncfusion/ej2-react-base";
-import {DateTime, LineSeries, Tooltip} from "@syncfusion/ej2/charts";
 
 interface GraphPageProps {
-    transactionTypes: FinancialType[] | null;
     balances: Balance2[] | null;
 }
 
 export const GraphTab = (props: GraphPageProps) => {
     console.dir(props.balances);
 
-    //const primaryxAxis:AxisModel ={minimum:0,maximum:(props.transactions?.balances.length ?? 0)+1,visible:false};
+    const marker = {
+        visible: true, width: 10, height: 10, border: {width: 2, color: "#F8AB1D"},
+        dataLabel: {
+            visible: true, margin: {
+                left: 3,
+                right: 3,
+                top: 3,
+                bottom: 3,
+            },
+        },
+    };
+    const primaryxAxis: AxisModel = {
+        valueType: "DateTime",
+        title: "Date",
+        labelFormat: "dd/MMM/y",
+        intervalType: "Auto",
+        rangePadding: "Round",
+    };
+    const tooltip = {enable: true, format: "${point.y} on ${point.x}"};
+    const primaryyAxis: AxisModel = {title: "Balance", labelFormat: "c"};
+
     return (
-        <div className="control-pane">
-            <div className="control-section">
-                PlaceHolder
-                {/*<ChartComponent id="stockchartspline" title="Balance" primaryXAxis={primaryxAxis}>*/}
-                {/*    <Inject*/}
-                {/*        services={[LineSeries, DateTime, Tooltip]}/>*/}
-                {/*    <SeriesCollectionDirective>*/}
-                {/*        <SeriesDirective dataSource={props.transactions?.balances} xName="x" yName="balance"*/}
-                {/*                         marker={{dataLabel: {visible: true}}}/>*/}
-                {/*    </SeriesCollectionDirective>*/}
-                {/*</ChartComponent>*/}
-            </div>
-        </div>
+        <>
+            <ChartComponent id="charts" primaryXAxis={primaryxAxis} primaryYAxis={primaryyAxis} tooltip={tooltip}>
+                <Inject services={[StepLineSeries, Tooltip, DataLabel, Category, DateTime]}/>
+
+                <SeriesCollectionDirective>
+                <SeriesDirective dataSource={props.balances ?? []} xName="date" yName="balance" width={2}
+                                     name="BALANCE"
+                                     type="StepLine" marker={marker}>
+                    </SeriesDirective>
+                </SeriesCollectionDirective>
+            </ChartComponent>;
+
+        </>
     );
 };

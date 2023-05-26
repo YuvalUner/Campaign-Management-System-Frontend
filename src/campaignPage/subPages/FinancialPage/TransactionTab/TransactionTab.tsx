@@ -14,6 +14,7 @@ import {Button} from "react-bootstrap";
 import {UpdateTransactionDialog} from "./UpdateTransactionDialog";
 import AddIcon from "@mui/icons-material/Add";
 import {DeleteDialog} from "../DeleteDialog";
+import { format } from "date-fns";
 
 interface TransactionsTabProps {
     transactionTypes: FinancialType[] | null;
@@ -51,7 +52,9 @@ export const TransactionsTab = (props: TransactionsTabProps) => {
 
     const onDeleteIconClick = async (transactionGuid: string) => {
         const res = await ServerRequestMaker.MakeDeleteRequest(
-            config.ControllerUrls.FinancialData.Base + config.ControllerUrls.FinancialData.DeleteFinancialData + `${campaignGuid}/${transactionGuid}`,
+            config.ControllerUrls.FinancialData.Base +
+            config.ControllerUrls.FinancialData.DeleteFinancialData +
+            `${campaignGuid}/${transactionGuid}`,
         );
         await props.fetchTransaction();
     };
@@ -61,10 +64,10 @@ export const TransactionsTab = (props: TransactionsTabProps) => {
         <>
             {updateDialogData !== null &&
                 <UpdateTransactionDialog transaction={updateDialogData} closeDialog={closeUpdateDialog}
-                                         transactionTypes={props.transactionTypes} fetch={props.fetchTransaction}/>}
+                    transactionTypes={props.transactionTypes} fetch={props.fetchTransaction}/>}
             <AddTransactionDialog isOpen={isAddDialogOpen} switchMode={switchAddTransactionMode}
-                                  transactionTypes={props.transactionTypes}
-                                  fetch={props.fetchTransaction}/>
+                transactionTypes={props.transactionTypes}
+                fetch={props.fetchTransaction}/>
             <DeleteDialog values={deleteDialogData} switchMode={closeDeleteDialog} action={onDeleteIconClick}/>
 
             <Stack sx={{display: "flex", justifyContent: "space-between"}} direction={"row"} spacing={2}>
@@ -78,11 +81,11 @@ export const TransactionsTab = (props: TransactionsTabProps) => {
                     <ListItem key={transaction.dataGuid} secondaryAction={
                         <Stack direction="row" spacing={2}>
                             <IconButton aria-label="delete"
-                                        onClick={() => openDeleteDialog(transaction.dataGuid)}>
+                                onClick={() => openDeleteDialog(transaction.dataGuid)}>
                                 <DeleteIcon/>
                             </IconButton>
                             <IconButton aria-label="update"
-                                        onClick={() => openUpdateDialog(transaction)}>
+                                onClick={() => openUpdateDialog(transaction)}>
                                 <UpdateIcon/>
                             </IconButton>
                         </Stack>
@@ -94,7 +97,8 @@ export const TransactionsTab = (props: TransactionsTabProps) => {
                         </ListItemIcon>
                         <ListItemText
                             primary={`${transaction.dataTitle} (${transaction.amount}$)`}
-                            secondary={`created on ${new Date(transaction.dateCreated).toLocaleString()} By ${transaction.displayNameEng} of type ${transaction.typeName}`}
+                            secondary={`created on ${format(new Date(transaction.dateCreated), "PPPpp")} By
+                            ${transaction.displayNameEng} of type ${transaction.typeName}`}
                         />
                     </ListItem>,
                 )}

@@ -67,7 +67,9 @@ const AddTransactionDialog = (props: AddTransactionDialogProps) => {
         }
 
         const res = await ServerRequestMaker.MakePostRequest(
-            config.ControllerUrls.FinancialData.Base + config.ControllerUrls.FinancialData.CreateFinancialData + campaignGuid,
+            config.ControllerUrls.FinancialData.Base +
+            config.ControllerUrls.FinancialData.CreateFinancialData +
+            campaignGuid,
             {
                 IsExpense: isExpense,
                 Amount: amountRef.current.value,
@@ -94,11 +96,11 @@ const AddTransactionDialog = (props: AddTransactionDialogProps) => {
             <DialogTitle>Add Transaction</DialogTitle>
             <DialogContent>
                 <TextField fullWidth autoFocus margin="dense" label="Title" inputRef={titleRef} error={titleError}
-                           helperText={""}/>
+                    helperText={""}/>
                 <TextField fullWidth margin="dense" label="Description" inputRef={descriptionRef} error={descError}
-                           helperText={""}/>
+                    helperText={""}/>
                 <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group"
-                            onChange={onRadioGroupChange} value={isExpense}>
+                    onChange={onRadioGroupChange} value={isExpense}>
                     <FormControlLabel value={false} control={<Radio/>} label="Income"/>
                     <FormControlLabel value={true} control={<Radio/>} label="Expense"/>
                 </RadioGroup>

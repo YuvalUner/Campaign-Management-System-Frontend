@@ -7,7 +7,7 @@ import FinancialType from "../../../models/financialType";
 import {Balance2, FinancialSummary} from "../../../models/financialSummary";
 import FinancialData from "../../../models/financialData";
 import {TransactionsTab} from "./TransactionTab/TransactionTab";
-import {Box, Tab, Tabs} from "@mui/material";
+import {Box, Stack, Tab, Tabs, Typography} from "@mui/material";
 import GraphIcon from "@mui/icons-material/Timeline";
 import ListIcon from "@mui/icons-material/FormatListBulleted";
 import Constants from "../../../utils/constantsAndStaticObjects/constants";
@@ -50,14 +50,20 @@ const FinancialPage = (props: FinancialPageProps) => {
             campaignGuid,
         );
         const transactions = res.data as FinancialData[];
-        setTransactions(transactions);
+        transactions.sort((a, b) => a.dateCreated.localeCompare(b.dateCreated));
 
         const summary = Array<Balance2>();
         let balance = 0;
+        let expenses = 0;
+        let income = 0;
         transactions.forEach((e) => {
-            balance += e.amount;
-            summary.push({amount: balance, date: new Date(e.dateCreated)});
+            balance += e.isExpense ? -e.amount : e.amount;
+            expenses += e.isExpense ? e.amount : 0;
+            income += !e.isExpense ? e.amount : 0;
+            summary.push({balance, expenses, income, date: new Date(e.dateCreated)});
         });
+        transactions.reverse();
+        setTransactions(transactions);
         setSummary(summary);
     };
 
@@ -94,12 +100,23 @@ const FinancialPage = (props: FinancialPageProps) => {
                         <Tab icon={<GraphIcon/>} label="Balance" value={1}/>
                     </Tabs>
                 </Box>
+                <Stack direction={"row"} sx={{width: "100%"}} justifyContent="space-evenly" alignItems="center">
+                    <Typography variant={"h4"} color={"#de454a"}>
+                        Expenses: {summary?.at(-1)?.expenses}
+                    </Typography>
+                    <Typography variant={"h4"} color={"#45de7d"}>
+                        Income: {summary?.at(-1)?.income}
+                    </Typography>
+                    <Typography variant={"h4"} color={"#4594de"}>
+                        Balance: {summary?.at(-1)?.balance}
+                    </Typography>
+                </Stack>
                 <TabPanel value={currentTab} index={0}>
                     <TransactionsTab transactionTypes={transactionsTypes} transactions={transactions}
                         fetchTransaction={getTransactions}/>
                 </TabPanel>
                 <TabPanel value={currentTab} index={1}>
-                    <GraphTab transactionTypes={transactionsTypes} balances={summary}/>
+                    <GraphTab balances={summary}/>
                 </TabPanel>
                 <TabPanel value={currentTab} index={2}>
                     <TransactionTypeTab transactionTypes={transactionsTypes}
