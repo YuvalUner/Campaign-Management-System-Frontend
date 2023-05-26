@@ -9,13 +9,14 @@ import {
     TextField,
     TextFieldProps,
 } from "@mui/material";
-import ServerRequestMaker from "../utils/server-request-maker";
-import config from "../app-config.json";
+import ServerRequestMaker from "../../utils/helperMethods/server-request-maker";
+import config from "../../app-config.json";
 import {HttpStatusCode, isAxiosError} from "axios";
 
 interface UpdateNumberDialogProps {
     isOpen: boolean;
     switchMode: () => void;
+    fetch:() => Promise<void>;
 }
 
 interface DialogInfo {
@@ -84,6 +85,7 @@ function UpdateNumberDialog(props: UpdateNumberDialogProps): JSX.Element {
             );
             if (res.status === HttpStatusCode.Ok) {
                 setDialogInfo(defaultDialogInfo);
+                await props.fetch();
                 props.switchMode();
             }
         } catch (error) {
@@ -135,7 +137,6 @@ function UpdateNumberDialog(props: UpdateNumberDialogProps): JSX.Element {
                 <Button onClick={handleSubmit}>Update</Button>
             </DialogActions>
         </Dialog>
-
     );
 }
 

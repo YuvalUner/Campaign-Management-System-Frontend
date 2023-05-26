@@ -1,155 +1,104 @@
 import React, {useEffect, useState} from "react";
-import UserPrivateInfo from "../models/user-private-info";
 import config from "../app-config.json";
-import {AxiosResponse, HttpStatusCode} from "axios";
-import ErrorCodeExtractor from "../utils/error-code-extractor";
-import {
-    Alert, AlertTitle, Button, Dialog, DialogActions, DialogContent, DialogContentText,
-    List, DialogTitle, Divider, FormControl, InputLabel,
-    ListItem,
-    ListItemText,
-    MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography, makeStyles,
-} from "@mui/material";
-import ServerRequestMaker from "../utils/server-request-maker";
-import CustomStatusCode from "../utils/constantsAndStaticObjects/custom-status-code";
-import UpdateNumberDialog from "./UpdateNumberDialog";
+import {Avatar, Box, Divider, Paper, Stack, Typography} from "@mui/material";
+import ServerRequestMaker from "../utils/helperMethods/server-request-maker";
+import "./ProfilePage.css";
+import City from "../models/city";
+import User from "../models/user";
+import UpdateNumberDialog from "./dialogs/UpdateNumberDialog";
+import Field from "./fields/Field";
+import Constants from "../utils/constantsAndStaticObjects/constants";
+import Button from "@mui/material/Button";
+import {SlidingPopup} from "./dialogs/SlidingPopup";
+import RegisterIcon from "@mui/icons-material/HowToReg";
+import EditIcon from "@mui/icons-material/Edit";
+import {AuthenticateDialog} from "./dialogs/AuthenticateDialog";
+import {HttpStatusCode, isAxiosError} from "axios";
 
 function ProfilePage(): JSX.Element {
     // Define state object to store user's personal details
-    const [userDetails, setUserDetails] = useState<UserPrivateInfo>({
+    const [userDetails, setUserDetails] = useState<User>({
         firstNameHeb: "",
         lastNameHeb: "",
-        idNumber: 0,
+        idNumber: "",
         cityName: "",
-        phoneNum: "",
+        phoneNumber: "",
     });
 
+    // page data
     const [isVerified, setIsVerified] = useState(false);
+    const [cities, setCities] = useState<City[]>([{cityId: 10, cityName: "תירוש"}]);
 
-    // Define a state variable to track whether the form has been submitted
-    const [submitted, setSubmitted] = useState(false);
-    //set Alert definition
-    const [alertMessage, setAlertMessage] = useState<React.ReactNode>(null);
-
-    const [cities, setCities] = useState([{cityId: 10, cityName: "תירוש"}]);
-
-    // holds if dialog (whatever it is) is open
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    // holds if dialog is open
+    const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+    const [isAuthenticateFormOpen, setIsAuthenticateFormOpen] = useState(false);
+    const [popupData, setPopupData] = useState<string | null>(null);
 
 
-    // TODO: refactor this useEffect as async function
-    useEffect(() => {
-        ServerRequestMaker.MakeGetRequest(
-            config.ControllerUrls.Users.Base + config.ControllerUrls.Users.GetVerifiedStatus,
-        ).then((res: AxiosResponse) => {
-            // TODO: isVerified is probably should be IsVerified
-            setIsVerified(res.data.isVerified === true);
-        });
-    }, []);
-
-    // TODO: move this useEffect to be .then (or better async function) in the above useEffect
-    useEffect(() => {
-        ServerRequestMaker.MakeGetRequest(
-            config.ControllerUrls.Users.Base + config.ControllerUrls.Users.GetProfilePageInfo,
-        ).then((res: AxiosResponse) => {
-            const updatedUserDetails = {
-                firstNameHeb: res.data.firstNameHeb,
-                lastNameHeb: res.data.lastNameHeb,
-                idNumber: 0,
-                cityName: res.data.cityName,
-                phoneNum: res.data.phoneNumber,
-            };
-            if (isVerified) {
-                setUserDetails(updatedUserDetails);
+    const getIsVerified = async () => {
+        try {
+            const res = await ServerRequestMaker.MakeGetRequest(
+                config.ControllerUrls.Users.Base + config.ControllerUrls.Users.GetVerifiedStatus,
+            );
+            setIsVerified(res.data.isVerified);
+            if (!res.data.isVerified) {
+                setPopupData("You have limited permission because you are not authenticated, press authenticate to fill missing data");
             }
-        });
-    }, [isVerified, isDialogOpen]);
-
-    // gets the cities, probably the list that is being shown
-    // TODO: add it to the useEffect above as a parallel async.
-    useEffect(() => {
-        ServerRequestMaker.MakeGetRequest(
-            config.ControllerUrls.Cities.Base,
-        ).then((res: AxiosResponse) => {
-            setCities(res.data);
-        });
-    }, []);
-
-    // function to show alert message
-    // TODO: refactor it to different component, and not save it to state - change the state to hold the message and
-    //  create the message in return value
-    const showAlert = (message: string, severity: "error" | "warning" | "info" | "success") => {
-        setAlertMessage(
-            <Alert variant="outlined" severity={severity} onClose={() => setAlertMessage(null)}>
-                <AlertTitle>{severity.charAt(0).toUpperCase() + severity.slice(1)}</AlertTitle>
-                <strong>{message}</strong>
-            </Alert>,
-        );
-    };
-
-    // a function that will be called when pressing submit
-    // it needs to:
-    // (1) check input
-    // (2) send new date
-    // (3) check server returned ok
-    // (3.1) if not show error message
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        // checking input
-        if (!userDetails.firstNameHeb || !userDetails.lastNameHeb || !userDetails.idNumber || !userDetails.cityName) {
-            showAlert("Please fill in all fields", "error");
-            return;
-        }
-        if (!/^[\u0590-\u05FF]+$/.test(userDetails.firstNameHeb)) {
-            showAlert("First name should contain only Hebrew letters", "error");
-            return;
-        }
-
-        if (!/^[\u0590-\u05FF]+$/.test(userDetails.lastNameHeb)) {
-            showAlert("Last name should contain only Hebrew letters", "error");
-            return;
-        }
-        if (userDetails.idNumber.toString().length !== 9) {
-            showAlert("ID number must be exactly 9 digits", "error");
-            return;
-        }
-
-        // put new data in server
-        const res = await ServerRequestMaker.MakePutRequest(
-            config.ControllerUrls.Users.Base + config.ControllerUrls.Users.UserPrivateInfo,
-            userDetails,
-        );
-
-        // if server returned ok then finish - showing at alert success, setting isVerified and submitted
-        // TODO: check why setting setIsVerified and setSubmitted
-        // TODO: change name and meaning of alert - alert should not be positive (success)
-        if (res.status === HttpStatusCode.Ok) {
-            showAlert("User private info updated successfully!", "success");
-            setIsVerified(true);
-            setSubmitted(true);
-        } else {
-            // if returned notOK then show failure
-            const errNum = ErrorCodeExtractor(res.data);
-            if (res.status !== HttpStatusCode.Unauthorized) {
-                if (errNum === CustomStatusCode.DuplicateKey) {
-                    showAlert("ID number already exists when verifying info.", "error");
-                } else if (errNum === CustomStatusCode.AlreadyVerified) {
-                    showAlert("Phone number already verified.", "error");
-                } else {
-                    showAlert("Unauthorized request.", "error");
+        } catch (e) {
+            if (isAxiosError(e)) {
+                if (e.response?.status === 500){
+                    console.log("server crashed on verified, st to true");
+                    setIsVerified(true);
                 }
-            } else if (errNum === CustomStatusCode.ValueNotFound) {
-                showAlert("Verification failed. Please check your info and try again.", "error");
-            } else if (errNum === CustomStatusCode.DuplicateKey) {
-                showAlert("ID number already exists when verifying info.", "error");
             } else {
-                showAlert("Bad request.", "error");
+                throw e;
             }
         }
+
     };
 
-    // defining function that will be called when input is changed that will change the field in the info
+    const getUserInfo = async () => {
+        const res = await ServerRequestMaker.MakeGetRequest(
+            config.ControllerUrls.Users.Base + config.ControllerUrls.Users.GetProfilePageInfo,
+        );
+        setUserDetails(res.data);
+    };
+
+    const getCities = async () => {
+        const res = await ServerRequestMaker.MakeGetRequest(
+            config.ControllerUrls.Cities.Base,
+        );
+        setCities(res.data);
+    };
+
+    useEffect(() => {
+        const f = async () => {
+            await getIsVerified();
+            await getCities();
+        };
+        // f();
+        getIsVerified();
+        getCities();
+    }, []);
+
+    useEffect(() => {
+        getUserInfo();
+    }, [isVerified]);
+
+
+    const switchUpdateDialogMode = () => {
+        setIsUpdateDialogOpen((prev) => !prev);
+    };
+
+    const switchAuthenticateFormMode = () => {
+        setIsAuthenticateFormOpen((prev) => !prev);
+    };
+
+    const onAuthenticate = async () => {
+        getIsVerified();
+        getUserInfo();
+    };
+
     // TODO: this will cause render whenever input is changed, should switch to useRef, and on submit getting the info
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
@@ -159,128 +108,75 @@ function ProfilePage(): JSX.Element {
         }));
     };
 
-    // TODO: same as above
-    const handleCityChange = (event: SelectChangeEvent<HTMLSelectElement>) => {
-        const cityName = event.target.value as string;
-        //const cityName = cities.find(city => city.cityId === value)?.cityName || "";
-        setUserDetails((prevState) => ({
-            ...prevState,
-            cityName: cityName,
-        }));
-    };
-
-    // TODO: this is provably to remove the default behavior of submit, there is cleaner way (think), need to look it up
-    //  in minimum use lambda ()=>{} or leave it empty
-    const handleUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
-        return;
-    };
-
-
-    const switchDialogMode = () => {
-        setIsDialogOpen((prev) => !prev);
-    };
-
-    const styles = {
-        halfWidth: {
-            width: "50%",
-        },
-        listItem: {
-            backgroundColor: "white",
-            "&:hover": {
-                backgroundColor: "lightgray",
-            },
-        },
-    };
-
     return (
-        <div>
-            <Typography variant={"h4"}>
-                Profile Page
-            </Typography>
-            {isVerified ? (
-                <div>
-                    {/* data part*/}
-                    <Stack onSubmit={handleUpdate}>
-                        <List component="nav" aria-label="mailbox folders">
-                            <ListItem sx={styles.listItem} style={styles.halfWidth}>
-                                <ListItemText primary="Name:"/> {userDetails.firstNameHeb}
-                            </ListItem>
-                            <Divider/>
-                            <ListItem sx={styles.listItem} divider style={styles.halfWidth}>
-                                <ListItemText primary="Surname:"/> {userDetails.lastNameHeb}
-                            </ListItem>
-                            <ListItem sx={styles.listItem} style={styles.halfWidth}>
-                                <ListItemText primary="Phone Number:"/> {userDetails.phoneNum}
-                            </ListItem>
-                            <Divider light/>
-                            <ListItem>
-                                <Button onClick={switchDialogMode} style={styles.halfWidth}
-                                        type="submit" id="outlined-basic"
-                                        variant="contained" color="inherit">Update Number</Button>
-                            </ListItem>
-                        </List>
-                    </Stack>
-                    {/*pop up*/}
-                    <UpdateNumberDialog isOpen={isDialogOpen} switchMode={switchDialogMode}/>
-                </div>
-            ) : (
-                // If the form hasn't been submitted yet, display the form for the user to enter their personal details
-                <>
-                    <form onSubmit={handleSubmit}>
-                        <Stack direction={"column"} spacing={1}>
-                            {alertMessage}
-                            <label>
-                                {/* <FirstNameField showAlert={showAlert} /> */}
-                                <TextField id="outlined-basic" label="First Name" variant="outlined"
-                                           type="text"
-                                           name="firstNameHeb"
-                                           value={userDetails.firstNameHeb}
-                                           onChange={handleInputChange}
-                                />
-                            </label>
-                            <label>
-                                <TextField id="outlined-basic" label="Last Name" variant="outlined"
-                                           type="text"
-                                           name="lastNameHeb"
-                                           value={userDetails.lastNameHeb}
-                                           onChange={handleInputChange}
-                                />
-                            </label>
-                            <label>
-                                <TextField id="outlined-basic" label="ID" variant="outlined"
-                                           type="text"
-                                           name="idNumber"
-                                           value={userDetails.idNumber}
-                                           onChange={handleInputChange}
-                                />
-                            </label>
-                            <label>
-                                <p><FormControl style={styles.halfWidth}>
-                                    <InputLabel id="demo-simple-select-label" variant="outlined">City</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        label="City"
-                                        onChange={handleCityChange} native>
-                                        <option value=""/>
-                                        {cities.map(city => {
-                                                return <option key={city.cityId} value={city.cityName}>
-                                                    {city.cityName}
-                                                </option>;
-                                            },
-                                        )
-                                        }
-                                    </Select>
-                                </FormControl>
-                                </p>
-                            </label>
-                            <Button style={styles.halfWidth} type="submit" id="outlined-basic"
-                                    variant="contained" color="inherit">Submit</Button>
+        <>
+            <UpdateNumberDialog isOpen={isUpdateDialogOpen} switchMode={switchUpdateDialogMode} fetch={getUserInfo}/>
+            <SlidingPopup isOpen={popupData !== null} message={popupData ?? ""} onClose={() => setPopupData(null)}/>
+            <AuthenticateDialog userDetails={userDetails} cities={cities} isOpen={isAuthenticateFormOpen}
+                                switchMode={switchAuthenticateFormMode} fetch={onAuthenticate}/>
+            <Box display="flex" justifyContent="center">
+                <Paper elevation={4} sx={{
+                    width: 750,
+                    height: "85%",
+                    marginRight: `${Constants.muiBoxDefaultPadding}px`,
+                    marginLeft: `${Constants.muiBoxDefaultPadding}px`,
+                    marginTop: `${Constants.muiBoxDefaultPadding}px`,
+                    p: "5px",
+                }}>
+                    <Stack direction={"column"} spacing={2} alignItems={"center"}>
+                        <Box justifyContent="center" display="flex" alignItems="center">
+                            <Avatar src={userDetails.profilePicUrl ?? ""} alt={userDetails.displayNameEng} sx={{
+                                height: "112px",
+                                width: "112px",
+                            }}/>
+                        </Box>
+                        <Typography variant={"h3"}>
+                            {userDetails.displayNameEng}
+                        </Typography>
+                        <Divider sx={{width: "95%"}}>English Name</Divider>
+                        <Stack direction={"row"} spacing={7}>
+                            <Field label={"First Name"} name={"firstNameEng"}
+                                   value={userDetails.firstNameEng ?? ""}
+                                   onChange={handleInputChange}/>
+                            <Field label={"Last Name"} name={"lastNameEng"}
+                                   value={userDetails.lastNameEng ?? ""}
+                                   onChange={handleInputChange}/>
                         </Stack>
-                    </form>
-                </>
-            )}
-        </div>
+                        <Divider sx={{width: "95%"}}>Hebrew Name</Divider>
+                        <Stack direction={"row"} spacing={7}>
+                            <Field label={"First Name"} name={"firstNameHeb"}
+                                   value={userDetails.firstNameHeb ?? ""}
+                                   onChange={handleInputChange}/>
+                            <Field label={"Last Name"} name={"lastNameHeb"}
+                                   value={userDetails.lastNameHeb ?? ""}
+                                   onChange={handleInputChange}/>
+                        </Stack>
+                        <Divider sx={{width: "95%"}}>Contact</Divider>
+                        <Stack direction={"row"} spacing={7}>
+                            <Field label={"Phone Number"} name={"phoneNumber"}
+                                   value={userDetails.phoneNumber ?? ""}
+                                   onChange={handleInputChange}
+                                   endAdornment={<EditIcon onClick={switchUpdateDialogMode}
+                                                           sx={{cursor: "pointer"}}/>}
+                            />
+                            <Field label={"Email"} name={"email"}
+                                   value={userDetails.email ?? ""}
+                                   onChange={handleInputChange}/>
+
+                        </Stack>
+                        <Field label={"City"} name={"cityName"}
+                               value={userDetails.cityName ?? ""}
+                               onChange={handleInputChange}/>
+                        {!isVerified && <Box textAlign="center">
+                            <Button variant="contained" startIcon={<RegisterIcon/>} size={"large"}
+                                    sx={{width: 200}} onClick={switchAuthenticateFormMode}>
+                                Authenticate
+                            </Button>
+                        </Box>}
+                    </Stack>
+                </Paper>
+            </Box>
+        </>
     );
 }
 

@@ -9,7 +9,9 @@ import {
     Drawer,
     List,
     ListItem,
-    ListItemButton, ListItemIcon, ListItemText,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
 } from "@mui/material";
 import NotAuthorizedPage from "../notAuthorizedPage/notAuthorizedPage";
 import {UserLoggedInContext} from "../App";
@@ -27,8 +29,9 @@ import PermissionToTabMapper from "./utils/permission-to-tab-mapper";
 import SubScreenRoutes from "./utils/sub-screen-routes";
 import VotersLedgerPage from "./subPages/VotersLedgerPage/VotersLedgerPage";
 import NotFoundPage from "../notFoundPage/NotFoundPage";
-import SettingsPage from "./subPages/SettingsPage";
+import SettingsPage from "./subPages/SettingsPage/SettingsPage";
 import CustomLedgerManagementPage from "./subPages/customLedgerManagementPage/CustomLedgerManagementPage";
+import FinancialPage from "./subPages/FinancialPage/FinancialPage";
 
 /**
  * If the user has both edit and view permissions, remove the view permissions - as it is implicit that the user has
@@ -148,6 +151,9 @@ function CampaignPage(): JSX.Element {
                 });
                 setPermissions(keptPermissions);
                 setSideMenuList([...hardcodedSideMenuList, ...addToSideMenuList]);
+                console.log("list");
+                console.dir(hardcodedSideMenuList);
+                console.dir(addToSideMenuList);
             }
         }).catch(() => {
             setPermissions([]);
@@ -200,6 +206,9 @@ function CampaignPage(): JSX.Element {
         case PermissionTargets.CustomLedger:
             return <Route path={SubScreenRoutes.UploadCustomLedgerRoute} key={permission.permissionTarget}
                 element={<CustomLedgerManagementPage/>}/>;
+        case PermissionTargets.Financial:
+            return <Route path={SubScreenRoutes.FinancialComponent} key={permission.permissionTarget}
+                element={<FinancialPage campaign={campaign}/>}/>;
         default:
             return <Route path={"Error"} key={permission.permissionTarget}
                 element={<NotFoundPage

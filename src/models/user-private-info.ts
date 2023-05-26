@@ -1,5 +1,4 @@
 interface UserPrivateInfo {
-
     firstNameHeb: string,
     lastNameHeb: string,
     idNumber: number,

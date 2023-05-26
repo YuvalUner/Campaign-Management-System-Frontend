@@ -1,17 +1,17 @@
 import React, {useEffect, useRef, useState} from "react";
-import Campaign from "../../models/campaign";
+import Campaign from "../../../models/campaign";
 import {Button, Stack, TextField, Typography} from "@mui/material";
-import Constants from "../../utils/constantsAndStaticObjects/constants";
+import Constants from "../../../utils/constantsAndStaticObjects/constants";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import CampaignNameField from "../../createCampaignPage/formFields/CampaignNameField";
-import CampaignDescriptionField from "../../createCampaignPage/formFields/CampaignDescriptionField";
-import CampaignLogoUploadField from "../../createCampaignPage/formFields/CampaignLogoUploadField";
+import CampaignNameField from "../../../createCampaignPage/formFields/CampaignNameField";
+import CampaignDescriptionField from "../../../createCampaignPage/formFields/CampaignDescriptionField";
+import CampaignLogoUploadField from "../../../createCampaignPage/formFields/CampaignLogoUploadField";
 import {FileObject} from "mui-file-dropzone";
-import ImageBbApiRequestMaker from "../../utils/ImageBbApiRequestMaker";
+import ImageBbApiRequestMaker from "../../../utils/helperMethods/image-bb-api-request-maker";
 import {HttpStatusCode} from "axios";
-import ServerRequestMaker from "../../utils/server-request-maker";
-import config from "../../app-config.json";
-import Events from "../../utils/events";
+import ServerRequestMaker from "../../../utils/helperMethods/server-request-maker";
+import config from "../../../app-config.json";
+import Events from "../../../utils/helperMethods/events";
 
 interface SettingsPageProps {
     campaign: Campaign | null;
@@ -38,14 +38,18 @@ function SettingsPage(props: SettingsPageProps): JSX.Element {
 
     const updateInviteLink = async () => {
         const res = await ServerRequestMaker.MakePutRequest(
-            config.ControllerUrls.Invites.Base + config.ControllerUrls.Invites.UpdateInvite + props.campaign?.campaignGuid,
+            config.ControllerUrls.Invites.Base +
+            config.ControllerUrls.Invites.UpdateInvite +
+            props.campaign?.campaignGuid,
             {},
         );
     };
 
     const revokeInviteLink = async () => {
         const res = await ServerRequestMaker.MakeDeleteRequest(
-            config.ControllerUrls.Invites.Base + config.ControllerUrls.Invites.RevokeInvite + props.campaign?.campaignGuid,
+            config.ControllerUrls.Invites.Base +
+            config.ControllerUrls.Invites.RevokeInvite +
+            props.campaign?.campaignGuid,
         );
         if (res.status === HttpStatusCode.Ok) {
             setInviteLink(null);
@@ -65,12 +69,15 @@ function SettingsPage(props: SettingsPageProps): JSX.Element {
         }
     };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>):
+    Promise<void> => {
         event.preventDefault();
 
         await uploadToImgBb();
         const res = await ServerRequestMaker.MakePutRequest(
-            config.ControllerUrls.Campaigns.Base + config.ControllerUrls.Campaigns.UpdateCampaign + props.campaign?.campaignGuid,
+            config.ControllerUrls.Campaigns.Base +
+            config.ControllerUrls.Campaigns.UpdateCampaign +
+            props.campaign?.campaignGuid,
             campaignRef.current,
         );
         if (res.status === HttpStatusCode.Ok) {

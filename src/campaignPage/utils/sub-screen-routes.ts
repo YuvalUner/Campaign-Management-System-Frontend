@@ -7,6 +7,7 @@ const SubScreenRoutes = {
     VotersLedgerComponent: "/voters-ledger",
     SettingsComponent: "/settings",
     UploadCustomLedgerComponent: "/upload-custom-ledger",
+    FinancialComponent: "/financial",
     UploadCustomLedgerRoute: "upload-custom-ledger",
 };
 

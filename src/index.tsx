@@ -4,13 +4,14 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import {GoogleOAuthProvider} from "@react-oauth/google";
 import App from "./App";
-import { registerLicense } from "@syncfusion/ej2-base";
+import {registerLicense} from "@syncfusion/ej2-base";
 import config from "./app-config.json";
+import {DevSupport} from "@react-buddy/ide-toolbox";
 
 registerLicense(config.SyncfusionLicenseKey);
 
 const root = ReactDOM.createRoot(
-    document.getElementById("root") as HTMLElement
+    document.getElementById("root") as HTMLElement,
 );
 
 const clientId: string | undefined = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -21,8 +22,8 @@ if (clientId === undefined) {
 
 root.render(
     <GoogleOAuthProvider clientId={clientId}>
-        <App/>
-    </GoogleOAuthProvider>
+            <App/>
+    </GoogleOAuthProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function
