@@ -89,6 +89,11 @@
       "CreateFinancialData": "create/",
       "UpdateFinancialData": "update/",
       "DeleteFinancialData": "delete/"
+    },
+    "Roles": {
+      "Base": "api/Roles/",
+      "GetRoles": "get-roles/",
+      "DeleteRole":"delete-role/"
     }
   }
 }

@@ -7,8 +7,9 @@ import SubPageNames from "./sub-page-names";
 import ErrorIcon from "@mui/icons-material/Error";
 import SubScreenRoutes from "./sub-screen-routes";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
-import MoneyIcon from '@mui/icons-material/AttachMoney';
-
+import MoneyIcon from "@mui/icons-material/AttachMoney";
+import PeopleIcon from "@mui/icons-material/People";
+import WorkIcon from '@mui/icons-material/Work';
 /**
  * A function for mapping between permissions and the tabs they grant access to.
  * @param permission The permission to map.
@@ -39,6 +40,18 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             name: SubPageNames.Financial,
             icon: <MoneyIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.FinancialComponent,
+        };
+    case PermissionTargets.CampaignUsersList:
+        return {
+            name: SubPageNames.CampaignUsers,
+            icon: <PeopleIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.CampaignUsersComponent,
+        };
+    case PermissionTargets.CampaignRolesList:
+        return {
+            name: SubPageNames.CampaignRoles,
+            icon: <WorkIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.CampaignRolesComponent,
         };
     default:
         return {

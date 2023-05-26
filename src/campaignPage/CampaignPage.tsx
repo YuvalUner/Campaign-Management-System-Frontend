@@ -32,6 +32,8 @@ import NotFoundPage from "../notFoundPage/NotFoundPage";
 import SettingsPage from "./subPages/SettingsPage/SettingsPage";
 import CustomLedgerManagementPage from "./subPages/customLedgerManagementPage/CustomLedgerManagementPage";
 import FinancialPage from "./subPages/FinancialPage/FinancialPage";
+import {RolesPage} from "./subPages/RolesPage/RolesPage";
+import {UsersPage} from "./subPages/UsersPage/UsersPage";
 
 /**
  * If the user has both edit and view permissions, remove the view permissions - as it is implicit that the user has
@@ -151,9 +153,6 @@ function CampaignPage(): JSX.Element {
                 });
                 setPermissions(keptPermissions);
                 setSideMenuList([...hardcodedSideMenuList, ...addToSideMenuList]);
-                console.log("list");
-                console.dir(hardcodedSideMenuList);
-                console.dir(addToSideMenuList);
             }
         }).catch(() => {
             setPermissions([]);
@@ -209,6 +208,12 @@ function CampaignPage(): JSX.Element {
         case PermissionTargets.Financial:
             return <Route path={SubScreenRoutes.FinancialComponent} key={permission.permissionTarget}
                 element={<FinancialPage campaign={campaign}/>}/>;
+        case PermissionTargets.CampaignRolesList:
+            return <Route path={SubScreenRoutes.CampaignRolesComponent} key={permission.permissionTarget}
+                          element={<RolesPage campaign={campaign}/>}/>;
+        case PermissionTargets.CampaignUsersList:
+            return <Route path={SubScreenRoutes.CampaignUsersComponent} key={permission.permissionTarget}
+                          element={<UsersPage campaign={campaign}/>}/>;
         default:
             return <Route path={"Error"} key={permission.permissionTarget}
                 element={<NotFoundPage
