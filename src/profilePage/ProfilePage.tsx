@@ -47,7 +47,7 @@ function ProfilePage(): JSX.Element {
         } catch (e) {
             if (isAxiosError(e)) {
                 if (e.response?.status === 500){
-                    console.log("server crashed on verified, st to true");
+                    console.log("server crashed on verified, set to true");
                     setIsVerified(true);
                 }
             } else {

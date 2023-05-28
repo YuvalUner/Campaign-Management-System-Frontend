@@ -93,7 +93,9 @@
     "Roles": {
       "Base": "api/Roles/",
       "GetRoles": "get-roles/",
-      "DeleteRole":"delete-role/"
+      "DeleteRole":"delete-role/",
+      "AddRole":"add-role/",
+      "UpdateRole":"update-role/"
     }
   }
 }
