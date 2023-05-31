@@ -30,5 +30,5 @@ function comparePermissions (a: Permission, b: Permission): boolean {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-export { PermissionTargets, PermissionTypes, comparePermissions};
+export { PermissionTargets, PermissionTypes, comparePermissions };
 export default Permission;

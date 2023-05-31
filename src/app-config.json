@@ -89,6 +89,11 @@
       "CreateFinancialData": "create/",
       "UpdateFinancialData": "update/",
       "DeleteFinancialData": "delete/"
+    },
+    "CampaignAdvisor": {
+      "Base": "api/CampaignAdvisor/",
+      "GetAllResults": "results/",
+      "GetSpecificResultDetails": "results/"
     }
   }
 }
