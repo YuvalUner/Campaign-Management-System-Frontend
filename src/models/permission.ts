@@ -16,6 +16,7 @@ const PermissionTargets = {
     Publishing: "Publishing",
     Financial: "Financial",
     CustomLedger: "Custom Voters Ledger",
+    CampaignAdvisor: "Campaign Advisor",
 };
 
 const PermissionTypes = {
@@ -27,5 +28,7 @@ function comparePermissions (a: Permission, b: Permission): boolean {
     return a.permissionTarget === b.permissionTarget && a.permissionType === b.permissionType;
 }
 
-export default Permission;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export { PermissionTargets, PermissionTypes, comparePermissions};
+export default Permission;

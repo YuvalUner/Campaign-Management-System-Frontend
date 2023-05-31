@@ -9,6 +9,8 @@ const SubScreenRoutes = {
     UploadCustomLedgerComponent: "/upload-custom-ledger",
     FinancialComponent: "/financial",
     UploadCustomLedgerRoute: "upload-custom-ledger",
+    CampaignAdvisorComponent: "/campaign-advisor",
+    CampaignAdvisorRoute: "campaign-advisor",
 };
 
 export default SubScreenRoutes;

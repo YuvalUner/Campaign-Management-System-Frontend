@@ -9,6 +9,7 @@ const SubPageNames = {
     Settings: "Settings",
     UploadCustomLedger: "Custom Ledgers",
     Financial: "Financial",
+    CampaignAdvisor: "Campaign Advisor",
 };
 
 export default SubPageNames;
