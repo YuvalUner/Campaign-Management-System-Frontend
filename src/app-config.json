@@ -40,7 +40,8 @@
       "GetBasicInfo": "get-basic-info/",
       "GetCampaignAdmins": "get-campaign-admins/",
       "UpdateCampaign": "update/",
-      "IsCampaignCustomCampaign": "get-is-custom-campaign/"
+      "IsCampaignCustomCampaign": "get-is-custom-campaign/",
+      "GetCampaignUsers": "getUsers/"
     },
     "Invites": {
       "Base": "api/Invites/",
