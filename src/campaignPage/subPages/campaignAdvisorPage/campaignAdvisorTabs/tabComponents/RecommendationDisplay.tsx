@@ -1,9 +1,10 @@
 import React from "react";
-import Permission from "../../../../../models/permission";
-import {Box, Typography} from "@mui/material";
+import Permission, {PermissionTypes} from "../../../../../models/permission";
+import {Box, Stack, Typography} from "@mui/material";
 import config from "../../../../../app-config.json";
 import ServerRequestMaker from "../../../../../utils/helperMethods/server-request-maker";
 import Button from "@mui/material/Button";
+import {Spinner} from "react-bootstrap";
 
 interface RecommendationDisplayProps {
     permission: Permission;
@@ -22,13 +23,18 @@ interface RecommendationDisplayProps {
  */
 function RecommendationDisplay(props: RecommendationDisplayProps): JSX.Element {
 
+    const [generatingRecommendation, setGeneratingRecommendation] = React.useState<boolean>(false);
+
     const generateResponse = (): void =>  {
+        setGeneratingRecommendation(true);
         ServerRequestMaker.MakePostRequest(
             config.ControllerUrls.CampaignAdvisor.Base + config.ControllerUrls.CampaignAdvisor.GenerateGptResponse
             + props.campaignGuid + "/" + props.resultsGuid,
             null
         ).then((response) => {
             props.setRecommendation(response.data.response);
+        }).finally(() => {
+            setGeneratingRecommendation(false);
         });
     };
 
@@ -41,10 +47,23 @@ function RecommendationDisplay(props: RecommendationDisplayProps): JSX.Element {
             );
         }
         return (
-            <Box>
-                No recommendation generated yet. <br/>
-                <Button onClick={generateResponse}>Generate response</Button>
-            </Box>
+            <>
+                {!generatingRecommendation &&
+                    <Box>
+                    No recommendation generated yet. <br/>
+                        {props.permission.permissionType === PermissionTypes.Edit &&
+                            <Button onClick={generateResponse}>Generate response</Button>}
+                    </Box>
+                }
+                {generatingRecommendation &&
+                    <Stack direction={"column"} spacing={2} alignItems={"center"} justifyContent={"center"} sx={{
+                        marginTop: "2rem",
+                    }}>
+                        <Spinner/>
+                        <Typography variant={"h6"}>Generating recommendation</Typography>
+                    </Stack>
+                }
+            </>
         );
     };
 

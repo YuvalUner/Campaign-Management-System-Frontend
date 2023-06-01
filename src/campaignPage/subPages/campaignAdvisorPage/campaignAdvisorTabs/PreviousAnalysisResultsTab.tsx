@@ -58,16 +58,18 @@ function PreviousAnalysisResultsTab(props: PreviousAnalysisResultsTabProps): JSX
                     padding: "1rem",
                 }}>
                     <Grid xs={12} md={4}>
-                        <TabTextField fieldText={selectedAnalysis.overview?.resultsTitle}
-                            fieldLabel={FieldNames.Title} isReadOnly={true}/>
+                        <TabTextField fieldText={selectedAnalysis.overview?.resultsTitle !== ""
+                            ? selectedAnalysis.overview?.resultsTitle : "N/A"}
+                        fieldLabel={FieldNames.Title} isReadOnly={true}/>
                     </Grid>
                     <Grid xs={12} md={4}>
                         <TabTextField fieldText={selectedAnalysis.overview?.analysisTarget}
                             fieldLabel={FieldNames.OpponentName} isReadOnly={true}/>
                     </Grid>
                     <Grid xs={12} md={4}>
-                        <TabTextField fieldText={selectedAnalysis.overview?.targetTwitterHandle}
-                            fieldLabel={FieldNames.TwitterHandle} isReadOnly={true}/>
+                        <TabTextField fieldText={selectedAnalysis.overview?.targetTwitterHandle !== ""
+                            ? selectedAnalysis.overview?.targetTwitterHandle : "N/A"}
+                        fieldLabel={FieldNames.TwitterHandle} isReadOnly={true}/>
                     </Grid>
                     <Grid xs={12} md={4}>
                         <TabTextField fieldText={toDdMmYyyy(selectedAnalysis.overview?.timePerformed as Date)}
@@ -78,8 +80,9 @@ function PreviousAnalysisResultsTab(props: PreviousAnalysisResultsTabProps): JSX
                             fieldLabel={FieldNames.MaxDaysBack} isReadOnly={true}/>
                     </Grid>
                     <Grid xs={12} md={4}>
-                        <TabTextField fieldText={selectedAnalysis.overview?.additionalUserRequests}
-                            fieldLabel={FieldNames.AdditionalRequests} isReadOnly={true} isMultiline={true}/>
+                        <TabTextField fieldText={selectedAnalysis.overview?.additionalUserRequests !== ""
+                            ? selectedAnalysis.overview?.additionalUserRequests : "N/A" }
+                        fieldLabel={FieldNames.AdditionalRequests} isReadOnly={true} isMultiline={true}/>
                     </Grid>
                 </Grid>
             </Accordion>
