@@ -27,7 +27,9 @@ function ResultsDisplay(props: ResultsDisplayProps): JSX.Element {
     const renderRecommendation = (): JSX.Element => {
         if (props.recommendationLoading){
             return (
-                <Stack direction={"column"} spacing={4} alignItems={"center"} justifyContent={"center"}>
+                <Stack direction={"column"} spacing={2} alignItems={"center"} justifyContent={"center"} sx={{
+                    marginTop: "2rem",
+                }}>
                     <Spinner/>
                     <Typography variant={"h6"}>Generating recommendation
                         - please be patient, this may take some time</Typography>
@@ -52,13 +54,15 @@ function ResultsDisplay(props: ResultsDisplayProps): JSX.Element {
                         </Tooltip>
                     </Stack>
                 </AccordionSummary>
-                <RecommendationDisplay permission={props.permission}
-                    resultsGuid={props.selectedAnalysis.overview?.resultsGuid as string}
-                    recommendation={props.recommendation}
-                    campaignGuid={props.campaignGuid}
-                    setRecommendation={props.setRecommendation}
-                    firstFetchMade={props.firstFetchMade}
-                />
+                {props.recommendation !== undefined &&
+                    <RecommendationDisplay permission={props.permission}
+                        resultsGuid={props.selectedAnalysis.overview?.resultsGuid as string}
+                        recommendation={props.recommendation}
+                        campaignGuid={props.campaignGuid}
+                        setRecommendation={props.setRecommendation}
+                        firstFetchMade={props.firstFetchMade}
+                    />
+                }
             </Accordion>
         );
     };
@@ -66,7 +70,9 @@ function ResultsDisplay(props: ResultsDisplayProps): JSX.Element {
     const renderDetails = (): JSX.Element => {
         if (props.analysisLoading){
             return (
-                <Stack direction={"column"} spacing={4} alignItems={"center"} justifyContent={"center"}>
+                <Stack direction={"column"} spacing={2} alignItems={"center"} justifyContent={"center"} sx={{
+                    marginTop: "2rem",
+                }}>
                     <Spinner/>
                     <Typography variant={"h6"}>Analyzing opponent&#39;s campaign
                         - please be patient, this can take a couple of minutes</Typography>
@@ -81,19 +87,21 @@ function ResultsDisplay(props: ResultsDisplayProps): JSX.Element {
                     >
                         <Typography variant={"h6"}>Details</Typography>
                     </AccordionSummary>
-                    <AnalysisDetailsSection analysisDetails={props.selectedAnalysis.details?.filter(x => x.rowType
-                        === RowTypes.Article)} analysisType={"Articles"}/>
-                    <AnalysisDetailsSection analysisDetails={props.selectedAnalysis.details?.filter(x => x.rowType
-                        === RowTypes.TweetFromTarget)} analysisType={"Tweets from opponent"}/>
-                    <AnalysisDetailsSection analysisDetails={props.selectedAnalysis.details?.filter(x => x.rowType
-                        === RowTypes.TweetAboutTarget)} analysisType={"Tweets about opponent"}
-                    tooltipText={"This analysis is much less accurate than the other two," +
-                                                " as it was based on looking for" +
-                                                "the opponent's name on twitter. As such, please" +
-                                                " take the results with a" +
-                                                " grain of salt." +
-                                                " They also have the least impact on the below recommendation."}
-                    />
+                    {props.selectedAnalysis.details !== undefined && <>
+                        <AnalysisDetailsSection analysisDetails={props.selectedAnalysis.details?.filter(x => x.rowType
+                            === RowTypes.Article)} analysisType={"Articles"}/>
+                        <AnalysisDetailsSection analysisDetails={props.selectedAnalysis.details?.filter(x => x.rowType
+                            === RowTypes.TweetFromTarget)} analysisType={"Tweets from opponent"}/>
+                        <AnalysisDetailsSection analysisDetails={props.selectedAnalysis.details?.filter(x => x.rowType
+                            === RowTypes.TweetAboutTarget)} analysisType={"Tweets about opponent"}
+                        tooltipText={"This analysis is much less accurate than the other two," +
+                                                    " as it was based on looking for" +
+                                                    "the opponent's name on twitter. As such, please" +
+                                                    " take the results with a" +
+                                                    " grain of salt." +
+                                                    " They also have the least impact on the below recommendation."}
+                        />
+                    </>}
                 </Accordion>
                 <Accordion>
                     <AccordionSummary
@@ -112,10 +120,12 @@ function ResultsDisplay(props: ResultsDisplayProps): JSX.Element {
                             </Tooltip>
                         </Stack>
                     </AccordionSummary>
-                    <SamplesList samplesType={"Articles"}
-                        samples={props.selectedAnalysis.samples?.filter(x => x.isArticle === true)}/>
-                    <SamplesList samplesType={"Opponent tweets"}
-                        samples={props.selectedAnalysis.samples?.filter(x => x.isArticle === false)}/>
+                    {props.selectedAnalysis.samples !== undefined && <>
+                        <SamplesList samplesType={"Articles"}
+                            samples={props.selectedAnalysis.samples?.filter(x => x.isArticle === true)}/>
+                        <SamplesList samplesType={"Opponent tweets"}
+                            samples={props.selectedAnalysis.samples?.filter(x => x.isArticle === false)}/>
+                    </>}
                 </Accordion>
             </Stack>
         );

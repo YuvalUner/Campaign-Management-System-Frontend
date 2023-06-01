@@ -7,6 +7,9 @@ interface AnalysisTitleFieldProps {
     fieldLabel: string;
     isReadOnly: boolean;
     isMultiline?: boolean;
+    isRequired?: boolean;
+    inputType?: string;
+    maxLength?: number;
 }
 
 function TabTextField(props: AnalysisTitleFieldProps): JSX.Element {
@@ -18,9 +21,11 @@ function TabTextField(props: AnalysisTitleFieldProps): JSX.Element {
     };
 
     return (
-        <TextField label={props.fieldLabel} variant={"outlined"} multiline={props.isMultiline === true}
+        <TextField label={props.fieldLabel} variant={"outlined"} multiline={props.isMultiline === true} fullWidth
+            required={props.isRequired === true} type={props.inputType ?? "text"}
             value={props.fieldText ?? ""} onChange={onChange} inputProps={{
-                readOnly: props.isReadOnly
+                readOnly: props.isReadOnly,
+                maxLength: props.maxLength !== undefined? props.maxLength : 1000
             }}
         />
     );

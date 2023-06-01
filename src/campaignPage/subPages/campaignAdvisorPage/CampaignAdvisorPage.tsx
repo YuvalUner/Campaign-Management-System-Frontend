@@ -10,6 +10,7 @@ import AnalysisOverview from "../../../models/analysis-overview";
 import config from "../../../app-config.json";
 import ServerRequestMaker from "../../../utils/helperMethods/server-request-maker";
 import {useParams} from "react-router-dom";
+import Events from "../../../utils/helperMethods/events";
 
 function CampaignAdvisorPage(props: SubPageWithPermissionBaseProps): JSX.Element {
 
@@ -22,13 +23,21 @@ function CampaignAdvisorPage(props: SubPageWithPermissionBaseProps): JSX.Element
         setActiveTab(newValue);
     };
 
-    useEffect(() => {
+    const fetchPreviousAnalyses = () => {
         ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.CampaignAdvisor.Base + config.ControllerUrls.CampaignAdvisor.GetAllResults
             + campaignGuid,
         ).then((response) => {
             setPreviousAnalyses(response.data);
         });
+    };
+
+    useEffect(() => {
+        fetchPreviousAnalyses();
+        Events.subscribe(Events.EventNames.ShouldRefreshPreviousAnalysisList, fetchPreviousAnalyses);
+        return () => {
+            Events.unsubscribe(Events.EventNames.ShouldRefreshPreviousAnalysisList, fetchPreviousAnalyses);
+        };
     }, []);
 
     const renderMainSection = () => {
@@ -42,7 +51,7 @@ function CampaignAdvisorPage(props: SubPageWithPermissionBaseProps): JSX.Element
                         </Tabs>
                     </Box>
                     <TabPanel value={activeTab} index={0}>
-                        <NewAnalysisTab/>
+                        <NewAnalysisTab campaignGuid={campaignGuid as string} permission={props.permission}/>
                     </TabPanel>
                     <TabPanel value={activeTab} index={1}>
                         <PreviousAnalysisResultsTab previousAnalyses={previousAnalyses}
