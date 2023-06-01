@@ -1,6 +1,6 @@
 import React from "react";
 import AnalysisOverview from "../../../../models/analysis-overview";
-import {Accordion, AccordionSummary, Stack, Typography} from "@mui/material";
+import {Accordion, AccordionSummary, IconButton, Stack, Tooltip, Typography} from "@mui/material";
 import SelectAnalysis from "./tabComponents/SelectAnalysis";
 import TabTextField from "./tabComponents/TabTextField";
 import AdvisorResults from "../../../../models/advisor-results";
@@ -10,6 +10,9 @@ import FieldNames from "./field-names";
 import {toDdMmYyyy} from "../../../../utils/helperMethods/date-converter";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Grid from "@mui/material/Unstable_Grid2";
+import AnalysisDetailsSection from "./tabComponents/AnalysisDetailsSection";
+import {RowTypes} from "../../../../models/analysis-row";
+import InfoIcon from "@mui/icons-material/Info";
 
 
 interface PreviousAnalysisResultsTabProps {
@@ -81,6 +84,33 @@ function PreviousAnalysisResultsTab(props: PreviousAnalysisResultsTabProps): JSX
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Typography variant={"h6"}>Details</Typography>
+                </AccordionSummary>
+                <AnalysisDetailsSection analysisDetails={selectedAnalysis.details?.filter(x => x.rowType
+                    === RowTypes.Article)} analysisType={"Articles"}/>
+                <AnalysisDetailsSection analysisDetails={selectedAnalysis.details?.filter(x => x.rowType
+                    === RowTypes.TweetFromTarget)} analysisType={"Tweets from opponent"}/>
+                <AnalysisDetailsSection analysisDetails={selectedAnalysis.details?.filter(x => x.rowType
+                    === RowTypes.TweetAboutTarget)} analysisType={"Tweets about opponent"}
+                tooltipText={"This analysis is much less accurate than the other two, as it was based on looking for" +
+                        "the opponent's name on twitter. As such, please take the results with a grain of salt." +
+                        " They also have the least impact on the below recommendation."}
+                />
+            </Accordion>
+            <Accordion>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                >
+                    <Stack direction={"row"} spacing={1}>
+                        <Typography variant={"h6"}>Samples</Typography>
+                        <Tooltip title={"Up to 10 articles and tweets from the opponent are saved for display here," +
+                            "and are also used when generating the recommendation."}>
+                            <IconButton size={"small"}>
+                                <InfoIcon sx={{
+                                    fontSize: "1rem",
+                                }} color={"primary"}/>
+                            </IconButton>
+                        </Tooltip>
+                    </Stack>
                 </AccordionSummary>
             </Accordion>
         </Stack>
