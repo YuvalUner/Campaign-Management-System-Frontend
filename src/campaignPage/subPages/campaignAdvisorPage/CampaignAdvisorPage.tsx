@@ -46,14 +46,16 @@ function CampaignAdvisorPage(props: SubPageWithPermissionBaseProps): JSX.Element
                     </TabPanel>
                     <TabPanel value={activeTab} index={1}>
                         <PreviousAnalysisResultsTab previousAnalyses={previousAnalyses}
-                            campaignGuid={campaignGuid as string}/>
+                            campaignGuid={campaignGuid as string} permission={props.permission}/>
                     </TabPanel>
                 </>
             );
         }
 
         return (
-            <PreviousAnalysisResultsTab previousAnalyses={previousAnalyses} campaignGuid={campaignGuid as string}/>
+            <PreviousAnalysisResultsTab previousAnalyses={previousAnalyses} campaignGuid={campaignGuid as string}
+                permission={props.permission}
+            />
         );
     };
 

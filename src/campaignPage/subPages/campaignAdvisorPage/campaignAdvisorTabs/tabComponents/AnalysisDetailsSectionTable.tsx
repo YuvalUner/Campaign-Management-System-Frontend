@@ -17,11 +17,11 @@ function AnalysisDetailsSectionTable(props: AnalysisDetailsSectionTableProps): J
         >
             <Inject services={injectedServices}/>
             <ColumnsDirective>
-                <ColumnDirective field="topic" headerText="Topic" width="100"/>
-                <ColumnDirective field={"total"} headerText="Total" width="100"/>
-                <ColumnDirective field={"positive"} headerText="Positive %" width="100"/>
-                <ColumnDirective field={"negative"} headerText="Negative %" width="100"/>
-                <ColumnDirective field={"neutral"} headerText="Neutral %" width="100"/>
+                <ColumnDirective field="topic" headerText="Topic" width="150"/>
+                <ColumnDirective field={"total"} headerText="Total" width="150"/>
+                <ColumnDirective field={"positive"} headerText="Positive %" width="150"/>
+                <ColumnDirective field={"negative"} headerText="Negative %" width="150"/>
+                <ColumnDirective field={"neutral"} headerText="Neutral %" width="150"/>
                 <ColumnDirective field={"hate"} headerText="Hate %" width="100"/>
             </ColumnsDirective>
         </GridComponent>

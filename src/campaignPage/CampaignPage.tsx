@@ -27,7 +27,7 @@ import Permission, {PermissionTargets, PermissionTypes} from "../models/permissi
 import MenuListItem from "./utils/menu-list-item";
 import PermissionToTabMapper from "./utils/permission-to-tab-mapper";
 import SubScreenRoutes from "./utils/sub-screen-routes";
-import VotersLedgerPage from "./subPages/VotersLedgerPage/VotersLedgerPage";
+import VotersLedgerPage from "./subPages/votersLedgerPage/VotersLedgerPage";
 import NotFoundPage from "../notFoundPage/NotFoundPage";
 import SettingsPage from "./subPages/SettingsPage/SettingsPage";
 import CustomLedgerManagementPage from "./subPages/customLedgerManagementPage/CustomLedgerManagementPage";

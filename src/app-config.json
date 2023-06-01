@@ -93,7 +93,8 @@
     "CampaignAdvisor": {
       "Base": "api/CampaignAdvisor/",
       "GetAllResults": "results/",
-      "GetSpecificResultDetails": "results/"
+      "GetSpecificResultDetails": "results/",
+      "GenerateGptResponse": "generate-gpt-response/"
     }
   }
 }
