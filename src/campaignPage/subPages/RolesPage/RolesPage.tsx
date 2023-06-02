@@ -2,18 +2,21 @@ import React, {useEffect, useState} from "react";
 import Campaign from "../../../models/campaign";
 import ServerRequestMaker from "../../../utils/helperMethods/server-request-maker";
 import config from "../../../app-config.json";
-import Role from "../../../models/role";
+import Role, {builtInRoleNames} from "../../../models/role";
 import {useParams} from "react-router-dom";
 import {DeleteDialog} from "../FinancialPage/DeleteDialog";
-import {IconButton, List, ListItem, ListItemText, Stack, Typography} from "@mui/material";
+import {Box, IconButton, List, ListItem, ListItemIcon, ListItemText, Stack, Typography} from "@mui/material";
 import {Button} from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Sync";
-import {format} from "date-fns";
 import AddRoleDialog from "./AddRoleDialog";
 import {UpdateRoleDialog} from "./UpdateRoleDialog";
-
+import axios from "axios";
+import Constants from "../../../utils/constantsAndStaticObjects/constants";
+import IncomeIcon from "@mui/icons-material/CallReceived";
+import AdminIcon from "@mui/icons-material/ManageAccounts";
+import PersonIcon from '@mui/icons-material/Person';
 interface RolesPageProps {
     campaign: Campaign | null;
 }
@@ -31,7 +34,7 @@ export const RolesPage = (props: RolesPageProps) => {
         const types = res.data as Role[];
         types.sort((a, b) => {
             if (a.roleLevel !== undefined && b.roleLevel !== undefined && a.roleLevel !== b.roleLevel) {
-                return a.roleLevel - b.roleLevel;
+                return -(a.roleLevel - b.roleLevel);
             }
             return a.roleName.localeCompare(b.roleName);
         });
@@ -66,8 +69,15 @@ export const RolesPage = (props: RolesPageProps) => {
     };
 
     const onDeleteIconClick = async (role: Role) => {
-        const res = await ServerRequestMaker.MakeDeleteRequest(
-            config.ControllerUrls.Roles.Base + config.ControllerUrls.Roles.DeleteRole + campaignGuid,
+        const res = await axios.delete(
+            config.ServerBaseUrl + config.ControllerUrls.Roles.Base + config.ControllerUrls.Roles.DeleteRole + campaignGuid, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                data: role,
+            },
         );
         await getRoles();
     };
@@ -79,33 +89,41 @@ export const RolesPage = (props: RolesPageProps) => {
             <AddRoleDialog isOpen={isAddDialogOpen} switchMode={switchAddTransactionMode} fetch={getRoles}/>
             <DeleteDialog values={deleteDialogData} switchMode={closeDeleteDialog} action={onDeleteIconClick}/>
 
-            <Stack sx={{display: "flex", justifyContent: "space-between"}} direction={"row"} spacing={2}>
-                <Typography variant="h5" sx={{flexGrow: "1"}}>
-                    Transactions
-                </Typography>
-                <Button onClick={switchAddTransactionMode}>Add Transaction <AddIcon/></Button>
-            </Stack>
-            <List>
-                {roles?.map((role) =>
-                    <ListItem key={role.roleName} secondaryAction={
-                        <Stack direction="row" spacing={2}>
-                            <IconButton aria-label="delete"
-                                        onClick={() => openDeleteDialog(role)}>
-                                <DeleteIcon/>
-                            </IconButton>
-                            <IconButton aria-label="update"
-                                        onClick={() => openUpdateDialog(role)}>
-                                <UpdateIcon/>
-                            </IconButton>
-                        </Stack>
-                    }>
-                        <ListItemText
-                            primary={role.roleName}
-                            secondary={`level: ${role.roleLevel}\n${role.roleDescription}`}
-                        />
-                    </ListItem>,
-                )}
-            </List>
+            <Box sx={{width: "100%", height: `calc(100% - ${Constants.topMenuHeight}px)`, marginTop: "10px"}}>
+                <Stack sx={{display: "flex", justifyContent: "space-between"}} direction={"row"} spacing={2}>
+                    <Typography variant="h5" sx={{flexGrow: "1"}}>
+                        Roles
+                    </Typography>
+                    <Button onClick={switchAddTransactionMode}>Add Role <AddIcon/></Button>
+                </Stack>
+                <List>
+                    {roles?.map((role) =>
+                        <ListItem key={role.roleName}
+                                  secondaryAction={builtInRoleNames.includes(role.roleName) ? undefined :
+                                      <Stack direction="row" spacing={2}>
+                                          <IconButton aria-label="delete"
+                                                      onClick={() => openDeleteDialog(role)}>
+                                              <DeleteIcon/>
+                                          </IconButton>
+                                          <IconButton aria-label="update"
+                                                      onClick={() => openUpdateDialog(role)}>
+                                              <UpdateIcon/>
+                                          </IconButton>
+                                      </Stack>
+                                  }>
+                            <ListItemIcon>
+                                {role.roleLevel !== 0
+                                    ? <AdminIcon color="warning"/>
+                                    : <PersonIcon color="success"/>}
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={role.roleName}
+                                secondary={`level: ${role.roleLevel}\n${role.roleDescription}`}
+                            />
+                        </ListItem>,
+                    )}
+                </List>
+            </Box>
         </>
     );
 };

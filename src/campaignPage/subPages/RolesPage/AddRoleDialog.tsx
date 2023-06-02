@@ -74,7 +74,7 @@ const AddRoleDialog = (props: AddRoleDialogProps) => {
                 <TextField fullWidth margin="dense" label="Role Description" inputRef={descriptionRef} error={descError}
                            helperText={""}/>
                 <TextField fullWidth margin="dense" label="Role Level" type={"number"} inputRef={levelRef}
-                           error={levelError} helperText={""}/>
+                           error={levelError} helperText={"0 is regular worker, 3 is owner"}/>
             </DialogContent>
             <DialogActions>
                 <Button fullWidth onClick={addRole}>Add</Button>
