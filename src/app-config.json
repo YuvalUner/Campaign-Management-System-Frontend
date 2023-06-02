@@ -7,7 +7,7 @@
     "ApiKey": "f62f9f34ecef275cf31a659b34210726"
   },
   "SyncfusionLicenseKey": "Mgo+DSMBaFt+QHFqVkNrXVNbdV5dVGpAd0N3RGlcdlR1fUUmHVdTRHRcQllhQX9TdEBiXHhYc3Y=;Mgo+DSMBPh8sVXJ1S0d+X1RPd11dXmJWd1p/THNYflR1fV9DaUwxOX1dQl9gSXpRfkRjW3pfdXNST2I=;ORg4AjUWIQA/Gnt2VFhhQlJBfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hSn5XdE1iWX1bcXFST2Ze;MTg3MDI1MEAzMjMxMmUzMTJlMzMzNUVlYWQvNXlubXNJSTJ5K1JkclhURnd0Rkl2Y0JMd2J3ZHVLTVlXWnQ0V0U9;MTg3MDI1MUAzMjMxMmUzMTJlMzMzNUtQSGRLeThrNFlRaG1kR2dIT05zL1Q5M3ErQjRCMFhiS2ZFa05DVk9sdzQ9;NRAiBiAaIQQuGjN/V0d+XU9Hc1RDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS31TckdrWH9cdXVQTmleUw==;MTg3MDI1M0AzMjMxMmUzMTJlMzMzNVl5VmlpVUZqVnN1R1YzK2NLSlh3WVBya3F4YzZYajluODRuUzYzcEZ1V289;MTg3MDI1NEAzMjMxMmUzMTJlMzMzNUoxQWxkTmNiWWw5aXpOSnM1bEV2VDJKTWJpNGxoZEY3dS96L0dGMnA1bmc9;Mgo+DSMBMAY9C3t2VFhhQlJBfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hSn5XdE1iWX1bcXFcQGhe;MTg3MDI1NkAzMjMxMmUzMTJlMzMzNWNYVTdBUldFdTZKMXg2dkdManl1THlFSzlVRk93MmZmNXpDdEJEQ1lDMVU9;MTg3MDI1N0AzMjMxMmUzMTJlMzMzNVlXRjBEVmtWdXBVanh0L3VMRzdwU0lhZnFqYyt0WDRsVk0vbm5jVGxSYUk9;MTg3MDI1OEAzMjMxMmUzMTJlMzMzNVl5VmlpVUZqVnN1R1YzK2NLSlh3WVBya3F4YzZYajluODRuUzYzcEZ1V289",
-  "ControllerUrls" : {
+  "ControllerUrls": {
     "Tokens": {
       "Base": "api/Token/",
       "SignIn": "googleSignIn",
@@ -40,7 +40,8 @@
       "GetBasicInfo": "get-basic-info/",
       "GetCampaignAdmins": "get-campaign-admins/",
       "UpdateCampaign": "update/",
-      "IsCampaignCustomCampaign": "get-is-custom-campaign/"
+      "IsCampaignCustomCampaign": "get-is-custom-campaign/",
+      "GetCampaignUsers": "getUsers/"
     },
     "Invites": {
       "Base": "api/Invites/",
@@ -51,7 +52,10 @@
     },
     "Permissions": {
       "Base": "api/Permissions/",
-      "GetSelfPermissions": "getSelf/"
+      "GetSelfPermissions": "getSelf/",
+      "AddPermission": "add/",
+      "GetPermissions": "get/",
+      "DeletePermission": "delete/"
     },
     "VotersLedger": {
       "Base": "api/VotersLedger/",
@@ -89,6 +93,15 @@
       "CreateFinancialData": "create/",
       "UpdateFinancialData": "update/",
       "DeleteFinancialData": "delete/"
+    },
+    "Roles": {
+      "Base": "api/Roles/",
+      "GetRoles": "get-roles/",
+      "DeleteRole": "delete-role/",
+      "AddRole": "add-role/",
+      "UpdateRole": "update-role/",
+      "AssignRole": "assign-role/",
+      "AssignAdminRole": "assign-admin-role/"
     },
     "CampaignAdvisor": {
       "Base": "api/CampaignAdvisor/",

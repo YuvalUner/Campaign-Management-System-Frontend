@@ -8,6 +8,8 @@ import ErrorIcon from "@mui/icons-material/Error";
 import SubScreenRoutes from "./sub-screen-routes";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import MoneyIcon from "@mui/icons-material/AttachMoney";
+import PeopleIcon from "@mui/icons-material/People";
+import WorkIcon from '@mui/icons-material/Work';
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
 /**
@@ -40,6 +42,18 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             name: SubPageNames.Financial,
             icon: <MoneyIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.FinancialComponent,
+        };
+    case PermissionTargets.CampaignUsersList:
+        return {
+            name: SubPageNames.CampaignUsers,
+            icon: <PeopleIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.CampaignUsersComponent,
+        };
+    case PermissionTargets.CampaignRolesList:
+        return {
+            name: SubPageNames.CampaignRoles,
+            icon: <WorkIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.CampaignRolesComponent,
         };
     case PermissionTargets.CampaignAdvisor:
         return {

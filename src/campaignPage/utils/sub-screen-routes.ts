@@ -8,6 +8,8 @@ const SubScreenRoutes = {
     SettingsComponent: "/settings",
     UploadCustomLedgerComponent: "/upload-custom-ledger",
     FinancialComponent: "/financial",
+    CampaignUsersComponent: "/CampaignUsers",
+    CampaignRolesComponent: "/CampaignRoles",
     UploadCustomLedgerRoute: "upload-custom-ledger",
     CampaignAdvisorComponent: "/campaign-advisor",
     CampaignAdvisorRoute: "campaign-advisor",

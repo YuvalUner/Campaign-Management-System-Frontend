@@ -52,7 +52,6 @@ export const AuthenticateDialog = forwardRef<HTMLDivElement, AuthenticateFormPro
     // (3) check server returned ok
     // (3.1) if not show error message
     const handleSubmit = async () => {
-        console.dir();
         // checking input
         if (!userDetails.firstNameHeb || !userDetails.lastNameHeb || !userDetails.idNumber || !userDetails.cityName) {
             showAlert("Please fill in all fields", "error");

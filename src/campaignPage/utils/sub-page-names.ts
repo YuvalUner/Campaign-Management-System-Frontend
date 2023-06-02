@@ -9,6 +9,8 @@ const SubPageNames = {
     Settings: "Settings",
     UploadCustomLedger: "Custom Ledgers",
     Financial: "Financial",
+    CampaignUsers: "Users",
+    CampaignRoles: "Roles",
     CampaignAdvisor: "Campaign Advisor",
 };
 

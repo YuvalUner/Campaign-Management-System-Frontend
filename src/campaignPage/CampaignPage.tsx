@@ -32,6 +32,8 @@ import NotFoundPage from "../notFoundPage/NotFoundPage";
 import SettingsPage from "./subPages/SettingsPage/SettingsPage";
 import CustomLedgerManagementPage from "./subPages/customLedgerManagementPage/CustomLedgerManagementPage";
 import FinancialPage from "./subPages/FinancialPage/FinancialPage";
+import {RolesPage} from "./subPages/RolesPage/RolesPage";
+import {UsersPage} from "./subPages/UsersPage/UsersPage";
 import CampaignAdvisorPage from "./subPages/campaignAdvisorPage/CampaignAdvisorPage";
 
 /**
@@ -207,6 +209,12 @@ function CampaignPage(): JSX.Element {
         case PermissionTargets.Financial:
             return <Route path={SubScreenRoutes.FinancialComponent} key={permission.permissionTarget}
                 element={<FinancialPage campaign={campaign}/>}/>;
+        case PermissionTargets.CampaignRolesList:
+            return <Route path={SubScreenRoutes.CampaignRolesComponent} key={permission.permissionTarget}
+                          element={<RolesPage campaign={campaign}/>}/>;
+        case PermissionTargets.CampaignUsersList:
+            return <Route path={SubScreenRoutes.CampaignUsersComponent} key={permission.permissionTarget}
+                          element={<UsersPage campaign={campaign}/>}/>;
         case PermissionTargets.CampaignAdvisor:
             return <Route path={SubScreenRoutes.CampaignAdvisorComponent} key={permission.permissionTarget}
                 element={<CampaignAdvisorPage permission={permission}/>}/>;

@@ -40,7 +40,7 @@ const FinancialPage = (props: FinancialPageProps) => {
         const objIndex = types.findIndex((obj) => obj.typeName === "Other");
         types[objIndex].typeDescription = "";
         types.sort((a, b) => a.typeName.localeCompare(b.typeName));
-        setTransactionsTypes(res.data);
+        setTransactionsTypes(types);
     };
 
     const getTransactions = async () => {

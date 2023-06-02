@@ -18,9 +18,10 @@ class ServerRequestMaker {
      * @param url - url of the specific method in the server.
      * @param body - the body of the request. A JSON object (pass it as the object itself, not as a string).
      * @param additionalHeaders - additional headers to add to the request. A JSON string.
+     * @param params
      */
     public static async MakePostRequest(url: string, body: unknown,
-        additionalHeaders: string | null = null): Promise<AxiosResponse> {
+        additionalHeaders: string | null = null, params: object | null = null): Promise<AxiosResponse> {
         return await this.instance.post(config.ServerBaseUrl + url, JSON.stringify(body), {
             headers: {
                 "Content-Type": "application/json",
@@ -28,6 +29,9 @@ class ServerRequestMaker {
                 "Access-Control-Allow-Origin": "*",
                 additionalHeaders,
             },
+            params: {
+                ...params
+            }
         });
     }
 

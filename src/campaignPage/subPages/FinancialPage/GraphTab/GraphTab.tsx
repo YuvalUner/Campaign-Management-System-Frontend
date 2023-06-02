@@ -22,8 +22,6 @@ interface GraphPageProps {
 }
 
 export const GraphTab = (props: GraphPageProps) => {
-    console.dir(props.balances);
-
     const marker = {
         visible: true, width: 10, height: 10, border: {width: 2, color: "#F8AB1D"},
         dataLabel: {
