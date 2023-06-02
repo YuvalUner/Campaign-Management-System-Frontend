@@ -102,6 +102,13 @@
       "UpdateRole": "update-role/",
       "AssignRole": "assign-role/",
       "AssignAdminRole": "assign-admin-role/"
+    },
+    "CampaignAdvisor": {
+      "Base": "api/CampaignAdvisor/",
+      "GetAllResults": "results/",
+      "GetSpecificResultDetails": "results/",
+      "GenerateGptResponse": "generate-gpt-response/",
+      "Analyze": "analyze/"
     }
   }
 }

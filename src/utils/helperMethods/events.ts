@@ -27,6 +27,7 @@ class Events{
         GoForward: "GoForward",
         StartUpload: "StartUpload",
         UploadFinished: "UploadFinished",
+        ShouldRefreshPreviousAnalysisList: "ShouldRefreshPreviousAnalysisList",
     };
 
     /**

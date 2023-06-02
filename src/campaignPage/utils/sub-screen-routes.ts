@@ -11,6 +11,8 @@ const SubScreenRoutes = {
     CampaignUsersComponent: "/CampaignUsers",
     CampaignRolesComponent: "/CampaignRoles",
     UploadCustomLedgerRoute: "upload-custom-ledger",
+    CampaignAdvisorComponent: "/campaign-advisor",
+    CampaignAdvisorRoute: "campaign-advisor",
 };
 
 export default SubScreenRoutes;

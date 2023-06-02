@@ -10,6 +10,8 @@ import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import MoneyIcon from "@mui/icons-material/AttachMoney";
 import PeopleIcon from "@mui/icons-material/People";
 import WorkIcon from '@mui/icons-material/Work';
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+
 /**
  * A function for mapping between permissions and the tabs they grant access to.
  * @param permission The permission to map.
@@ -52,6 +54,12 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             name: SubPageNames.CampaignRoles,
             icon: <WorkIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.CampaignRolesComponent,
+        };
+    case PermissionTargets.CampaignAdvisor:
+        return {
+            name: SubPageNames.CampaignAdvisor,
+            icon: <AutoAwesomeIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.CampaignAdvisorComponent,
         };
     default:
         return {

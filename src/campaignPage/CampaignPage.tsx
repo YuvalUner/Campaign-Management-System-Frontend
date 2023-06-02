@@ -27,13 +27,14 @@ import Permission, {PermissionTargets, PermissionTypes} from "../models/permissi
 import MenuListItem from "./utils/menu-list-item";
 import PermissionToTabMapper from "./utils/permission-to-tab-mapper";
 import SubScreenRoutes from "./utils/sub-screen-routes";
-import VotersLedgerPage from "./subPages/VotersLedgerPage/VotersLedgerPage";
+import VotersLedgerPage from "./subPages/votersLedgerPage/VotersLedgerPage";
 import NotFoundPage from "../notFoundPage/NotFoundPage";
 import SettingsPage from "./subPages/SettingsPage/SettingsPage";
 import CustomLedgerManagementPage from "./subPages/customLedgerManagementPage/CustomLedgerManagementPage";
 import FinancialPage from "./subPages/FinancialPage/FinancialPage";
 import {RolesPage} from "./subPages/RolesPage/RolesPage";
 import {UsersPage} from "./subPages/UsersPage/UsersPage";
+import CampaignAdvisorPage from "./subPages/campaignAdvisorPage/CampaignAdvisorPage";
 
 /**
  * If the user has both edit and view permissions, remove the view permissions - as it is implicit that the user has
@@ -214,6 +215,9 @@ function CampaignPage(): JSX.Element {
         case PermissionTargets.CampaignUsersList:
             return <Route path={SubScreenRoutes.CampaignUsersComponent} key={permission.permissionTarget}
                           element={<UsersPage campaign={campaign}/>}/>;
+        case PermissionTargets.CampaignAdvisor:
+            return <Route path={SubScreenRoutes.CampaignAdvisorComponent} key={permission.permissionTarget}
+                element={<CampaignAdvisorPage permission={permission}/>}/>;
         default:
             return <Route path={"Error"} key={permission.permissionTarget}
                 element={<NotFoundPage
