@@ -35,6 +35,7 @@ import FinancialPage from "./subPages/FinancialPage/FinancialPage";
 import {RolesPage} from "./subPages/RolesPage/RolesPage";
 import {UsersPage} from "./subPages/UsersPage/UsersPage";
 import CampaignAdvisorPage from "./subPages/campaignAdvisorPage/CampaignAdvisorPage";
+import {JobTypesPage} from "./subPages/JobTypesPage/JobTypesPage";
 
 /**
  * If the user has both edit and view permissions, remove the view permissions - as it is implicit that the user has
@@ -211,14 +212,16 @@ function CampaignPage(): JSX.Element {
                 element={<FinancialPage campaign={campaign}/>}/>;
         case PermissionTargets.CampaignRolesList:
             return <Route path={SubScreenRoutes.CampaignRolesComponent} key={permission.permissionTarget}
-                          element={<RolesPage campaign={campaign}/>}/>;
+                element={<RolesPage campaign={campaign}/>}/>;
         case PermissionTargets.CampaignUsersList:
             return <Route path={SubScreenRoutes.CampaignUsersComponent} key={permission.permissionTarget}
-                          element={<UsersPage campaign={campaign}/>}/>;
+                element={<UsersPage campaign={campaign}/>}/>;
         case PermissionTargets.CampaignAdvisor:
             return <Route path={SubScreenRoutes.CampaignAdvisorComponent} key={permission.permissionTarget}
                 element={<CampaignAdvisorPage permission={permission}/>}/>;
-        default:
+        case PermissionTargets.JobTypes:
+            return <Route path={SubScreenRoutes.JobTypes} key={permission.permissionTarget}
+                element={<JobTypesPage campaign={campaign}/>}/>;        default:
             return <Route path={"Error"} key={permission.permissionTarget}
                 element={<NotFoundPage
                     linkTo={SubScreenRoutes.CampaignBaseComponent + campaignGuid}

@@ -13,6 +13,7 @@ const SubScreenRoutes = {
     UploadCustomLedgerRoute: "upload-custom-ledger",
     CampaignAdvisorComponent: "/campaign-advisor",
     CampaignAdvisorRoute: "campaign-advisor",
+    JobTypes: "/job-types",
 };
 
 export default SubScreenRoutes;
