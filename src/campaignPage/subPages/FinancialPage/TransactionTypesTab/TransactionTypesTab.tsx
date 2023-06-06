@@ -20,7 +20,6 @@ interface TransactionTypeTabProps {
 }
 
 export const TransactionTypeTab = (props: TransactionTypeTabProps) => {
-    // .sort((a, b) => a.dateCreated.localeCompare(b.dateCreated))
     const params = useParams();
     const campaignGuid = params.campaignGuid;
 

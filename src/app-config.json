@@ -109,6 +109,13 @@
       "GetSpecificResultDetails": "results/",
       "GenerateGptResponse": "generate-gpt-response/",
       "Analyze": "analyze/"
+    },
+    "JobType": {
+      "Base": "api/JobTypes/",
+      "AddJobType": "add/",
+      "DeleteJobType": "delete/",
+      "GetJobTypes": "get/",
+      "UpdateJobType": "update/"
     }
   }
 }
