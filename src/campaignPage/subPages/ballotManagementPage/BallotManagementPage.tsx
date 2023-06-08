@@ -9,6 +9,7 @@ import Party from "../../../models/party";
 import Ballot from "../../../models/ballot";
 import ServerRequestMaker from "../../../utils/helperMethods/server-request-maker";
 import config from "../../../app-config.json";
+import Events from "../../../utils/helperMethods/events";
 
 interface BallotManagementPageProps extends SubPageWithPermissionBaseProps {
     isCustomCampaign: boolean;
@@ -42,6 +43,14 @@ function BallotManagementPage(props: BallotManagementPageProps): JSX.Element {
     useEffect(() => {
         getParties();
         getBallots();
+
+        Events.subscribe(Events.EventNames.ShouldRefreshBallotsList, getBallots);
+        Events.subscribe(Events.EventNames.ShouldRefreshPartyList, getParties);
+
+        return () => {
+            Events.unsubscribe(Events.EventNames.ShouldRefreshBallotsList, getBallots);
+            Events.unsubscribe(Events.EventNames.ShouldRefreshPartyList, getParties);
+        };
     }, []);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -57,7 +66,8 @@ function BallotManagementPage(props: BallotManagementPageProps): JSX.Element {
                 </Tabs>
                 <TabPanel index={0} value={activeTab}>
                     <ManageBallotsTab permission={props.permission} ballots={ballots}
-                        updateBallots={setBallots} isCustomCampaign={props.isCustomCampaign}/>
+                        isCustomCampaign={props.isCustomCampaign}
+                        campaignGuid={campaignGuid as string}/>
                 </TabPanel>
                 <TabPanel index={1} value={activeTab}>
                     <ManagePartiesTab permission={props.permission} parties={parties} updateParties={setParties}/>
