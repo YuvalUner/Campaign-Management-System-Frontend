@@ -268,6 +268,16 @@ enum CustomStatusCode {
     * via a ledger row id that does not exist.
     */
     LedgerRowNotFound = 50028,
+
+    /**
+     * A status code for when the user attempts to access a non-existent ballot.
+     */
+    BallotNotFound = 50029,
+
+    /**
+     * A status code for when the user attempts to access a non-existent party.
+     */
+    PartyNotFound = 50030,
 }
 
 export default CustomStatusCode;

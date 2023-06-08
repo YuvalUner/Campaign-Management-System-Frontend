@@ -12,6 +12,7 @@ const SubPageNames = {
     CampaignUsers: "Users",
     CampaignRoles: "Roles",
     CampaignAdvisor: "Campaign Advisor",
+    BallotManagement: "Ballot Management",
 };
 
 export default SubPageNames;

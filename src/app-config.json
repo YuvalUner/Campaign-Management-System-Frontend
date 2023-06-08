@@ -109,6 +109,20 @@
       "GetSpecificResultDetails": "results/",
       "GenerateGptResponse": "generate-gpt-response/",
       "Analyze": "analyze/"
+    },
+    "Parties": {
+      "Base": "api/Parties/",
+      "GetAllParties": "get/",
+      "AddParty": "add/",
+      "UpdateParty": "update/",
+      "DeleteParty": "delete/"
+    },
+    "Ballots": {
+      "Base": "api/Ballots/",
+      "GetAllBallots": "get-all-ballots/",
+      "DeleteBallot": "delete-ballot/",
+      "AddBallot": "add-ballot/",
+      "UpdateBallot": "update-ballot/"
     }
   }
 }
