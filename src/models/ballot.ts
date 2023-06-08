@@ -4,6 +4,8 @@ interface Ballot {
     accessible: boolean;
     ballotAddress: string;
     ballotLocation: string;
+    ballotId?: number;
+    isCustomBallot?: boolean;
 }
 
 export default Ballot;

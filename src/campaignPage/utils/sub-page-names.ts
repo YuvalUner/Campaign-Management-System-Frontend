@@ -10,6 +10,7 @@ const SubPageNames = {
     UploadCustomLedger: "Custom Ledgers",
     Financial: "Financial",
     CampaignAdvisor: "Campaign Advisor",
+    BallotManagement: "Ballot Management",
 };
 
 export default SubPageNames;

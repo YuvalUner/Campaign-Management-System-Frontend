@@ -61,7 +61,7 @@ function VotersLedgerPage(props: SubPageWithPermissionBaseProps): JSX.Element {
         : [Page, Sort, Resize, Toolbar, ExcelExport, Filter];
 
     const toolbarOptions = props.permission.permissionType === PermissionTypes.Edit ?
-        ["Edit", "Add", "Delete", "ExcelExport"]
+        ["Edit", "ExcelExport"]
         : ["ExcelExport"];
 
     useEffect(() => {

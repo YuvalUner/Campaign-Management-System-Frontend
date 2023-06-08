@@ -17,6 +17,7 @@ const PermissionTargets = {
     Financial: "Financial",
     CustomLedger: "Custom Voters Ledger",
     CampaignAdvisor: "Campaign Advisor",
+    BallotManagement: "Ballot Management",
 };
 
 const PermissionTypes = {

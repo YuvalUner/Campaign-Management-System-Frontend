@@ -11,6 +11,8 @@ const SubScreenRoutes = {
     UploadCustomLedgerRoute: "upload-custom-ledger",
     CampaignAdvisorComponent: "/campaign-advisor",
     CampaignAdvisorRoute: "campaign-advisor",
+    BallotManagementComponent: "/ballot-management",
+    BallotManagementRoute: "ballot-management",
 };
 
 export default SubScreenRoutes;
