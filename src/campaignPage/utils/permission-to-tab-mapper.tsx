@@ -11,7 +11,7 @@ import MoneyIcon from "@mui/icons-material/AttachMoney";
 import PeopleIcon from "@mui/icons-material/People";
 import WorkIcon from "@mui/icons-material/Work";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentIcon from "@mui/icons-material/Assignment";
 
 /**
  * A function for mapping between permissions and the tabs they grant access to.
@@ -67,6 +67,12 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             name: SubPageNames.JobTypes,
             icon: <AssignmentIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.JobTypes,
+        };
+    case PermissionTargets.Jobs:
+        return {
+            name: SubPageNames.Jobs,
+            icon: <AssignmentIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.Jobs,
         };
     default:
         return {

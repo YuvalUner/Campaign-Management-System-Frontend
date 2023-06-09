@@ -116,6 +116,21 @@
       "DeleteJobType": "delete/",
       "GetJobTypes": "get/",
       "UpdateJobType": "update/"
+    },
+    "Jobs": {
+      "Base": "api/Jobs/",
+      "AddJob": "add/",
+      "DeleteJob": "delete/",
+      "UpdateJob": "update/",
+      "GetJobs": "get/",
+      "GetJob": "get/",
+      "GetJobsByMannedStatus": "get-filtered/",
+      "AssignJob": "assign/",
+      "UnassignJob": "unassign/",
+      "GetJobAssignments": "get-assignments/",
+      "UpdateJobAssignment": "update-assignment/",
+      "GetSelfJobs": "get-self-jobs/",
+      "GetAvailableUsers": "get-available-users/"
     }
   }
 }
