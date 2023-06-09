@@ -6,30 +6,29 @@ import {
     Edit, EditSettingsModel,
     ExcelExport,
     Filter,
-    GridComponent, IEditCell,
+    GridComponent,
+    IEditCell,
     Page,
     Resize,
     Sort,
     Toolbar,
 } from "@syncfusion/ej2-react-grids";
 import {ClickEventArgs} from "@syncfusion/ej2-react-navigations";
-import Ballot from "../../../../../models/ballot";
+import Party from "../../../../../models/party";
+import {Alert, Stack} from "@mui/material";
 import {Inject} from "@syncfusion/ej2-react-schedule";
 import ServerRequestMaker from "../../../../../utils/helperMethods/server-request-maker";
 import config from "../../../../../app-config.json";
-import {Alert, Stack} from "@mui/material";
-import CustomStatusCode from "../../../../../utils/constantsAndStaticObjects/custom-status-code";
-import ErrorCodeExtractor from "../../../../../utils/helperMethods/error-code-extractor";
 import Events from "../../../../../utils/helperMethods/events";
 
-interface BallotsTableProps {
+interface PartiesTableProps {
     editable: boolean;
-    ballots: Ballot[];
+    parties: Party[];
     campaignGuid: string;
     changesMade: React.MutableRefObject<boolean>;
 }
 
-function BallotsTable(props: BallotsTableProps): JSX.Element {
+function PartiesTable(props: PartiesTableProps): JSX.Element {
 
     let gridInstance: GridComponent | null;
 
@@ -64,40 +63,25 @@ function BallotsTable(props: BallotsTableProps): JSX.Element {
         allowDeleting: props.editable,
     };
 
-    const fitErrorMessage = (e: { response: { data: string | null; }; }) : void => {
-        const errorCode: number = (ErrorCodeExtractor(e.response.data));
-
-        switch (errorCode) {
-        case CustomStatusCode.DuplicateKey:
-            setError("Ballot with this number already exists in this campaign");
-            break;
-        default:
-            setError("An error occurred");
-            break;
-        }
-    };
-
     const onActionComplete = (args: ActionEventArgs) => {
         if (args.requestType === "save"){
             props.changesMade.current = true;
             setError("");
-            const data: Ballot = args.data as Ballot;
+            const data: Party = args.data as Party;
             if (args.action === "add"){
                 ServerRequestMaker.MakePostRequest(
-                    config.ControllerUrls.Ballots.Base + config.ControllerUrls.Ballots.AddBallot + props.campaignGuid,
+                    config.ControllerUrls.Parties.Base + config.ControllerUrls.Parties.AddParty + props.campaignGuid,
                     data,
-                ).catch((e) => {
-                    fitErrorMessage(e);
-                    Events.dispatch(Events.EventNames.ShouldRefreshBallotsList);
+                ).finally(() => {
+                    Events.dispatch(Events.EventNames.ShouldRefreshPartyList);
                 });
             } else if (args.action === "edit"){
                 ServerRequestMaker.MakePutRequest(
-                    config.ControllerUrls.Ballots.Base + config.ControllerUrls.Ballots.UpdateBallot
+                    config.ControllerUrls.Parties.Base + config.ControllerUrls.Parties.UpdateParty
                     + props.campaignGuid,
                     data,
-                ).catch((e) => {
-                    fitErrorMessage(e);
-                    Events.dispatch(Events.EventNames.ShouldRefreshBallotsList);
+                ).catch(() => {
+                    Events.dispatch(Events.EventNames.ShouldRefreshPartyList);
                 });
             }
         } else if (args.requestType === "delete"){
@@ -105,13 +89,13 @@ function BallotsTable(props: BallotsTableProps): JSX.Element {
             setError("");
             if (args.data !== undefined && args.data instanceof Array && args.data.length > 0
                 && args.data[0] !== undefined) {
-                const data: Ballot = args.data[0] as Ballot;
+                const data: Party = args.data[0] as Party;
                 ServerRequestMaker.MakeDeleteRequest(
-                    config.ControllerUrls.Ballots.Base + config.ControllerUrls.Ballots.DeleteBallot
-                    + props.campaignGuid + "/" + data.innerCityBallotId,
+                    config.ControllerUrls.Parties.Base + config.ControllerUrls.Parties.DeleteParty
+                    + props.campaignGuid + "/" + data.partyId,
                 ).catch(() => {
                     setError("An error occurred");
-                    Events.dispatch(Events.EventNames.ShouldRefreshBallotsList);
+                    Events.dispatch(Events.EventNames.ShouldRefreshPartyList);
                 });
             } else{
                 setError("An error occurred");
@@ -122,7 +106,7 @@ function BallotsTable(props: BallotsTableProps): JSX.Element {
     return (
         <Stack direction={"column"} spacing={2}>
             <GridComponent
-                dataSource={props.ballots}
+                dataSource={props.parties}
                 allowPaging={true}
                 allowSorting={true}
                 allowResizing={true}
@@ -137,14 +121,18 @@ function BallotsTable(props: BallotsTableProps): JSX.Element {
             >
                 <Inject services={injectedServices}/>
                 <ColumnsDirective>
-                    <ColumnDirective field={"innerCityBallotId"} headerText={"Ballot Number"} width={"100px"}
-                        editType={"numericedit"} edit={numericParams} isPrimaryKey={true}
-                        validationRules={{required: true, number: true}}
+                    <ColumnDirective field={"partyId"} headerText={"Party Id"} width={"100px"} isPrimaryKey={true}
+                        visible={false}/>
+                    <ColumnDirective field={"partyName"} headerText={"Party Name"} width={"100px"}
+                        edit={numericParams} validationRules={{
+                            required: true,
+                        }}/>
+                    <ColumnDirective field={"partyLetter"} headerText={"Party Letter"} width={"100px"}
+                        validationRules={{
+                            required: true,
+                            maxLength: 5
+                        }}
                     />
-                    <ColumnDirective field={"cityName"} headerText={"City Name"} width={"100px"}/>
-                    <ColumnDirective field={"ballotLocation"} headerText={"Ballot Location"} width={"100px"}/>
-                    <ColumnDirective field={"ballotAddress"} headerText={"Ballot Address"} width={"100px"}/>
-                    <ColumnDirective field={"accessible"} headerText={"Accessible"} width={"100px"}/>
                 </ColumnsDirective>
             </GridComponent>
             {error !== "" && <Alert severity={"error"}>{error}</Alert>}
@@ -152,4 +140,4 @@ function BallotsTable(props: BallotsTableProps): JSX.Element {
     );
 }
 
-export default BallotsTable;
+export default PartiesTable;
