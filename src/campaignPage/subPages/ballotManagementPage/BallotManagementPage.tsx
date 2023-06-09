@@ -70,7 +70,8 @@ function BallotManagementPage(props: BallotManagementPageProps): JSX.Element {
                         campaignGuid={campaignGuid as string}/>
                 </TabPanel>
                 <TabPanel index={1} value={activeTab}>
-                    <ManagePartiesTab permission={props.permission} parties={parties} updateParties={setParties}/>
+                    <ManagePartiesTab permission={props.permission} parties={parties}
+                        updateParties={setParties} campaignGuid={campaignGuid as string}/>
                 </TabPanel>
             </Box>
         </Box>

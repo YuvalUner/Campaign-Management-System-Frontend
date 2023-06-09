@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import TabCommonProps from "./tab-common-props";
-import {Alert, Box, Divider, IconButton, List, Tooltip} from "@mui/material";
+import {Alert, Box, Divider, IconButton, List, Tooltip, Typography} from "@mui/material";
 import Events from "../../../../utils/helperMethods/events";
 import LedgerListItem from "./manageExistingLedgersTabComponents/LedgerListItem";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -40,10 +40,13 @@ function ManageExistingLedgersTab(props: TabCommonProps): JSX.Element {
                 </IconButton>
             </Tooltip>
             <List>
-                <Divider sx={{
-                    border: "1px solid black",
-                    marginBottom: "4px",
-                }}/>
+                {props.customLedgers.length > 0 ?
+                    <Divider sx={{
+                        border: "1px solid black",
+                        marginBottom: "4px",
+                    }}/>
+                    : <Typography variant={"h5"}>No custom ledgers found</Typography>
+                }
                 {props.customLedgers.map((ledger, idx) => {
                     return (
                         <div key={idx}>
