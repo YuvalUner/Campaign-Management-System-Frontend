@@ -12,7 +12,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import GraphIcon from "@mui/icons-material/Timeline";
 import TabPanel from "../../utils/TabPanel";
 import {MyJobsTab} from "./MyJobsTab";
-import {AllJobsTab} from "./AllJobsTab";
+import {AllJobsTab} from "./AllJobsTab/AllJobsTab";
 
 interface JobsPageProps {
     campaign: Campaign | null;

@@ -1,21 +1,22 @@
 import React, {useEffect, useState} from "react";
-import ServerRequestMaker from "../../../utils/helperMethods/server-request-maker";
-import config from "../../../app-config.json";
-import Job from "../../../models/job";
+import ServerRequestMaker from "../../../../utils/helperMethods/server-request-maker";
+import config from "../../../../app-config.json";
+import Job from "../../../../models/job";
 import {List, ListItem, ListItemIcon, ListItemText, Stack, Tooltip, Typography} from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import {Button} from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import {useParams} from "react-router-dom";
 import {AddDialog} from "./AddDialog";
-import {JobType} from "../../../models/jobType";
+import {JobType} from "../../../../models/jobType";
+import {JobDialog} from "./JobDialog";
 
 interface AllJobsTabProps {
     types: JobType[] | null;
 }
 
 
-export const AllJobsTab = (props:AllJobsTabProps) => {
+export const AllJobsTab = (props: AllJobsTabProps) => {
     const params = useParams();
     const campaignGuid = params.campaignGuid;
 
@@ -47,15 +48,16 @@ export const AllJobsTab = (props:AllJobsTabProps) => {
         jobsList = <Typography> no jobs</Typography>;
     } else {
         jobsList = (
-            allJobs.map((type, i) =>
-                <Tooltip key={type.jobGuid} title={`${type.jobStartTime}-${type.jobEndTime}`}>
+            allJobs.map((job, i) =>
+                <Tooltip key={job.jobGuid} title={`${job.jobStartTime}-${job.jobEndTime}`}
+                    onClick={() => setJobDialog(job)}>
                     <ListItem>
                         <ListItemIcon>
                             <CircleIcon/>
                         </ListItemIcon>
                         <ListItemText
-                            primary={type.jobName}
-                            secondary={`${type.jobDescription} on ${type.jobLocation}`}
+                            primary={job.jobName}
+                            secondary={`${job.jobDescription} on ${job.jobLocation}`}
                         />
                     </ListItem>
                 </Tooltip>,
@@ -65,7 +67,11 @@ export const AllJobsTab = (props:AllJobsTabProps) => {
 
     return (
         <>
-            <AddDialog isOpen={addDialog} switchMode={() => setAddDialog(false)} fetch={getAllJobs} types={props.types}/>
+            <AddDialog isOpen={addDialog} switchMode={() => setAddDialog(false)} fetch={getAllJobs}
+                       types={props.types}/>
+            <JobDialog isOpen={jobDialog !== null} switchMode={() => setJobDialog(null)}
+                       fetch={getAllJobs}
+                       types={props.types} currentJob={jobDialog}/>
             <Stack sx={{display: "flex", justifyContent: "space-between"}} direction={"row"} spacing={2}>
                 <Typography variant="h5" sx={{flexGrow: "1"}}>
                     All Tasks

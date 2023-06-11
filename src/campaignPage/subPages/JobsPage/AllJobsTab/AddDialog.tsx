@@ -15,9 +15,9 @@ import {
     Tooltip,
 } from "@mui/material";
 import {DateTimePickerComponent} from "@syncfusion/ej2-react-calendars";
-import {JobType} from "../../../models/jobType";
-import ServerRequestMaker from "../../../utils/helperMethods/server-request-maker";
-import config from "../../../app-config.json";
+import {JobType} from "../../../../models/jobType";
+import ServerRequestMaker from "../../../../utils/helperMethods/server-request-maker";
+import config from "../../../../app-config.json";
 
 interface AddDialogProps {
     isOpen: boolean;
