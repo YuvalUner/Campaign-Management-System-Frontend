@@ -63,7 +63,7 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             icon: <AutoAwesomeIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.CampaignAdvisorComponent,
         };
-   case PermissionTargets.JobTypes:
+    case PermissionTargets.JobTypes:
         return {
             name: SubPageNames.JobTypes,
             icon: <AssignmentIcon/>,
@@ -74,6 +74,7 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             name: SubPageNames.Jobs,
             icon: <AssignmentIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.Jobs,
+        };
     case PermissionTargets.BallotManagement:
         return {
             name: SubPageNames.BallotManagement,
