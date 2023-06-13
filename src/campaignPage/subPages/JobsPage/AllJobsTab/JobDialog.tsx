@@ -47,6 +47,7 @@ export const JobDialog = (props: JobDialogProps) => {
     const campaignGuid = params.campaignGuid;
 
     const [assignedPeople, setAssignedPeople] = useState<JobAssignment[] | null>(null);
+    
     const [assignmentDialog, setAssignmentDialog] = useState<JobAssignment | null>(null);
     const [deleteDialogData, setDeleteDialogData] = useState<string | null>(null);
     const [addPeopleDialog, setAddPeopleDialog] = useState(false);

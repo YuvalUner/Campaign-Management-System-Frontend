@@ -89,7 +89,8 @@ export const AllJobsTab = (props: AllJobsTabProps) => {
                     All Tasks
                 </Typography>
                 <Button onClick={() => setFilterDialog(true)} endIcon={<FilterAltIcon/>} variant="contained" >Filter</Button>
-                <Button onClick={() => setAddDialog(true)} endIcon={<AddIcon/>} variant="contained" >Add Transaction</Button>            </Stack>
+                <Button onClick={() => setAddDialog(true)} endIcon={<AddIcon/>} variant="contained" >Add Transaction</Button>
+            </Stack>
             <List>
                 {jobsList}
             </List>
