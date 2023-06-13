@@ -35,6 +35,8 @@ import FinancialPage from "./subPages/FinancialPage/FinancialPage";
 import {RolesPage} from "./subPages/RolesPage/RolesPage";
 import {UsersPage} from "./subPages/UsersPage/UsersPage";
 import CampaignAdvisorPage from "./subPages/campaignAdvisorPage/CampaignAdvisorPage";
+import {JobTypesPage} from "./subPages/JobTypesPage/JobTypesPage";
+import { JobsPage } from "./subPages/JobsPage/JobsPage";
 import BallotManagementPage from "./subPages/ballotManagementPage/BallotManagementPage";
 
 /**
@@ -212,13 +214,19 @@ function CampaignPage(): JSX.Element {
                 element={<FinancialPage campaign={campaign}/>}/>;
         case PermissionTargets.CampaignRolesList:
             return <Route path={SubScreenRoutes.CampaignRolesComponent} key={permission.permissionTarget}
-                          element={<RolesPage campaign={campaign}/>}/>;
+                element={<RolesPage campaign={campaign}/>}/>;
         case PermissionTargets.CampaignUsersList:
             return <Route path={SubScreenRoutes.CampaignUsersComponent} key={permission.permissionTarget}
-                          element={<UsersPage campaign={campaign}/>}/>;
+                element={<UsersPage campaign={campaign}/>}/>;
         case PermissionTargets.CampaignAdvisor:
             return <Route path={SubScreenRoutes.CampaignAdvisorComponent} key={permission.permissionTarget}
                 element={<CampaignAdvisorPage permission={permission}/>}/>;
+        case PermissionTargets.JobTypes:
+            return <Route path={SubScreenRoutes.JobTypes} key={permission.permissionTarget}
+                element={<JobTypesPage campaign={campaign}/>}/>;
+        case PermissionTargets.Jobs:
+            return <Route path={SubScreenRoutes.Jobs} key={permission.permissionTarget}
+                element={<JobsPage campaign={campaign}/>}/>;        
         case PermissionTargets.BallotManagement:
             return <Route path={SubScreenRoutes.BallotManagementComponent} key={permission.permissionTarget}
                 element={<BallotManagementPage permission={permission}

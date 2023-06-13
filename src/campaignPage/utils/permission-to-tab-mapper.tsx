@@ -9,8 +9,9 @@ import SubScreenRoutes from "./sub-screen-routes";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import MoneyIcon from "@mui/icons-material/AttachMoney";
 import PeopleIcon from "@mui/icons-material/People";
-import WorkIcon from '@mui/icons-material/Work';
+import WorkIcon from "@mui/icons-material/Work";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import HowToVoteIcon from "@mui/icons-material/HowToVote";
 
 /**
@@ -62,6 +63,17 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             icon: <AutoAwesomeIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.CampaignAdvisorComponent,
         };
+   case PermissionTargets.JobTypes:
+        return {
+            name: SubPageNames.JobTypes,
+            icon: <AssignmentIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.JobTypes,
+        };
+    case PermissionTargets.Jobs:
+        return {
+            name: SubPageNames.Jobs,
+            icon: <AssignmentIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.Jobs,
     case PermissionTargets.BallotManagement:
         return {
             name: SubPageNames.BallotManagement,

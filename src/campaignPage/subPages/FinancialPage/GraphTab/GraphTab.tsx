@@ -1,5 +1,4 @@
 import React from "react";
-import FinancialType from "../../../../models/financialType";
 import {Balance2} from "../../../../models/financialSummary";
 import {
     Tooltip,
@@ -13,9 +12,6 @@ import {
     SeriesDirective,
     StepLineSeries,
 } from "@syncfusion/ej2-react-charts";
-
-
-// import {AxisModel, ChartComponent, SeriesCollectionDirective, SeriesDirective} from "@syncfusion/ej2-react-charts";
 
 interface GraphPageProps {
     balances: Balance2[] | null;

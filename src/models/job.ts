@@ -1,14 +1,14 @@
 interface Job {
-    jobGuid: string;
-    jobName: string;
-    jobDescription: string | null;
-    jobLocation: string | null;
-    jobStartTime: Date | null;
-    jobEndTime: Date | null;
-    jobDefaultSalary: number | null;
-    peopleNeeded: number | null;
-    peopleAssigned: number | null;
-    jobTypeName: string | null;
+    jobGuid?: string;
+    jobName?: string;
+    jobDescription?: string;
+    jobLocation?: string;
+    jobStartTime?: string;
+    jobEndTime?: string;
+    jobDefaultSalary?: number;
+    peopleNeeded?: number;
+    peopleAssigned?: number;
+    jobTypeName?: string;
 }
 
 export default Job;

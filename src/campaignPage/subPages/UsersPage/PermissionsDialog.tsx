@@ -46,7 +46,6 @@ export const PermissionsDialog = (props: PermissionsDialogProps) => {
                     t.permissionTarget === item.permissionTarget
                 )),
         );
-        console.log(uniqe);
         setInitPermissions(uniqe);
         return uniqe;
     };
