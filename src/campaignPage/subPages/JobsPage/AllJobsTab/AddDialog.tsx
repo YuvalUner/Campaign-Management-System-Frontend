@@ -42,7 +42,6 @@ export const AddDialog = (props: AddDialogProps) => {
 
 
     const add = async () => {
-        console.dir(startTime);
         if (
             jobName === "" ||
             jobDescription === "" ||

@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {
+    Avatar,
     Button,
+    Chip,
     Dialog,
     DialogActions,
     DialogContent,
@@ -25,6 +27,11 @@ import Job from "../../../../models/job";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Sync";
 import EditIcon from "@mui/icons-material/Edit";
+import {DeleteDialog} from "../../FinancialPage/DeleteDialog";
+import {JobAssignment} from "../../../../models/jobAssignment";
+import AddIcon from "@mui/icons-material/Add";
+import {AddPeopleDialog} from "./AssignPeople/AddPeopleDialog";
+import {AssignmentDialog} from "./AssignPeople/AssignmentDialog";
 
 interface JobDialogProps {
     isOpen: boolean;
@@ -39,29 +46,20 @@ export const JobDialog = (props: JobDialogProps) => {
     const params = useParams();
     const campaignGuid = params.campaignGuid;
 
+    const [assignedPeople, setAssignedPeople] = useState<JobAssignment[] | null>(null);
+    const [assignmentDialog, setAssignmentDialog] = useState<JobAssignment | null>(null);
+    const [deleteDialogData, setDeleteDialogData] = useState<string | null>(null);
+    const [addPeopleDialog, setAddPeopleDialog] = useState(false);
+
     const [jobName, setJobName] = useState("");
     const [jobDescription, setJobDescription] = useState("");
     const [jobLocation, setJobLocation] = useState("");
-    const [startTime, setStartTime] = useState<Date | undefined>();
-    const [endTime, setEndTime] = useState<Date | undefined>();
+    const [startTime, setStartTime] = useState<string>("");
+    const [endTime, setEndTime] = useState<string>("");
     const [jobDefaultSalary, setJobDefaultSalary] = useState(0);
     const [peopleNeeded, setPeopleNeeded] = useState(0);
     const [jobTypeName, setJobTypeName] = useState("");
     const [editMode, setEditMode] = useState(false);
-
-    useEffect(() => {
-        if (props.currentJob === null) {
-            return;
-        }
-        setJobName(props.currentJob.jobName ?? "");
-        setJobDescription(props.currentJob.jobDescription ?? "");
-        setJobLocation(props.currentJob.jobLocation ?? "");
-        setStartTime(props.currentJob.jobStartTime);
-        setEndTime(props.currentJob.jobEndTime);
-        setJobDefaultSalary(props.currentJob.jobDefaultSalary ?? 0);
-        setPeopleNeeded(props.currentJob.peopleNeeded ?? 0);
-        setJobTypeName(props.currentJob.jobTypeName ?? "");
-    }, [props.currentJob]);
 
     const update = async () => {
         if (
@@ -96,22 +94,87 @@ export const JobDialog = (props: JobDialogProps) => {
         setEditMode(false);
     };
 
-    const onDelete = () => {
-        console.log();
+    const getAssigned = async () => {
+        if (props.currentJob === null) {
+            return;
+        }
+
+        const res = await ServerRequestMaker.MakeGetRequest(
+            config.ControllerUrls.Jobs.Base +
+            config.ControllerUrls.Jobs.GetJobAssignments +
+            campaignGuid + "/" + props.currentJob.jobGuid,
+        );
+        const people = res.data as JobAssignment[];
+        setAssignedPeople(people);
     };
+
+    const onDelete = async () => {
+        if (props.currentJob === null) {
+            return;
+        }
+
+        const res = await ServerRequestMaker.MakeDeleteRequest(
+            config.ControllerUrls.Jobs.Base +
+            config.ControllerUrls.Jobs.DeleteJob +
+            campaignGuid + "/" + props.currentJob.jobGuid,
+        );
+        await props.fetch();
+        props.switchMode();
+    };
+
+    useEffect(() => {
+        if (props.currentJob === null) {
+            return;
+        }
+        setJobName(props.currentJob.jobName ?? "");
+        setJobDescription(props.currentJob.jobDescription ?? "");
+        setJobLocation(props.currentJob.jobLocation ?? "");
+        setStartTime(props.currentJob.jobStartTime ?? "");
+        setEndTime(props.currentJob.jobEndTime ?? "");
+        setJobDefaultSalary(props.currentJob.jobDefaultSalary ?? 0);
+        setPeopleNeeded(props.currentJob.peopleNeeded ?? 0);
+        setJobTypeName(props.currentJob.jobTypeName ?? "");
+        getAssigned();
+    }, [props.currentJob]);
+
+    let peopleJSX: JSX.Element | JSX.Element[];
+    if (assignedPeople === null) {
+        peopleJSX = <Typography>Loading</Typography>;
+    } else if (assignedPeople.length === 0) {
+        peopleJSX = <Typography>no one is assigned</Typography>;
+    } else {
+        peopleJSX = (
+            assignedPeople.map((people, i) =>
+                <Tooltip title={`Salary: ${people.salary}$`} key={people.email}>
+                    <Chip
+                        avatar={<Avatar alt={people.displayNameEng} src={people.profilePicUrl}/>}
+                        label={people.displayNameEng}
+                        variant="outlined"
+                        onClick={() => setAssignmentDialog(people)}
+                    />
+                </Tooltip>,
+            )
+        );
+    }
 
     return (
         <>
+            <AssignmentDialog isOpen={assignmentDialog !== null} job={props.currentJob} assignment={assignmentDialog}
+                              fetch={getAssigned} close={() => setAssignmentDialog(null)}/>
+            <AddPeopleDialog job={props.currentJob} fetch={getAssigned} close={() => setAddPeopleDialog(false)}
+                             isOpen={addPeopleDialog}/>
+            <DeleteDialog values={deleteDialogData} switchMode={() => setDeleteDialogData(null)} action={onDelete}/>
             <Dialog open={props.isOpen} onClose={props.switchMode}>
                 <DialogTitle>
                     <Stack sx={{display: "flex", justifyContent: "space-between"}} direction={"row"} spacing={2}>
                         <Typography variant="h5" sx={{flexGrow: "1"}}>
-                            Roles
+                            Task
                         </Typography>
                         <IconButton aria-label="edit" onClick={() => setEditMode((prev) => !prev)}>
                             <EditIcon color={editMode ? "primary" : undefined}/>
                         </IconButton>
-                        <IconButton aria-label="delete" onClick={onDelete}>
+                        <IconButton aria-label="delete"
+                            onClick={() => setDeleteDialogData("are you sure you want to delete?")}>
                             <DeleteIcon/>
                         </IconButton>
                     </Stack>
@@ -135,11 +198,11 @@ export const JobDialog = (props: JobDialogProps) => {
                                 margin="dense"
                                 label="Job Location"
                                 fullWidth
-                                value={jobLocation}
-                                onChange={(e) => setJobLocation(e.target.value)}
                                 InputProps={{
                                     readOnly: !editMode,
                                 }}
+                                value={jobLocation}
+                                onChange={(e) => setJobLocation(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -155,14 +218,14 @@ export const JobDialog = (props: JobDialogProps) => {
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <DateTimePickerComponent value={startTime} floatLabelType="Auto"
+                            <DateTimePickerComponent value={new Date(startTime)} floatLabelType="Auto"
                                                      placeholder="Enter start date"
                                                      change={(arg) => setStartTime(arg.value)}
                                                      readonly={!editMode}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <DateTimePickerComponent value={endTime} floatLabelType="Auto" placeholder="Enter end date"
+                            <DateTimePickerComponent value={new Date(endTime)} floatLabelType="Auto" placeholder="Enter end date"
                                                      change={(arg) => setEndTime(arg.value)}
                                                      readonly={!editMode}/>
                         </Grid>
@@ -210,6 +273,15 @@ export const JobDialog = (props: JobDialogProps) => {
                                     ))}
                                 </Select>
                             </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Stack direction={"row"}
+                                   sx={{display: "flex", justifyContent: "space-between", overflow: "auto"}}>
+                                {peopleJSX}
+                                <IconButton aria-label="add" onClick={() => setAddPeopleDialog(true)}>
+                                    <AddIcon/>
+                                </IconButton>
+                            </Stack>
                         </Grid>
                     </Grid>
                 </DialogContent>

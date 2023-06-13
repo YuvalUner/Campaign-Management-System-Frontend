@@ -50,8 +50,7 @@ export const JobsPage = (props: JobsPageProps) => {
                 <Box sx={{borderBottom: 1, borderColor: "divider"}}>
                     <Tabs value={currentTab} onChange={handleTabChange} aria-label="basic tabs example">
                         <Tab icon={<ListIcon/>} label="My Jobs" value={0}/>
-                        <Tab icon={<FilterListIcon/>} label="Transaction Types" value={1}/>
-                        <Tab icon={<GraphIcon/>} label="Balance" value={2}/>
+                        <Tab icon={<FilterListIcon/>} label="All Jobs" value={1}/>
                     </Tabs>
                 </Box>
                 <TabPanel value={currentTab} index={0}>

@@ -38,7 +38,6 @@ export const RolesPage = (props: RolesPageProps) => {
             }
             return a.roleName.localeCompare(b.roleName);
         });
-        console.dir(types);
         setRoles(types);
     };
 

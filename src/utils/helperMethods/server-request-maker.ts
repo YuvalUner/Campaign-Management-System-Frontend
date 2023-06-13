@@ -30,8 +30,8 @@ class ServerRequestMaker {
                 additionalHeaders,
             },
             params: {
-                ...params
-            }
+                ...params,
+            },
         });
     }
 
@@ -42,13 +42,16 @@ class ServerRequestMaker {
      * @param additionalHeaders - additional headers to add to the request. A JSON string.
      */
     public static async MakeGetRequest<model>(url: string,
-        additionalHeaders: string | null = null): Promise<AxiosResponse> {
-        return await this.instance.get<model>(config.ServerBaseUrl + url, {
+        additionalHeaders: string | null = null, params: object | null = null): Promise<AxiosResponse> {
+            return await this.instance.get<model>(config.ServerBaseUrl + url, {
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Credentials": true,
                 withCredentials: true,
                 additionalHeaders,
+            },
+            params: {
+                ...params,
             },
         });
     }

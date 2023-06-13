@@ -61,7 +61,6 @@ export const UsersPage = (props: UsersPageProps) => {
         const res = await ServerRequestMaker.MakeGetRequest(
             config.ControllerUrls.Users.Base + config.ControllerUrls.Users.GetProfilePageInfo,
         );
-        console.dir(res.data);
         setCurrentUser(res.data);
     };
 
@@ -70,7 +69,6 @@ export const UsersPage = (props: UsersPageProps) => {
             config.ControllerUrls.Campaigns.Base + config.ControllerUrls.Campaigns.GetCampaignUsers + campaignGuid,
         );
         const types = res.data as UserWithRole[];
-        console.dir(types);
         setUsers(types);
     };
 
@@ -79,7 +77,6 @@ export const UsersPage = (props: UsersPageProps) => {
             config.ControllerUrls.Campaigns.Base + config.ControllerUrls.Campaigns.GetCampaignAdmins + campaignGuid,
         );
         const admins = res.data as Admin[];
-        console.dir(admins);
         setAdmins(admins);
     };
 

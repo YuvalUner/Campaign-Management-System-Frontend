@@ -4,12 +4,15 @@ import config from "../../../../app-config.json";
 import Job from "../../../../models/job";
 import {List, ListItem, ListItemIcon, ListItemText, Stack, Tooltip, Typography} from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
-import {Button} from "react-bootstrap";
+import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import {useParams} from "react-router-dom";
 import {AddDialog} from "./AddDialog";
 import {JobType} from "../../../../models/jobType";
 import {JobDialog} from "./JobDialog";
+import {format, parseISO} from "date-fns";
+import {FilterDialog} from "./FilterDialog";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 interface AllJobsTabProps {
     types: JobType[] | null;
@@ -33,7 +36,6 @@ export const AllJobsTab = (props: AllJobsTabProps) => {
             campaignGuid,
         );
         const jobs = res.data as Job[];
-        console.dir(jobs);
         setAllJobs(jobs);
     };
 
@@ -48,25 +50,35 @@ export const AllJobsTab = (props: AllJobsTabProps) => {
         jobsList = <Typography> no jobs</Typography>;
     } else {
         jobsList = (
-            allJobs.map((job, i) =>
-                <Tooltip key={job.jobGuid} title={`${job.jobStartTime}-${job.jobEndTime}`}
-                    onClick={() => setJobDialog(job)}>
-                    <ListItem>
-                        <ListItemIcon>
-                            <CircleIcon/>
-                        </ListItemIcon>
-                        <ListItemText
-                            primary={job.jobName}
-                            secondary={`${job.jobDescription} on ${job.jobLocation}`}
-                        />
-                    </ListItem>
-                </Tooltip>,
-            )
+            allJobs.map((job, i) => {
+                let tooltip: string;
+                if (job.jobStartTime === undefined || job.jobEndTime === undefined) {
+                    tooltip = "";
+                } else {
+                    tooltip = `from ${format(parseISO(job.jobStartTime), "PPpp")} to ${format(parseISO(job.jobEndTime), "PPpp")}`;
+                }
+                return (
+                    <Tooltip key={job.jobGuid} title={tooltip}
+                             onClick={() => setJobDialog(job)}>
+                        <ListItem>
+                            <ListItemIcon>
+                                <CircleIcon/>
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={`${job.jobName} (${job.peopleAssigned}/${job.peopleNeeded})`}
+                                secondary={`${job.jobDescription} on ${job.jobLocation}`}
+                            />
+                        </ListItem>
+                    </Tooltip>
+                );
+            })
         );
     }
 
     return (
         <>
+            <FilterDialog isOpen={filterDialog} close={() => setFilterDialog(false)} setter={setAllJobs}
+                          reset={getAllJobs} types={props.types}/>
             <AddDialog isOpen={addDialog} switchMode={() => setAddDialog(false)} fetch={getAllJobs}
                        types={props.types}/>
             <JobDialog isOpen={jobDialog !== null} switchMode={() => setJobDialog(null)}
@@ -76,8 +88,8 @@ export const AllJobsTab = (props: AllJobsTabProps) => {
                 <Typography variant="h5" sx={{flexGrow: "1"}}>
                     All Tasks
                 </Typography>
-                <Button onClick={() => setAddDialog(true)}>Add Transaction <AddIcon/></Button>
-            </Stack>
+                <Button onClick={() => setFilterDialog(true)} endIcon={<FilterAltIcon/>} variant="contained" >Filter</Button>
+                <Button onClick={() => setAddDialog(true)} endIcon={<AddIcon/>} variant="contained" >Add Transaction</Button>            </Stack>
             <List>
                 {jobsList}
             </List>

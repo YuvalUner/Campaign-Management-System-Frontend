@@ -3,8 +3,8 @@ interface Job {
     jobName?: string;
     jobDescription?: string;
     jobLocation?: string;
-    jobStartTime?: Date;
-    jobEndTime?: Date;
+    jobStartTime?: string;
+    jobEndTime?: string;
     jobDefaultSalary?: number;
     peopleNeeded?: number;
     peopleAssigned?: number;
