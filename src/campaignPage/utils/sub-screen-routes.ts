@@ -15,6 +15,8 @@ const SubScreenRoutes = {
     CampaignAdvisorRoute: "campaign-advisor",
     JobTypes: "/job-types",
     Jobs: "/jobs",
+    BallotManagementComponent: "/ballot-management",
+    BallotManagementRoute: "ballot-management",
 };
 
 export default SubScreenRoutes;

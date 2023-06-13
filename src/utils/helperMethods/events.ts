@@ -28,6 +28,8 @@ class Events{
         StartUpload: "StartUpload",
         UploadFinished: "UploadFinished",
         ShouldRefreshPreviousAnalysisList: "ShouldRefreshPreviousAnalysisList",
+        ShouldRefreshBallotsList: "ShouldRefreshBallotsList",
+        ShouldRefreshPartyList: "ShouldRefreshPartyList",
     };
 
     /**

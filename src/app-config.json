@@ -131,6 +131,20 @@
       "UpdateJobAssignment": "update-assignment/",
       "GetSelfJobs": "get-self-jobs/",
       "GetAvailableUsers": "get-available-users/"
+    },
+    "Parties": {
+      "Base": "api/Parties/",
+      "GetAllParties": "get/",
+      "AddParty": "add/",
+      "UpdateParty": "update/",
+      "DeleteParty": "delete/"
+    },
+    "Ballots": {
+      "Base": "api/Ballots/",
+      "GetAllBallots": "get-all-ballots/",
+      "DeleteBallot": "delete-ballot/",
+      "AddBallot": "add-ballot/",
+      "UpdateBallot": "update-ballot/"
     }
   }
 }

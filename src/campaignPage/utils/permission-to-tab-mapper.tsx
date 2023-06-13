@@ -12,6 +12,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import WorkIcon from "@mui/icons-material/Work";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import HowToVoteIcon from "@mui/icons-material/HowToVote";
 
 /**
  * A function for mapping between permissions and the tabs they grant access to.
@@ -62,7 +63,7 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             icon: <AutoAwesomeIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.CampaignAdvisorComponent,
         };
-    case PermissionTargets.JobTypes:
+   case PermissionTargets.JobTypes:
         return {
             name: SubPageNames.JobTypes,
             icon: <AssignmentIcon/>,
@@ -73,6 +74,11 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
             name: SubPageNames.Jobs,
             icon: <AssignmentIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.Jobs,
+    case PermissionTargets.BallotManagement:
+        return {
+            name: SubPageNames.BallotManagement,
+            icon: <HowToVoteIcon/>,
+            navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.BallotManagementComponent,
         };
     default:
         return {

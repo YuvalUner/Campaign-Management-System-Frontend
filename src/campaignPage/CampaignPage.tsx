@@ -37,6 +37,7 @@ import {UsersPage} from "./subPages/UsersPage/UsersPage";
 import CampaignAdvisorPage from "./subPages/campaignAdvisorPage/CampaignAdvisorPage";
 import {JobTypesPage} from "./subPages/JobTypesPage/JobTypesPage";
 import { JobsPage } from "./subPages/JobsPage/JobsPage";
+import BallotManagementPage from "./subPages/ballotManagementPage/BallotManagementPage";
 
 /**
  * If the user has both edit and view permissions, remove the view permissions - as it is implicit that the user has
@@ -226,6 +227,10 @@ function CampaignPage(): JSX.Element {
         case PermissionTargets.Jobs:
             return <Route path={SubScreenRoutes.Jobs} key={permission.permissionTarget}
                 element={<JobsPage campaign={campaign}/>}/>;        
+        case PermissionTargets.BallotManagement:
+            return <Route path={SubScreenRoutes.BallotManagementComponent} key={permission.permissionTarget}
+                element={<BallotManagementPage permission={permission}
+                    isCustomCampaign={campaign?.isCustomCampaign === true}/>}/>;
         default:
             return <Route path={"Error"} key={permission.permissionTarget}
                 element={<NotFoundPage
