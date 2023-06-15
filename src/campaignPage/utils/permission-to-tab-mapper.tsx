@@ -13,6 +13,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import HowToVoteIcon from "@mui/icons-material/HowToVote";
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 /**
  * A function for mapping between permissions and the tabs they grant access to.
@@ -66,7 +67,7 @@ function PermissionToTabMapper(permission: Permission, campaignGuid: string): Me
     case PermissionTargets.JobTypes:
         return {
             name: SubPageNames.JobTypes,
-            icon: <AssignmentIcon/>,
+            icon: <ListAltIcon/>,
             navTo: SubScreenRoutes.CampaignBaseComponent + campaignGuid + SubScreenRoutes.JobTypes,
         };
     case PermissionTargets.Jobs:

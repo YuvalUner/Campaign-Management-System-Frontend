@@ -118,25 +118,25 @@ export const FilterDialog = (props: FilterDialogProps) => {
                         </Grid>
                         <Grid item xs={6}>
                             <DateTimePickerComponent value={new Date(jobStartTime)} floatLabelType="Auto"
-                                                     placeholder="Enter start date"
-                                                     change={(arg) => setJobStartTime(arg.value)}
+                                placeholder="Enter start date"
+                                change={(arg) => setJobStartTime(arg.value)}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <DateTimePickerComponent value={new Date(jobEndTime)} floatLabelType="Auto"
-                                                     placeholder="Enter end date"
-                                                     change={(arg) => setJobEndTime(arg.value)}
+                                placeholder="Enter end date"
+                                change={(arg) => setJobEndTime(arg.value)}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <FormControlLabel label="Fully Assigned"
-                                              control={
-                                                  <Switch
-                                                      checked={fullyManned}
-                                                      onChange={(e) => setFullyManned(e.target.checked)}
-                                                      color="primary"
-                                                  />
-                                              }
+                                control={
+                                    <Switch
+                                        checked={fullyManned}
+                                        onChange={(e) => setFullyManned(e.target.checked)}
+                                        color="primary"
+                                    />
+                                }
                             />
                         </Grid>
                     </Grid>

@@ -42,7 +42,6 @@ function UpdateNumberDialog(props: UpdateNumberDialogProps): JSX.Element {
         const newPhoneNumber = inputRef.current?.value;
 
         if (typeof newPhoneNumber !== "string") {
-            console.error("newPhoneNumber is not string");
             return;
         }
 
@@ -80,7 +79,8 @@ function UpdateNumberDialog(props: UpdateNumberDialogProps): JSX.Element {
 
         try {
             const res = await ServerRequestMaker.MakePostRequest(
-                config.ControllerUrls.VerificationCode.Base + config.ControllerUrls.VerificationCode.VerifyVerificationCode,
+                config.ControllerUrls.VerificationCode.Base +
+                config.ControllerUrls.VerificationCode.VerifyVerificationCode,
                 {"VerificationCode": verificationCode},
             );
             if (res.status === HttpStatusCode.Ok) {

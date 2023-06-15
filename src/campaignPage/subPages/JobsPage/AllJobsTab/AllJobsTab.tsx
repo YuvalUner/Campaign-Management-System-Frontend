@@ -55,11 +55,12 @@ export const AllJobsTab = (props: AllJobsTabProps) => {
                 if (job.jobStartTime === undefined || job.jobEndTime === undefined) {
                     tooltip = "";
                 } else {
-                    tooltip = `from ${format(parseISO(job.jobStartTime), "PPpp")} to ${format(parseISO(job.jobEndTime), "PPpp")}`;
+                    tooltip = `from ${format(parseISO(job.jobStartTime), "PPpp")} to 
+                    ${format(parseISO(job.jobEndTime), "PPpp")}`;
                 }
                 return (
                     <Tooltip key={job.jobGuid} title={tooltip}
-                             onClick={() => setJobDialog(job)}>
+                        onClick={() => setJobDialog(job)}>
                         <ListItem>
                             <ListItemIcon>
                                 <CircleIcon/>
@@ -78,18 +79,26 @@ export const AllJobsTab = (props: AllJobsTabProps) => {
     return (
         <>
             <FilterDialog isOpen={filterDialog} close={() => setFilterDialog(false)} setter={setAllJobs}
-                          reset={getAllJobs} types={props.types}/>
+                reset={getAllJobs} types={props.types}/>
             <AddDialog isOpen={addDialog} switchMode={() => setAddDialog(false)} fetch={getAllJobs}
-                       types={props.types}/>
+                types={props.types}/>
             <JobDialog isOpen={jobDialog !== null} switchMode={() => setJobDialog(null)}
-                       fetch={getAllJobs}
-                       types={props.types} currentJob={jobDialog}/>
+                fetch={getAllJobs}
+                types={props.types} currentJob={jobDialog}/>
             <Stack sx={{display: "flex", justifyContent: "space-between"}} direction={"row"} spacing={2}>
                 <Typography variant="h5" sx={{flexGrow: "1"}}>
                     All Tasks
                 </Typography>
-                <Button onClick={() => setFilterDialog(true)} endIcon={<FilterAltIcon/>} variant="contained" >Filter</Button>
-                <Button onClick={() => setAddDialog(true)} endIcon={<AddIcon/>} variant="contained" >Add Transaction</Button>
+                <Button
+                    onClick={() => setFilterDialog(true)}
+                    endIcon={<FilterAltIcon/>}
+                    variant="contained" >Filter
+                </Button>
+                <Button
+                    onClick={() => setAddDialog(true)}
+                    endIcon={<AddIcon/>}
+                    variant="contained" >Add Task
+                </Button>
             </Stack>
             <List>
                 {jobsList}

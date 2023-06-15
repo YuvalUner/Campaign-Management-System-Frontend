@@ -45,9 +45,9 @@ export const GraphTab = (props: GraphPageProps) => {
                 <Inject services={[StepLineSeries, Tooltip, DataLabel, Category, DateTime]}/>
 
                 <SeriesCollectionDirective>
-                <SeriesDirective dataSource={props.balances ?? []} xName="date" yName="balance" width={2}
-                                     name="BALANCE"
-                                     type="StepLine" marker={marker}>
+                    <SeriesDirective dataSource={props.balances ?? []} xName="date" yName="balance" width={2}
+                        name="BALANCE"
+                        type="StepLine" marker={marker}>
                     </SeriesDirective>
                 </SeriesCollectionDirective>
             </ChartComponent>;

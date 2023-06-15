@@ -16,7 +16,7 @@ import axios from "axios";
 import Constants from "../../../utils/constantsAndStaticObjects/constants";
 import IncomeIcon from "@mui/icons-material/CallReceived";
 import AdminIcon from "@mui/icons-material/ManageAccounts";
-import PersonIcon from '@mui/icons-material/Person';
+import PersonIcon from "@mui/icons-material/Person";
 interface RolesPageProps {
     campaign: Campaign | null;
 }
@@ -69,7 +69,11 @@ export const RolesPage = (props: RolesPageProps) => {
 
     const onDeleteIconClick = async (role: Role) => {
         const res = await axios.delete(
-            config.ServerBaseUrl + config.ControllerUrls.Roles.Base + config.ControllerUrls.Roles.DeleteRole + campaignGuid, {
+            config.ServerBaseUrl +
+            config.ControllerUrls.Roles.Base +
+            config.ControllerUrls.Roles.DeleteRole +
+            campaignGuid,
+            {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json",
@@ -98,18 +102,18 @@ export const RolesPage = (props: RolesPageProps) => {
                 <List>
                     {roles?.map((role) =>
                         <ListItem key={role.roleName}
-                                  secondaryAction={builtInRoleNames.includes(role.roleName) ? undefined :
-                                      <Stack direction="row" spacing={2}>
-                                          <IconButton aria-label="delete"
-                                                      onClick={() => openDeleteDialog(role)}>
-                                              <DeleteIcon/>
-                                          </IconButton>
-                                          <IconButton aria-label="update"
-                                                      onClick={() => openUpdateDialog(role)}>
-                                              <UpdateIcon/>
-                                          </IconButton>
-                                      </Stack>
-                                  }>
+                            secondaryAction={builtInRoleNames.includes(role.roleName) ? undefined :
+                            <Stack direction="row" spacing={2}>
+                                <IconButton aria-label="delete"
+                                    onClick={() => openDeleteDialog(role)}>
+                                    <DeleteIcon/>
+                                </IconButton>
+                                <IconButton aria-label="update"
+                                    onClick={() => openUpdateDialog(role)}>
+                                    <UpdateIcon/>
+                                </IconButton>
+                            </Stack>
+                        }>
                             <ListItemIcon>
                                 {role.roleLevel !== 0
                                     ? <AdminIcon color="warning"/>

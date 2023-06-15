@@ -138,13 +138,13 @@ export const AuthenticateDialog = forwardRef<HTMLDivElement, AuthenticateFormPro
                     </DialogTitle>
                     <Stack spacing={4} justifyContent="center" alignItems="center">
                         <TextField label={"ID"} name={"idNumber"} value={userDetails.idNumber ?? ""}
-                                   onChange={handleInputChange} sx={{width: "75%"}}/>
+                            onChange={handleInputChange} sx={{width: "75%"}}/>
                         <TextField label={"First Name In Hebrew"} name={"firstNameHeb"}
-                                   value={userDetails.firstNameHeb ?? ""}
-                                   onChange={handleInputChange} sx={{width: "75%"}}/>
+                            value={userDetails.firstNameHeb ?? ""}
+                            onChange={handleInputChange} sx={{width: "75%"}}/>
                         <TextField label={"Last Name In Hebrew"} name={"lastNameHeb"}
-                                   value={userDetails.lastNameHeb ?? ""}
-                                   onChange={handleInputChange} sx={{width: "75%"}}/>
+                            value={userDetails.lastNameHeb ?? ""}
+                            onChange={handleInputChange} sx={{width: "75%"}}/>
                         <Autocomplete
                             disablePortal
                             options={props.cities}

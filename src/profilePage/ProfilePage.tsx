@@ -42,12 +42,13 @@ function ProfilePage(): JSX.Element {
             );
             setIsVerified(res.data.isVerified);
             if (!res.data.isVerified) {
-                setPopupData("You have limited permission because you are not authenticated, press authenticate to fill missing data");
+                setPopupData(
+                    "You have limited permission because you are not authenticated, press authenticate to fill missing data"
+                );
             }
         } catch (e) {
             if (isAxiosError(e)) {
                 if (e.response?.status === 500){
-                    console.log("server crashed on verified, set to true");
                     setIsVerified(true);
                 }
             } else {
@@ -113,7 +114,7 @@ function ProfilePage(): JSX.Element {
             <UpdateNumberDialog isOpen={isUpdateDialogOpen} switchMode={switchUpdateDialogMode} fetch={getUserInfo}/>
             <SlidingPopup isOpen={popupData !== null} message={popupData ?? ""} onClose={() => setPopupData(null)}/>
             <AuthenticateDialog userDetails={userDetails} cities={cities} isOpen={isAuthenticateFormOpen}
-                                switchMode={switchAuthenticateFormMode} fetch={onAuthenticate}/>
+                switchMode={switchAuthenticateFormMode} fetch={onAuthenticate}/>
             <Box display="flex" justifyContent="center">
                 <Paper elevation={4} sx={{
                     width: 750,
@@ -136,40 +137,40 @@ function ProfilePage(): JSX.Element {
                         <Divider sx={{width: "95%"}}>English Name</Divider>
                         <Stack direction={"row"} spacing={7}>
                             <Field label={"First Name"} name={"firstNameEng"}
-                                   value={userDetails.firstNameEng ?? ""}
-                                   onChange={handleInputChange}/>
+                                value={userDetails.firstNameEng ?? ""}
+                                onChange={handleInputChange}/>
                             <Field label={"Last Name"} name={"lastNameEng"}
-                                   value={userDetails.lastNameEng ?? ""}
-                                   onChange={handleInputChange}/>
+                                value={userDetails.lastNameEng ?? ""}
+                                onChange={handleInputChange}/>
                         </Stack>
                         <Divider sx={{width: "95%"}}>Hebrew Name</Divider>
                         <Stack direction={"row"} spacing={7}>
                             <Field label={"First Name"} name={"firstNameHeb"}
-                                   value={userDetails.firstNameHeb ?? ""}
-                                   onChange={handleInputChange}/>
+                                value={userDetails.firstNameHeb ?? ""}
+                                onChange={handleInputChange}/>
                             <Field label={"Last Name"} name={"lastNameHeb"}
-                                   value={userDetails.lastNameHeb ?? ""}
-                                   onChange={handleInputChange}/>
+                                value={userDetails.lastNameHeb ?? ""}
+                                onChange={handleInputChange}/>
                         </Stack>
                         <Divider sx={{width: "95%"}}>Contact</Divider>
                         <Stack direction={"row"} spacing={7}>
                             <Field label={"Phone Number"} name={"phoneNumber"}
-                                   value={userDetails.phoneNumber ?? ""}
-                                   onChange={handleInputChange}
-                                   endAdornment={<EditIcon onClick={switchUpdateDialogMode}
-                                                           sx={{cursor: "pointer"}}/>}
+                                value={userDetails.phoneNumber ?? ""}
+                                onChange={handleInputChange}
+                                endAdornment={<EditIcon onClick={switchUpdateDialogMode}
+                                sx={{cursor: "pointer"}}/>}
                             />
                             <Field label={"Email"} name={"email"}
-                                   value={userDetails.email ?? ""}
-                                   onChange={handleInputChange}/>
+                                value={userDetails.email ?? ""}
+                                onChange={handleInputChange}/>
 
                         </Stack>
                         <Field label={"City"} name={"cityName"}
-                               value={userDetails.cityName ?? ""}
-                               onChange={handleInputChange}/>
+                            value={userDetails.cityName ?? ""}
+                            onChange={handleInputChange}/>
                         {!isVerified && <Box textAlign="center">
                             <Button variant="contained" startIcon={<RegisterIcon/>} size={"large"}
-                                    sx={{width: 200}} onClick={switchAuthenticateFormMode}>
+                                sx={{width: 200}} onClick={switchAuthenticateFormMode}>
                                 Authenticate
                             </Button>
                         </Box>}

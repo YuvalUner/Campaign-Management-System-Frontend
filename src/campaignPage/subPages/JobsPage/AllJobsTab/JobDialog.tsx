@@ -157,13 +157,17 @@ export const JobDialog = (props: JobDialogProps) => {
             )
         );
     }
+    const onAssignment = async () => {
+        getAssigned();
+        props.fetch();
+    };
 
     return (
         <>
             <AssignmentDialog isOpen={assignmentDialog !== null} job={props.currentJob} assignment={assignmentDialog}
-                              fetch={getAssigned} close={() => setAssignmentDialog(null)}/>
+                fetch={onAssignment} close={() => setAssignmentDialog(null)}/>
             <AddPeopleDialog job={props.currentJob} fetch={getAssigned} close={() => setAddPeopleDialog(false)}
-                             isOpen={addPeopleDialog}/>
+                isOpen={addPeopleDialog}/>
             <DeleteDialog values={deleteDialogData} switchMode={() => setDeleteDialogData(null)} action={onDelete}/>
             <Dialog open={props.isOpen} onClose={props.switchMode}>
                 <DialogTitle>
@@ -220,15 +224,17 @@ export const JobDialog = (props: JobDialogProps) => {
                         </Grid>
                         <Grid item xs={6}>
                             <DateTimePickerComponent value={new Date(startTime)} floatLabelType="Auto"
-                                                     placeholder="Enter start date"
-                                                     change={(arg) => setStartTime(arg.value)}
-                                                     readonly={!editMode}
+                                placeholder="Enter start date"
+                                change={(arg) => setStartTime(arg.value)}
+                                readonly={!editMode}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <DateTimePickerComponent value={new Date(endTime)} floatLabelType="Auto" placeholder="Enter end date"
-                                                     change={(arg) => setEndTime(arg.value)}
-                                                     readonly={!editMode}/>
+                            <DateTimePickerComponent value={new Date(endTime)}
+                            floatLabelType="Auto"
+                            placeholder="Enter end date"
+                                change={(arg) => setEndTime(arg.value)}
+                                readonly={!editMode}/>
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
@@ -260,9 +266,9 @@ export const JobDialog = (props: JobDialogProps) => {
                             <FormControl fullWidth margin="dense">
                                 <InputLabel aria-readonly={!editMode}>Job Type</InputLabel>
                                 <Select inputProps={{readOnly: !editMode}}
-                                        label="Job Type"
-                                        value={jobTypeName}
-                                        onChange={(e) => setJobTypeName(e.target.value)}>
+                                    label="Job Type"
+                                    value={jobTypeName}
+                                    onChange={(e) => setJobTypeName(e.target.value)}>
                                     {props.types?.map((type) => (
                                         <MenuItem value={type.jobTypeName} key={type.jobTypeName}>
                                             <Tooltip title={type.jobTypeDescription} placement="right-start">
@@ -276,13 +282,19 @@ export const JobDialog = (props: JobDialogProps) => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                            <Stack direction={"row"}
-                                   sx={{display: "flex", justifyContent: "space-between", overflow: "auto"}}>
-                                {peopleJSX}
-                                <IconButton aria-label="add" onClick={() => setAddPeopleDialog(true)}>
-                                    <AddIcon/>
-                                </IconButton>
-                            </Stack>
+                            <Grid container>
+                                <Grid item xs={11}>
+                                    <Stack direction={"row"} spacing={1}
+                                           sx={{display: "flex", justifyContent: "left", overflow: "auto"}}>
+                                        {peopleJSX}
+                                    </Stack>
+                                </Grid>
+                                <Grid item xs={1}>
+                                    <IconButton aria-label="add" onClick={() => setAddPeopleDialog(true)}>
+                                        <AddIcon/>
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </DialogContent>

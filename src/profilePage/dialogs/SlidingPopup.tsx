@@ -43,7 +43,7 @@ export const SlidingPopup = (props: SlidingPopupProps) => {
             </DialogContent>
             <DialogActions>
                 <Button size={"large"} onClick={props.onConfirm ?? props.onClose}
-                        endIcon={<SendIcon sx={{"&:hover": {backgroundColor: "#9b9c9d"}}}/>}></Button>
+                    endIcon={<SendIcon sx={{"&:hover": {backgroundColor: "#9b9c9d"}}}/>}></Button>
             </DialogActions>
         </Dialog>
     );

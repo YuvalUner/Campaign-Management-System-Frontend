@@ -96,16 +96,16 @@ export const AssignmentDialog = (props: AssignmentDialogProps) => {
     return (
         <>
             <DeleteDialog switchMode={() => setIsDeleteDialogOpen(false)} action={remove} values={""}
-                          isOpen={isDeleteDialogOpen}>
+                isOpen={isDeleteDialogOpen}>
                 <FormControlLabel label="Send Notification"
-                                  control={
-                                      <Switch
-                                          aria-label={"hekk"}
-                                          checked={sendNotificationOnDelete}
-                                          onChange={(e) => setSendNotificationOnDelete(e.target.checked)}
-                                          color="primary"
-                                      />
-                                  }
+                    control={
+                        <Switch
+                            aria-label={"hekk"}
+                            checked={sendNotificationOnDelete}
+                            onChange={(e) => setSendNotificationOnDelete(e.target.checked)}
+                            color="primary"
+                        />
+                    }
                 />
             </DeleteDialog>
             <Dialog open={props.isOpen} onClose={props.close}>
@@ -177,14 +177,14 @@ export const AssignmentDialog = (props: AssignmentDialogProps) => {
                                 InputProps={{
                                     readOnly: !isEditing,
                                     endAdornment: <EditIcon onClick={() => setIsEditing((prev) => !prev)}
-                                                            sx={{cursor: "pointer"}}/>,
+                                    sx={{cursor: "pointer"}} color={isEditing ? "primary" : undefined}/>,
                                 }}
                                 value={salary}
                                 onChange={(e) => setSalary(Number(e.target.value))}
                             />
                         </Grid>
                     </Grid>
-                    </DialogContent>
+                </DialogContent>
                 <DialogActions>
                     <Box>
                         <Button onClick={props.close}>Close</Button>

@@ -96,7 +96,9 @@ export const UsersPage = (props: UsersPageProps) => {
 
     const getSelfPermissions = async () => {
         const res = await ServerRequestMaker.MakeGetRequest(
-            config.ControllerUrls.Permissions.Base + config.ControllerUrls.Permissions.GetSelfPermissions + campaignGuid,
+            config.ControllerUrls.Permissions.Base +
+            config.ControllerUrls.Permissions.GetSelfPermissions +
+            campaignGuid,
         );
         const permissions = res.data as permission[];
         setSelfPermissions(permissions);
@@ -125,12 +127,12 @@ export const UsersPage = (props: UsersPageProps) => {
     return (
         <>
             <RolesDialog isOpen={rolesDialogData !== null} switchMode={() => setRolesDialogData(null)}
-                         refresh={getUsers} roles={roles} userToChange={rolesDialogData}/>
+                refresh={getUsers} roles={roles} userToChange={rolesDialogData}/>
             <PermissionsDialog isOpen={permissionsDialogData !== null} switchMode={() => setPermissionsDialogData(null)}
-                               refresh={getUsers} userToChange={permissionsDialogData}
-                               currentUserPermissions={selfPermissions}/>
+                refresh={getUsers} userToChange={permissionsDialogData}
+                currentUserPermissions={selfPermissions}/>
             <GridComponent dataSource={users ?? []} ref={g => grid = g} editSettings={editSettings}
-                           toolbar={toolbarOptions}>
+                toolbar={toolbarOptions}>
                 <ColumnsDirective>
                     <ColumnDirective field="roleName" headerText="Role" template={RolesButtonTemplate}/>
                     <ColumnDirective field="firstNameEng" headerText="First Name"/>

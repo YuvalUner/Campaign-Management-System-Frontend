@@ -71,9 +71,9 @@ export const UpdateRoleDialog = (props: UpdateRoleDialogProps) => {
         <Dialog open={props.role !== null} onClose={props.closeDialog}>
             <DialogTitle>Update Role {props.role?.roleName}</DialogTitle>
             <DialogContent>
-            <TextField fullWidth margin="dense" label="Role Description" inputRef={descriptionRef} error={descError}
-                           helperText={""} defaultValue={props.role?.roleDescription} multiline maxRows={4}
-                sx={{width:"450px"}}/>
+                <TextField fullWidth margin="dense" label="Role Description" inputRef={descriptionRef} error={descError}
+                    helperText={""} defaultValue={props.role?.roleDescription} multiline maxRows={4}
+                    sx={{width:"450px"}}/>
             </DialogContent>
             <DialogActions>
                 <Button fullWidth onClick={updateTransaction}>Confirm</Button>

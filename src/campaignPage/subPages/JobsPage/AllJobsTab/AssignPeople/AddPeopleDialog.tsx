@@ -97,12 +97,12 @@ export const AddPeopleDialog = (props: AddPeopleDialogProps) => {
                     />
                     <FormControlLabel label="Send Notification"
                         control={
-                        <Switch
-                            aria-label={"Send Notification"}
-                            checked={sendNotification}
-                            onChange={(e) => setSendNotification(e.target.checked)}
-                            color="primary"
-                        />
+                            <Switch
+                                aria-label={"Send Notification"}
+                                checked={sendNotification}
+                                onChange={(e) => setSendNotification(e.target.checked)}
+                                color="primary"
+                            />
                         }
                     />
                 </Stack>
