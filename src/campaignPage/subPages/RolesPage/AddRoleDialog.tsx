@@ -16,13 +16,11 @@ const AddRoleDialog = (props: AddRoleDialogProps) => {
 
     const nameRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLInputElement>(null);
-    const levelRef = useRef<HTMLInputElement>(null);
     const [nameError, setNameError] = useState(false);
     const [descError, setDescError] = useState(false);
-    const [levelError, setLevelError] = useState(false);
 
     const addRole = async () => {
-        if (!nameRef.current || !descriptionRef.current || !levelRef.current) {
+        if (!nameRef.current || !descriptionRef.current ) {
             return;
         }
 
@@ -41,13 +39,6 @@ const AddRoleDialog = (props: AddRoleDialogProps) => {
             setDescError(false);
         }
 
-        if (levelRef.current.value === "") {
-            setLevelError(true);
-            error = true;
-        } else {
-            setLevelError(false);
-        }
-
         if (error) {
             return;
         }
@@ -57,7 +48,6 @@ const AddRoleDialog = (props: AddRoleDialogProps) => {
             {
                 RoleName: nameRef.current.value,
                 RoleDescription: descriptionRef.current.value,
-                RoleLevel: levelRef.current.value,
                 IsCustomRole: true,
             },
         );
@@ -69,12 +59,10 @@ const AddRoleDialog = (props: AddRoleDialogProps) => {
         <Dialog open={props.isOpen} onClose={props.switchMode}>
             <DialogTitle>Add Role</DialogTitle>
             <DialogContent>
-            <TextField fullWidth autoFocus margin="dense" label="Role Name" inputRef={nameRef} error={nameError}
-                           helperText={""}/>
+                <TextField fullWidth autoFocus margin="dense" label="Role Name" inputRef={nameRef} error={nameError}
+                    helperText={""}/>
                 <TextField fullWidth margin="dense" label="Role Description" inputRef={descriptionRef} error={descError}
-                           helperText={""}/>
-                <TextField fullWidth margin="dense" label="Role Level" type={"number"} inputRef={levelRef}
-                           error={levelError} helperText={"0 is regular worker, 3 is owner"}/>
+                    helperText={""}/>
             </DialogContent>
             <DialogActions>
                 <Button fullWidth onClick={addRole}>Add</Button>

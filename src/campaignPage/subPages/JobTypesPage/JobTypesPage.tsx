@@ -10,9 +10,10 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Sync";
 import CircleIcon from "@mui/icons-material/Circle";
-import {JobType} from "../../../models/jobType";
+import {builtInTypesNames, JobType} from "../../../models/jobType";
 import AddJobTypeDialog from "./AddJobTypeDialog";
 import UpdateJobTypeDialog from "./UpdateJobTypeDialog";
+import {builtInRoleNames} from "../../../models/role";
 
 interface JobTypesPageProps {
     campaign: Campaign | null;
@@ -66,10 +67,10 @@ export const JobTypesPage = (props: JobTypesPageProps) => {
     return (
         <>
             <UpdateJobTypeDialog type={updateDialogData} closeDialog={closeUpdateDialog}
-                                 fetch={getJobTypes}/>
+                fetch={getJobTypes}/>
             <AddJobTypeDialog switchMode={switchAddTransactionTypeMode}
-                              fetch={getJobTypes}
-                              isOpen={isAddDialogOpen}/>
+                fetch={getJobTypes}
+                isOpen={isAddDialogOpen}/>
             <DeleteDialog values={deleteDialogData} switchMode={closeDeleteDialog} action={onDeleteIconClick}/>
 
             <Stack sx={{display: "flex", justifyContent: "space-between"}} direction={"row"} spacing={2}>
@@ -81,13 +82,13 @@ export const JobTypesPage = (props: JobTypesPageProps) => {
             <List>
                 {jobsTypes?.map((type, i) =>
                     <ListItem key={type.jobTypeName} secondaryAction={
-                        type.jobTypeName !== "Other" ? <Stack direction="row" spacing={2}>
+                        !builtInTypesNames.includes(type.jobTypeName ?? "") ? <Stack direction="row" spacing={2}>
                             <IconButton aria-label="delete"
-                                        onClick={() => setDeleteDialogData(type.jobTypeName ?? "")}>
+                                onClick={() => setDeleteDialogData(type.jobTypeName ?? "")}>
                                 <DeleteIcon/>
                             </IconButton>
                             <IconButton aria-label="update"
-                                        onClick={() => setUpdateDialogData(type)}>
+                                onClick={() => setUpdateDialogData(type)}>
                                 <UpdateIcon/>
                             </IconButton>
                         </Stack> : null

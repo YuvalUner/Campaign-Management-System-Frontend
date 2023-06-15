@@ -226,7 +226,7 @@ function CampaignPage(): JSX.Element {
                 element={<JobTypesPage campaign={campaign}/>}/>;
         case PermissionTargets.Jobs:
             return <Route path={SubScreenRoutes.Jobs} key={permission.permissionTarget}
-                element={<JobsPage campaign={campaign}/>}/>;        
+                element={<JobsPage campaign={campaign}/>}/>;      
         case PermissionTargets.BallotManagement:
             return <Route path={SubScreenRoutes.BallotManagementComponent} key={permission.permissionTarget}
                 element={<BallotManagementPage permission={permission}
@@ -287,6 +287,9 @@ function CampaignPage(): JSX.Element {
             }}>
                 <List>
                     {sideMenuList.map((item, index) => {
+                        if (item.name === "Unknown") {
+                            return null;
+                        }
                         return (
                             <ListItem key={index}>
                                 <ListItemButton onClick={() => {

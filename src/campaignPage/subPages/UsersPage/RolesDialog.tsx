@@ -40,7 +40,9 @@ export const RolesDialog = (props: RolesDialogProps) => {
 
     const assignRole = async (role: Role) => {
         const res = await ServerRequestMaker.MakePostRequest(
-            config.ControllerUrls.Roles.Base + config.ControllerUrls.Roles.AssignRole + `${campaignGuid}/${props.userToChange?.email}`,
+            config.ControllerUrls.Roles.Base +
+            config.ControllerUrls.Roles.AssignRole +
+            `${campaignGuid}/${props.userToChange?.email}`,
             role,
             null,
             {
@@ -58,7 +60,9 @@ export const RolesDialog = (props: RolesDialogProps) => {
 
     const assignAdminRole = async (role: Role) => {
         const res = await ServerRequestMaker.MakePostRequest(
-            config.ControllerUrls.Roles.Base + config.ControllerUrls.Roles.AssignAdminRole + `${campaignGuid}/${props.userToChange?.email}`,
+            config.ControllerUrls.Roles.Base +
+            config.ControllerUrls.Roles.AssignAdminRole +
+            `${campaignGuid}/${props.userToChange?.email}`,
             role,
             null,
             {
@@ -78,7 +82,6 @@ export const RolesDialog = (props: RolesDialogProps) => {
         const role = props.roles?.find((role) => role.roleName === chosenRole);
 
         if (role === undefined) {
-            console.log("role is not in list");
             return;
         }
 
@@ -109,14 +112,14 @@ export const RolesDialog = (props: RolesDialogProps) => {
                             {props.roles?.map((role, i) =>
                                 <Grid key={role.roleName}>
                                     <Chip color={colorPicker(role.roleName)}
-                                          onClick={() => setChosenRole(role.roleName)} label={role.roleName}/>
+                                        onClick={() => setChosenRole(role.roleName)} label={role.roleName}/>
                                 </Grid>,
                             )}
                         </Grid>
                         <FormControlLabel label="Send SMS" control={<Switch checked={sendSMS}
-                                                                            onChange={(e) => setSendSMS(e.target.checked)}/>}/>
+                            onChange={(e) => setSendSMS(e.target.checked)}/>}/>
                         <FormControlLabel label="Send Email" control={<Switch checked={sendEmail}
-                                                                              onChange={(e) => setSendEmail(e.target.checked)}/>}/>
+                            onChange={(e) => setSendEmail(e.target.checked)}/>}/>
                     </Stack>
                 </DialogContent>
                 <DialogActions>

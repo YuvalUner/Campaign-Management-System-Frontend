@@ -38,13 +38,15 @@ export const PermissionsDialog = (props: PermissionsDialogProps) => {
         }
 
         const res = await ServerRequestMaker.MakeGetRequest(
-            config.ControllerUrls.Permissions.Base + config.ControllerUrls.Permissions.GetPermissions + `${campaignGuid}/${props.userToChange.email}`,
+            config.ControllerUrls.Permissions.Base +
+            config.ControllerUrls.Permissions.GetPermissions +
+            `${campaignGuid}/${props.userToChange.email}`,
         );
         const permissions = res.data as permission[];
         const uniqe = permissions.filter((item, pos, self) =>
-                pos === self.findIndex((t) => (
-                    t.permissionTarget === item.permissionTarget
-                )),
+            pos === self.findIndex((t) => (
+                t.permissionTarget === item.permissionTarget
+            )),
         );
         setInitPermissions(uniqe);
         return uniqe;
@@ -52,14 +54,18 @@ export const PermissionsDialog = (props: PermissionsDialogProps) => {
 
     const assignPermission = async (perm: permission) => {
         const res = await ServerRequestMaker.MakePostRequest(
-            config.ControllerUrls.Permissions.Base + config.ControllerUrls.Permissions.AddPermission + `${campaignGuid}/${props.userToChange?.email}`,
+            config.ControllerUrls.Permissions.Base +
+            config.ControllerUrls.Permissions.AddPermission +
+            `${campaignGuid}/${props.userToChange?.email}`,
             perm,
         );
     };
 
     const removePermission = async (perm: permission) => {
         const res = await axios.delete(
-            config.ControllerUrls.Roles.Base + config.ControllerUrls.Roles.AssignAdminRole + `${campaignGuid}/${props.userToChange?.email}`,
+            config.ControllerUrls.Roles.Base +
+            config.ControllerUrls.Roles.AssignAdminRole +
+            `${campaignGuid}/${props.userToChange?.email}`,
             {
                 withCredentials: true,
                 headers: {
@@ -154,8 +160,8 @@ export const PermissionsDialog = (props: PermissionsDialogProps) => {
                                 return (
                                     <Grid key={perm.permissionTarget}>
                                         <Chip color={setting.color} label={perm.permissionTarget}
-                                              disabled={setting.disabled}
-                                              onClick={createonClick(perm)}/>
+                                            disabled={setting.disabled}
+                                            onClick={createonClick(perm)}/>
                                     </Grid>
                                 );
                             })}
@@ -164,7 +170,7 @@ export const PermissionsDialog = (props: PermissionsDialogProps) => {
                 </DialogContent>
                 <DialogActions>
                     <Button fullWidth onClick={submit}
-                            disabled={false}>Change</Button>
+                        disabled={false}>Change</Button>
                     <Button fullWidth onClick={props.switchMode}>Cancel</Button>
                 </DialogActions>
             </Dialog>

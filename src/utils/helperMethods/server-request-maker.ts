@@ -43,7 +43,7 @@ class ServerRequestMaker {
      */
     public static async MakeGetRequest<model>(url: string,
         additionalHeaders: string | null = null, params: object | null = null): Promise<AxiosResponse> {
-            return await this.instance.get<model>(config.ServerBaseUrl + url, {
+        return await this.instance.get<model>(config.ServerBaseUrl + url, {
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Credentials": true,

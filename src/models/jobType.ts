@@ -3,3 +3,10 @@ export interface JobType {
     jobTypeDescription?: string;
     isCustomJobType: boolean;
 }
+export const builtInTypesNames: string[] = [
+    "Phone Operator",
+    "Ballot Crew",
+    "Ballot Staff",
+    "Driver",
+    "Other",
+];

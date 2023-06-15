@@ -67,11 +67,11 @@ const UpdateJobTypeDialog = (props: UpdateJobTypeDialogProps) => {
             <DialogTitle>Add Transaction Type</DialogTitle>
             <DialogContent>
                 <TextField fullWidth autoFocus margin="dense" label="type name"
-                           onChange={(e) => setName(e.target.value)} error={nameError}
-                           value={name}/>
+                onChange={(e) => setName(e.target.value)} error={nameError}
+                value={name}/>
                 <TextField fullWidth margin="dense" label="description" error={descError}
-                           onChange={(e) => setName(e.target.value)}
-                           value={description}/>
+                onChange={(e) => setName(e.target.value)}
+                value={description}/>
             </DialogContent>
             <DialogActions>
                 <Button fullWidth onClick={addType}>Confirm</Button>

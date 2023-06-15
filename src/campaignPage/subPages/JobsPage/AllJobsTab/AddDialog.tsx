@@ -40,14 +40,23 @@ export const AddDialog = (props: AddDialogProps) => {
     const [peopleNeeded, setPeopleNeeded] = useState(0);
     const [jobTypeName, setJobTypeName] = useState("");
 
+    const [jobNameError, setJobNameError] = useState(false);
+    const [jobDescriptionError, setJobDescriptionError] = useState(false);
+    const [jobLocationError, setJobLocationError] = useState(false);
+    const [startTimeError, setStartTimeError] = useState(false);
+    const [endTimeError, setEndTimeError] = useState(false);
+    const [jobDefaultSalaryError, setJobDefaultSalaryError] = useState(false);
+    const [peopleNeededError, setPeopleNeededError] = useState(false);
+    const [jobTypeNameError, setJobTypeNameError] = useState(false);
 
     const add = async () => {
+        console.dir(typeof (startTime));
         if (
             jobName === "" ||
             jobDescription === "" ||
             jobLocation === "" ||
-            startTime === null ||
-            endTime === null ||
+            startTime === null || startTime === undefined ||
+            endTime === null || endTime === undefined ||
             jobDefaultSalary === null ||
             peopleNeeded === null ||
             jobTypeName === ""
@@ -83,6 +92,7 @@ export const AddDialog = (props: AddDialogProps) => {
                         <TextField
                             margin="dense"
                             label="Job Name"
+                            required
                             fullWidth
                             value={jobName}
                             onChange={(e) => setJobName(e.target.value)}
@@ -93,6 +103,7 @@ export const AddDialog = (props: AddDialogProps) => {
                             margin="dense"
                             label="Job Location"
                             fullWidth
+                            required
                             value={jobLocation}
                             onChange={(e) => setJobLocation(e.target.value)}
                         />
@@ -102,17 +113,19 @@ export const AddDialog = (props: AddDialogProps) => {
                             margin="dense"
                             label="Job Description"
                             fullWidth
+                            required
                             value={jobDescription}
                             onChange={(e) => setJobDescription(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        <DateTimePickerComponent value={startTime} floatLabelType="Auto" placeholder="Enter start date"
-                                                 change={(arg) => setStartTime(arg.value)}/>
+                        <DateTimePickerComponent value={startTime} floatLabelType="Auto"
+                            placeholder="Enter start date"
+                            change={(arg) => setStartTime(arg.value)}/>
                     </Grid>
                     <Grid item xs={6}>
                         <DateTimePickerComponent value={endTime} floatLabelType="Auto" placeholder="Enter end date"
-                                                 change={(arg) => setEndTime(arg.value)}/>
+                            change={(arg) => setEndTime(arg.value)}/>
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
@@ -120,6 +133,7 @@ export const AddDialog = (props: AddDialogProps) => {
                             label="Job Default Salary"
                             type="number"
                             fullWidth
+                            required
                             value={jobDefaultSalary}
                             onChange={(e) => setJobDefaultSalary(Number(e.target.value))}
                         />
@@ -130,13 +144,14 @@ export const AddDialog = (props: AddDialogProps) => {
                             label="People Needed"
                             type="number"
                             fullWidth
+                            required
                             value={peopleNeeded}
                             onChange={(e) => setPeopleNeeded(Number(e.target.value))}
                         />
                     </Grid>
                     <Grid item xs={12}>
                         <FormControl fullWidth margin="dense">
-                            <InputLabel>Job Type</InputLabel>
+                            <InputLabel required>Job Type</InputLabel>
                             <Select
                                 label="Job Type"
                                 value={jobTypeName}
