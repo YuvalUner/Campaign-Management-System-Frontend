@@ -4,6 +4,7 @@ The web client for the Campaign Management System.\
 This system is meant to help users manage their election campaigns.\
 The client is built using React (TypeScript), and is meant to work with the matching web server found at https://github.com/YuvalUner/Campaign-Management-System-Server .\
 Due to certain limitations, this project is not complete.\
+Developed as part of a final project of for a bachelor's degree at Bar-Ilan University, 2023.
 
 ## Installation
 1. Clone the repository.
